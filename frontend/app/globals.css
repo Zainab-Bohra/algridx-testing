@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  /* Your custom ALUGRIDX colors */
+  --color-brand-navy: #0A192F;
+  --color-brand-blue: #0056B3;
+  --color-brand-light: #E6F0FA;
+
+  /* Custom Box Shadow */
+  --shadow-glow: 0 0 20px rgba(0, 86, 179, 0.3);
+}
+
+/* Any custom base styles */
+body {
+  background-color: white;
+  color: #0f172a; /* slate-900 */
+}
+/* Custom Scrollbar - Premium Industrial Look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A192F; /* Brand Navy */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0056B3; /* Brand Blue */
+  border-radius: 5px;
+  border: 2px solid #0A192F;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00bcd4; /* Cyan Accent */
+}
+
+/* Text Selection Color (When user selects text) */
+::selection {
+  background-color: #00bcd4;
+  color: #ffffff;
+}
+
+/* Smooth Scrolling for the whole website */
+html {
+  scroll-behavior: smooth;
+}
