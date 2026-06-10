@@ -15,7 +15,27 @@ const app = express();
 dbConnect();
 
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL }));app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use(express.json());
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://alugridx-demo-4ouo5hvgk-zainab-bohras-projects.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/blogs", blogRoutes);
 
 const storage = multer.diskStorage({
