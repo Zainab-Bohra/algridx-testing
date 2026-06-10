@@ -1,15 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion, animate } from "framer-motion";
+import { motion, Variants, animate } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Cpu, Globe, Users, ChevronRight } from "lucide-react";
 import Hero from "@/components/site/Hero";
 import SlidingMarquee from "@/components/site/SlidingMarquee";
 
 // --- Animation Variants for Staggered Scroll Reveals ---
-const sectionReveal = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
+const sectionReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+    },
+  },
 };
 
 const staggerContainer = {

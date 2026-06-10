@@ -73,8 +73,10 @@ export default function ContactClient() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: i * 0.1 }}
-                    whileHover={{ y: -4, shadow: "0 20px 40px rgba(0,0,0,0.06)" }}
-                    key={i}
+whileHover={{
+  y: -4,
+  boxShadow: "0 20px 40px rgba(0,0,0,0.06)",
+}}                    key={i}
                     /* यहाँ border-2 लगा दिया है ताकि वाइट बैकग्राउंड पर ये साफ चमकें */
                     className="bg-slate-50/80 border-2 border-slate-200/60 p-6 rounded-2xl relative overflow-hidden transition-all duration-300 group hover:border-cyan-400"
                   >

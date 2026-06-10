@@ -1,24 +1,33 @@
 "use client";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, Variants } from "framer-motion";import Link from "next/link";
 import { Shield, Target, Compass, Award, Building2, Zap, ArrowRight, Activity } from "lucide-react";
 
 // --- Advanced Symmetrical Motion Variants ---
-const fadeUpInteractive = {
-  hidden: { opacity: 0, y: 40, scale: 0.98 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+const fadeUpInteractive: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: 1,
-    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] } 
-  }
+    transition: {
+      duration: 0.8,
+    },
+  },
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
 };
-
 const valuePillars = [
   { icon: Shield, title: "Zero Defect Metric", subtitle: "Rigid Protocol", desc: "Every air distribution grille and louvre undergoes micro-tolerance inspections, completely mitigating site installation pressure drag errors." },
   { icon: Zap, title: "Autonomous Sourcing", subtitle: "UAE Ecosystem", desc: "By operating directly inside Ajman, we bypass long global supply chains, slashing standard GCC procurement windows by up to 40%." },

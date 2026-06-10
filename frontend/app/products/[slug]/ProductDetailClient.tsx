@@ -3,7 +3,16 @@ import { useState, useEffect } from "react";import { useParams } from "next/navi
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, ShieldCheck } from "lucide-react";
-
+interface Product {
+  _id: string;
+  slug: string;
+  name: string;
+  category?: string;
+  images?: string[];
+  series?: string;
+  code?: string;
+  isAvailable?: boolean;
+}
 // --- Complete Detailed Dataset ---
 const productsExtendedData: Record<string, {
   name: string;
@@ -40,9 +49,10 @@ const productsExtendedData: Record<string, {
 export default function ProductDetailClient() {
   const params = useParams();
   const slug = typeof params?.slug === "string" ? params.slug : "";
-  const [activeTab, setActiveTab] = useState("specs");
-  const [productData, setProductData] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+const [activeTab, setActiveTab] = useState("specs");
+const [productData, setProductData] = useState<Product | null>(null);
+const [loading, setLoading] = useState(true);
   // 🛡️ SAFETY GUARD: If slug is not resolved yet, show a clean loader instead of crashing
   if (!slug) {
     return (
@@ -51,17 +61,19 @@ export default function ProductDetailClient() {
       </div>
     );
   }
-  useEffect(() => {
+ useEffect(() => {
   const fetchProduct = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products`
+      );
 
       if (!res.ok) return;
 
       const data = await res.json();
 
       const found = data.find(
-        (item) => item.slug === slug
+        (item: any) => item.slug === slug
       );
 
       if (found) {

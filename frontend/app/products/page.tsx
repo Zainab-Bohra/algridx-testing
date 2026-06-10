@@ -2,15 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 import {
   Package,
   ChevronRight,
   ArrowRight,
 } from "lucide-react";
 
-export default function ProductsPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+interface Product {
+  _id: string;
+  slug: string;
+  name: string;
+  category?: string;
+  images?: string[];
+  series?: string;
+  code?: string;
+  isAvailable?: boolean;
+}
+function ProductsContent() {
+const [products, setProducts] = useState<Product[]>([]); 
+ const [loading, setLoading] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -44,8 +55,8 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleCategoryChange = (slug) => {
-    if (slug) {
+const handleCategoryChange = (slug: string | null) => {   
+   if (slug) {
       router.push(`/products?category=${slug}`);
     } else {
       router.push("/products");
@@ -187,14 +198,12 @@ className={`group flex items-center justify-between px-4 py-3 rounded-2xl text-s
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
 
                 {filteredProducts.map((prod) => {
-                  const imageSrc =
-                    prod.images?.length > 0
-                      ? prod.images[0].startsWith(
-                          "http"
-                        )
-                        ? prod.images[0]
-                        : `http://localhost:5000${prod.images[0]}`
-                      : "https://placehold.co/400x300/f8f9fa/adb5bd?text=ALUGRIDX";
+const imageSrc =
+  prod.images && prod.images.length > 0
+    ? prod.images[0].startsWith("http")
+      ? prod.images[0]
+      : `${process.env.NEXT_PUBLIC_API_URL}${prod.images[0]}`
+    : "https://placehold.co/400x300/f8f9fa/adb5bd?text=ALUGRIDX";
 
                   return (
                     <div
@@ -266,5 +275,18 @@ className={`group flex items-center justify-between px-4 py-3 rounded-2xl text-s
 
       </div>
     </div>
+  );
+}
+export default function ProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-white">
+          Loading Products...
+        </div>
+      }
+    >
+      <ProductsContent />
+    </Suspense>
   );
 }

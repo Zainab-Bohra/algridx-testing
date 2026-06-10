@@ -137,6 +137,27 @@ const [bForm, setBForm] = useState({
     alert("Server Error");
   }
 };
+const deleteBlog = async (id: string) => {
+  if (!confirm("Are you sure you want to delete this blog?")) return;
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/blogs/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (res.ok) {
+      fetchBlogs();
+    } else {
+      alert("Failed to delete blog");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server Error");
+  }
+};
   return (
     <div className="bg-[#0a1128] min-h-screen pt-32 pb-24 px-6 text-slate-100">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -184,7 +205,6 @@ const [bForm, setBForm] = useState({
               <div className="space-y-1">
                 <label className="text-xs font-medium text-slate-300">Upload Product Image</label>
                 <div className="flex items-center gap-3 bg-slate-950 border border-white/5 p-2 rounded-xl">
-                  <input type="file" accept="image/*" onChange={e => handleImageUpload(e, "product")} className="text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500 file:text-slate-950 hover:file:bg-cyan-400 cursor-pointer w-full" />
                 </div>
                 {pForm.image && <p className="text-[10px] text-emerald-400 truncate mt-1">Selected: {pForm.image}</p>}
               </div>
