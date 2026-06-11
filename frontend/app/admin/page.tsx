@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Edit3, CheckCircle, XCircle, FileText, Package, RefreshCw, LogOut } from "lucide-react";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 export default function AdminDashboard() {
   const router = useRouter();
