@@ -225,6 +225,24 @@ app.delete("/api/blogs/:id", async (req, res) => {
   } catch (error) { res.status(500).json({ error: "Failed to delete blog" }); }
 });
 
+app.post("/api/admin/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (
+    username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    return res.status(200).json({
+      success: true,
+      token: "admin-authenticated",
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    error: "Invalid username or password",
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
