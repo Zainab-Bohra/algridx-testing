@@ -191,12 +191,7 @@ const deleteBlog = async (id: string) => {
                 <input type="text" value={pForm.name} onChange={e => setPForm({...pForm, name: e.target.value})} required className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="e.g., Ceiling Diffuser" />
               </div>
               
-              {/* <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">Product Series / Code</label>
-                <input type="text" value={pForm.series} onChange={e => setPForm({...pForm, series: e.target.value})} required className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="e.g., SAD Series" />
-              </div> */}
-
-              {/* 🚀 NEW FIELD: PRODUCT CATEGORY */}
+         
               <div className="space-y-1">
                 <label className="text-xs font-medium text-slate-300">Product Category</label>
                 <input type="text" value={pForm.category} onChange={e => setPForm({...pForm, category: e.target.value})} required className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="e.g., Diffusers / Grilles / Dampers" />

@@ -26,18 +26,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white text-slate-900 antialiased flex flex-col min-h-screen`}>
-         <SplashLoader>
-    {children}
+<body
+  className={`${inter.className} bg-white text-slate-900 antialiased flex flex-col min-h-screen`}
+>
+  <SplashLoader>
+    <Navbar />
+
+    <main className="flex-grow flex flex-col">
+      {children}
+    </main>
+
+    <Footer />
+
+    <WhatsAppButton />
   </SplashLoader>
-        <Navbar />
-        
-        <main className="flex-grow flex flex-col">{children}</main>
-        
-        <Footer />
-        
-        <WhatsAppButton />
-      </body>
+</body>
     </html>
   );
 }
