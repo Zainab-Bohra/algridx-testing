@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
+import SplashLoader from "@/components/SplashLoader";
 import "./globals.css";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
@@ -26,12 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white text-slate-900 antialiased flex flex-col min-h-screen`}>
-        {/* यहाँ Navbar जोड़ा गया है */}
+         <SplashLoader>
+    {children}
+  </SplashLoader>
         <Navbar />
         
         <main className="flex-grow flex flex-col">{children}</main>
         
-        {/* यहाँ Footer जोड़ा गया है */}
         <Footer />
         
         <WhatsAppButton />
