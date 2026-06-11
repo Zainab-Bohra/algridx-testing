@@ -22,7 +22,7 @@ export default function SplashLoader({
       <div className="fixed inset-0 bg-[#0a1128] flex items-center justify-center z-[9999]">
         <div className="text-center">
           <img
-            src="/logo.png"
+  src="/images/alugridx-without-bg-1.webp"
             alt="ALUGRIDX"
             className="w-40 mx-auto"
           />
