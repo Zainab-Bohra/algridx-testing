@@ -41,10 +41,14 @@ const [products, setProducts] = useState<Product[]>([]);
         const res = await fetch(
 `${process.env.NEXT_PUBLIC_API_URL}/api/products`        );
 
-        if (res.ok) {
-          const data = await res.json();
-          setProducts(data);
-        }
+       if (res.ok) {
+  const data = await res.json();
+
+  console.log("API DATA:", data);
+  console.log("COUNT:", data.length);
+
+  setProducts(data);
+}
       } catch (err) {
         console.error("Error:", err);
       } finally {
@@ -70,7 +74,7 @@ const handleCategoryChange = (slug: string | null) => {
       </div>
     );
   }
-
+console.log("Products State:", products);
   const filteredProducts = products.filter((prod) => {
     if (prod.isAvailable === false) return false;
 
@@ -87,6 +91,7 @@ const handleCategoryChange = (slug: string | null) => {
       productCategorySlug?.includes(categoryParam)
     );
   });
+  console.log("Filtered Products:", filteredProducts);
 
   return (
     <div className="bg-[#0a1128] min-h-screen pt-32 pb-20 px-4 md:px-8 text-white">
@@ -108,9 +113,8 @@ const handleCategoryChange = (slug: string | null) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* SIDEBAR */}
-          <div className="lg:col-span-3 sticky top-28">
-
-            <div className="bg-white rounded-3xl p-6 shadow-2xl border border-slate-100">
+        <div className="lg:col-span-3 lg:sticky lg:top-28 relative z-20">
+  <div className="bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 relative z-20">
 
               <h3 className="text-sm font-extrabold uppercase tracking-wider text-[#0a1128] pb-4 border-b border-slate-200">
                 Browse Categories
