@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import AboutClient from "./AboutClient";
 
-// 🚀 ENTERPRISE HVAC B2B SEO METADATA (ESTABLISHED 1986 - 2026)
 export const metadata: Metadata = {
   title: "About ALUGRIDX | 40-Year HVAC Manufacturing Legacy in UAE",
   description: "Evolving from Hashim Darwish Commission LLC (Est. 1986), ALUGRIDX Air Conditioning Industry LLC delivers tight-tolerance architectural aluminium grilles and terminal grids across the GCC from Ajman, UAE.",

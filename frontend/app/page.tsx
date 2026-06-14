@@ -1,40 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, Variants, animate } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Cpu, Globe, Users, ChevronRight } from "lucide-react";
+import { ArrowRight, HardHat, Zap, Layers, Activity, Plus, ChevronRight } from "lucide-react";
 import Hero from "@/components/site/Hero";
 import SlidingMarquee from "@/components/site/SlidingMarquee";
 
-// --- Animation Variants for Staggered Scroll Reveals ---
 const sectionReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 30,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-    },
-  },
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
-};
-
-// --- Animated Counter Sub-Component ---
-function Counter({ value, duration = 2 }: { value: number; duration?: number }) {
+function Counter({ value }: { value: number }) {
   const [count, setCount] = useState(0);
-
   return (
     <motion.span
       onViewportEnter={() => {
         const controls = animate(0, value, {
-          duration: duration,
+          duration: 1.5,
           ease: "easeOut",
           onUpdate: (latest) => setCount(Math.floor(latest)),
         });
@@ -46,7 +29,6 @@ function Counter({ value, duration = 2 }: { value: number; duration?: number }) 
   );
 }
 
-// --- Data Structures ---
 const categories = [
   { name: "Ceiling Diffusers", code: "SAD / RAD Series", desc: "Engineered for optimal omnidirectional air distribution with whisper-quiet acoustics." },
   { name: "Linear Slot Diffusers", code: "SLSD / RLSD Series", desc: "Architectural linear profiles delivering high-capacity fluid airflow design." },
@@ -59,321 +41,289 @@ const categories = [
 ];
 
 const features = [
-  { title: "Premium Grade Aluminium", desc: "Architectural 6063-T6 alloy bases built for maximum rigidity, anti-corrosion survival, and aesthetic lifespan.", icon: ShieldCheck },
-  { title: "Tight Tolerance Manufacturing", desc: "Micro-machined structural tolerances conforming strictly to international ASHRAE standards.", icon: Cpu },
-  { title: "UAE & GCC Supply Focus", desc: "Direct enterprise supply channels providing seamless project dispatching across the GCC industrial landscape.", icon: Globe },
-  { title: "Custom Project Consultation", desc: "Dedicated specialized engineers backing your design from draft configurations to on-site testing phases.", icon: Users },
+  { title: "6063-T6 Extrusions", desc: "Premium grade alloy foundations crafted for high structural rigidity and corrosion prevention.", icon: Layers },
+  { title: "Flow Calibrations", desc: "Components micro-machined to ensure total conformance with global ASHRAE airflow rules.", icon: Activity },
+  { title: "GCC Logistics Node", desc: "Direct manufacturing dispatch loops providing bulk distribution across regional fields.", icon: Zap },
+  { title: "Engineering Desk", desc: "Dedicated specialists executing blueprint checks from early stages down to site testing.", icon: HardHat },
 ];
 
 const applications = [
-  { title: "Commercial Buildings", count: "120+ Projects" },
-  { title: "Residential Complexes", count: "85+ Towers" },
-  { title: "Hospitality & Resorts", count: "40+ Premium Sites" },
-  { title: "Healthcare Facilities", count: "65+ Sterile Zones" },
-  { title: "Industrial Plants", count: "50+ Systems" },
-  { title: "Infrastructure Hubs", count: "30+ Nodes" },
-  { title: "Aviation Terminals", count: "15+ Airports" },
-  { title: "Mega Retail Spaces", count: "70+ Mall Outlets" },
+  { title: "Commercial Architecture", count: "120+" },
+  { title: "Residential Towers", count: "85+" },
+  { title: "Hospitality Frameworks", count: "40+" },
+  { title: "Sterile Clinical Environments", count: "65+" },
+  { title: "Industrial Complexes", count: "50+" },
+  { title: "Infrastructure Hubs", count: "30+" },
+  { title: "Aviation Terminals", count: "15+" },
+  { title: "High-Traffic Retail", count: "70+" },
 ];
 
 export default function Home() {
   return (
-    <div className="bg-white min-h-screen text-slate-900 selection:bg-cyan-500 selection:text-white overflow-hidden relative">
+    <div className="bg-[#DDF4E7] min-h-screen text-[#124170] selection:bg-[#26667F] selection:text-white overflow-hidden relative">
       
-      {/* Structural Architectural Grid Overlay Lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a05_1px,transparent_1px),linear-gradient(to_bottom,#0f172a05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
+      {/* Structural Minimal Grid Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417005_1px,transparent_1px),linear-gradient(to_bottom,#12417005_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
 
-      {/* Hero & Marquee Components */}
+      {/* Hero Component */}
       <Hero />
-      <SlidingMarquee />
 
-      {/* CORE OFFERS SECTION */}
+      {/* --- SECTION 2: HARDWARE INDEX (MASSIVE IMAGE + BOTTOM ANCHORED TEXT) --- */}
       <section className="py-36 px-6 max-w-7xl mx-auto relative z-10">
-        <div className="absolute top-[20%] left-[-10%] w-[40rem] h-[40rem] bg-cyan-400/5 rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-[10%] right-[-10%] w-[35rem] h-[35rem] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
-
+        
         <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-150px" }}
+          initial="hidden" whileInView="visible" viewport={{ once: true }}
           variants={sectionReveal}
-          className="text-center mb-24"
+          className="border-b border-[#124170]/10 pb-12 mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
         >
-          <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-brand-navy text-cyan-400 font-extrabold tracking-widest uppercase text-xs mb-6 shadow-[0_4px_15px_rgba(10,25,47,0.2)] border border-white/10">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            Production Blueprint
-          </span>
-          <h2 className="text-4xl md:text-7xl font-black text-brand-navy tracking-tight leading-tight">
-            Advanced Air <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-cyan-500 to-blue-700">Management Systems</span>
-          </h2>
-          <p className="text-slate-500 mt-6 max-w-2xl mx-auto text-lg font-medium">Precision-machined structural terminal devices serving specialized high-tier HVAC frameworks.</p>
+          <div>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Hardware Index</h2>
+          </div>
+          
         </motion.div>
 
-        {/* Product Cards Grid */}
-        <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {categories.map((cat, i) => (
-            <motion.div variants={sectionReveal} key={i} className="group h-[380px] [perspective:1200px] cursor-pointer">
-              <div className="relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] origin-center group-hover:[transform:rotateY(180deg)] rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <div
+              key={i}
+              className="w-full h-[480px] [perspective:1200px] group cursor-pointer"
+            >
+              {/* THE 3D CARD CONTAINER */}
+              <div 
+                className="w-full h-full rounded-[40px] bg-gradient-to-br from-[#26667F] to-[#124170] relative transition-all duration-700 ease-in-out [transform-style:preserve-3d] shadow-[0_25px_25px_-5px_rgba(18,65,112,0.2)] group-hover:[transform:rotate3d(1,-1,0,22deg)] group-hover:shadow-[30px_50px_25px_-40px_rgba(18,65,112,0.3),0_25px_30px_0_rgba(18,65,112,0.15)]"
+              >
                 
-                {/* CARD FRONT */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] bg-white border border-slate-100/80 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group-hover:border-brand-blue/30 transition-all duration-300">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue/0 via-brand-blue/30 to-cyan-400/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                {/* FLOATING 3D CIRCLE LAYERS */}
+                <div className="absolute left-0 top-0 [transform-style:preserve-3d] z-30">
+                  <span className="absolute block aspect-square rounded-full top-[12px] left-[12px] bg-white/5 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[260px] [transform:translate3d(0,0,25px)] transition-all duration-600 ease-in-out" />
+                  <span className="absolute block aspect-square rounded-full top-[14px] left-[14px] bg-white/10 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[220px] [transform:translate3d(0,0,45px)] transition-all duration-600 ease-in-out delay-75 group-hover:[transform:translate3d(0,0,65px)]" />
+                  <span className="absolute block aspect-square rounded-full top-[16px] left-[16px] bg-white/15 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[190px] [transform:translate3d(0,0,65px)] transition-all duration-600 ease-in-out delay-150 group-hover:[transform:translate3d(0,0,85px)]" />
+                  <span className="absolute block aspect-square rounded-full top-[20px] left-[20px] bg-white/20 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[170px] [transform:translate3d(0,0,85px)] transition-all duration-600 ease-in-out delay-225 group-hover:[transform:translate3d(0,0,105px)]" />
                   
-                  <div className="h-44 w-full bg-gradient-to-b from-slate-50 to-slate-100/50 rounded-xl flex items-center justify-center p-4 overflow-hidden border border-slate-100/50 relative">
-                    <img 
-                      src={`/images/products/${cat.name.toLowerCase().replace(/\s+/g, '-')}.avif`}
+                  {/* ULTRA MASSIVE IMAGE FRAME */}
+                  <span className="absolute aspect-square rounded-full top-[24px] left-[24px] bg-[#DDF4E7] shadow-[10px_10px_25px_0_rgba(18,65,112,0.3)] w-[160px] [transform:translate3d(0,0,105px)] transition-all duration-600 ease-in-out delay-300 group-hover:[transform:translate3d(0,0,140px)] grid place-content-center p-4 overflow-hidden border border-white/30">
+                    <img
+                      src={`/images/products/${cat.name.toLowerCase().replace(/\s+/g, "-")}.avif`}
                       alt={cat.name}
-                      className="max-w-full max-h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.05)] group-hover:scale-110 group-hover:rotate-2 transition-all duration-500"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://placehold.co/400x300/f1f5f9/0a192f?text=ALUGRIDX";
-                      }}
+                      className="max-h-full max-w-full object-contain mix-blend-multiply scale-110"
                     />
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-extrabold text-brand-navy tracking-tight group-hover:text-brand-blue transition-colors">{cat.name}</h3>
-                    <p className="text-xs font-bold text-cyan-600 uppercase tracking-widest mt-1.5">{cat.code}</p>
-                  </div>
+                  </span>
                 </div>
 
-                {/* CARD BACK */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gradient-to-br from-brand-navy via-[#0b1d36] to-[#040e1a] rounded-2xl p-8 flex flex-col justify-between text-left text-white border border-white/5 overflow-hidden shadow-[0_20px_50px_rgba(10,25,47,0.3)]">
-                  <div className="absolute -top-16 -right-16 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl" />
-                  
-                  <div>
-                    <h3 className="text-2xl font-black tracking-tight border-b border-white/10 pb-3 text-cyan-400">{cat.name}</h3>
-                    <p className="text-sm text-slate-300/90 leading-relaxed font-light mt-4">
+                {/* GLASSMORPHISM LAYER */}
+                <div 
+                  className="absolute inset-[10px] rounded-[45px] rounded-tl-[100%] bg-gradient-to-b from-white/20 to-white/5 [transform:translate3d(0,0,30px)] border-r border-b border-white/10 transition-all duration-600 ease-in-out [transform-style:preserve-3d]" 
+                />
+
+                {/* TEXT CONTENT LAYER */}
+                <div className="pt-[245px] px-6 pb-5 [transform:translate3d(0,0,31px)] relative z-10 flex flex-col justify-end h-full">
+                  <div className="mb-4">
+                    <span className="block text-[#DDF4E7] font-black text-base tracking-tight uppercase leading-tight font-sans drop-shadow-sm">
+                      {cat.name}
+                    </span>
+                    <span className="block text-[9px] font-mono tracking-widest text-white/40 uppercase font-bold mt-0.5">
+                      {cat.code}
+                    </span>
+                    <p className="block text-[11px] text-[#DDF4E7]/70 leading-relaxed font-light mt-1.5">
                       {cat.desc}
                     </p>
                   </div>
-                  
-                  <Link 
-                    href={`/products/?category=${cat.name.replace(/\s+/g, '-').toLowerCase()}`} 
-                    className="group/btn w-full flex items-center justify-between bg-gradient-to-r from-brand-blue to-cyan-600 text-white px-5 py-3.5 rounded-xl font-bold text-sm shadow-[0_4px_20px_rgba(0,150,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all duration-300"
-                  >
-                    <span>Configure Specifications</span>
-                    <ChevronRight size={18} className="transform group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+
+                  {/* BOTTOM ACTION BAR */}
+                  <div className="flex items-center justify-between [transform-style:preserve-3d] pt-3 border-t border-white/5">
+                    
+                    {/* Micro Spec Nodes */}
+                    <div className="flex gap-1.5 [transform-style:preserve-3d]">
+                      {[1, 2, 3].map((dot) => (
+                        <div 
+                          key={dot}
+                          className="w-5 h-5 rounded-full bg-white/90 border border-[#26667F]/20 grid place-content-center text-[8px] font-mono font-bold text-[#124170] shadow-sm transition-all duration-500 hover:bg-[#124170] hover:text-white"
+                          style={{
+                            transform: "translate3d(0,0,0px)",
+                            transitionDelay: `${dot * 0.12}s`,
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Explore Link */}
+                    <Link 
+                      href={`/products/?category=${cat.name.replace(/\s+/g, "-").toLowerCase()}`}
+                      className="flex items-center gap-0.5 text-[#DDF4E7] hover:text-white text-[11px] font-mono font-bold transition-transform duration-300 hover:[transform:translate3d(0,0,12px)] group/btn"
+                    >
+                      <span>Explore</span>
+                      <ChevronRight size={12} className="transition-transform group-hover/btn:translate-x-0.5" />
+                    </Link>
+
+                  </div>
                 </div>
 
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
-      {/* 4. WHY ALUGRIDX SECTION */}
-      <section className="py-36 bg-gradient-to-b from-brand-navy to-[#050c17] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_70%_30%,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-150px" }}
-            variants={sectionReveal}
-            className="text-left max-w-3xl mb-24"
-          >
-            <span className="text-cyan-400 font-black tracking-widest uppercase text-xs block mb-4">Enterprise Benchmarks</span>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tight leading-none">Engineering Architecture without Compromise</h2>
-          </motion.div>
+      {/* --- SECTION 3: SYSTEM RIGIDITY & ACCURACY --- */}
+      <section className="py-36 bg-[#124170] text-[#DDF4E7] relative z-10 rounded-t-[3rem]">
+        <div className="max-w-7xl mx-auto px-6">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
+            <div className="lg:col-span-8">
+              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none text-white">
+                Rigidity & Dynamic Accuracy
+              </h2>
+            </div>
+            <div className="lg:col-span-4 border-l border-[#26667F] pl-6">
+              <p className="text-sm text-[#DDF4E7]/60 font-light leading-relaxed">
+                Every frame leaving our workspace line undergoes calibrated pressure testing to survive structural fluctuations.
+              </p>
+            </div>
+          </div>
 
-          {/* Cards Grid */}
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feat, i) => {
               const Icon = feat.icon;
               return (
                 <motion.div 
-                  variants={sectionReveal} 
                   key={i} 
-                  className="group bg-gradient-to-br from-[#0e223d] to-[#081526] border border-white/10 rounded-2xl p-8 hover:from-[#122b4d] hover:to-[#0a1b30] hover:border-cyan-400/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_30px_rgba(0,255,255,0.1)] transition-all duration-500 relative overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.02, borderColor: "#67C090", boxShadow: "0 10px 30px rgba(18,65,112,0.3)" }}
+                  viewport={{ once: true }}
+                  className="bg-[#26667F]/30 border-2 border-transparent p-10 flex gap-6 items-start transition-all duration-300 relative rounded-xl"
                 >
-                  <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-brand-blue/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all duration-500" />
-                  
-                  <div className="w-14 h-14 bg-gradient-to-br from-brand-blue to-cyan-500/40 rounded-xl flex items-center justify-center mb-8 border border-white/10 shadow-lg group-hover:rotate-6 group-hover:scale-105 transition-all duration-500">
-                    <Icon className="text-white" size={26} />
+                  <div className="bg-[#124170] text-[#67C090] p-3 rounded-lg">
+                    <Icon size={22} />
                   </div>
-                  
-                  <h3 className="text-2xl font-extrabold mb-4 tracking-tight group-hover:text-cyan-400 transition-colors">{feat.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed font-light">{feat.desc}</p>
+                  <div>
+                    <h3 className="text-xl font-bold tracking-tight mb-2 text-white">{feat.title}</h3>
+                    <p className="text-sm text-[#DDF4E7]/70 font-light leading-relaxed">{feat.desc}</p>
+                  </div>
                 </motion.div>
               );
             })}
-          </motion.div>
+          </div>
 
-          {/* LIVE INTERACTIVE STATS PANEL */}
-          <div className="mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-16 border-t border-white/10 text-center lg:text-left">
-            <div>
-              <p className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue"><Counter value={44} />+</p>
-              <p className="text-sm font-bold text-slate-400 tracking-wider uppercase mt-2">Product Configurations</p>
-            </div>
-            <div>
-              <p className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue"><Counter value={40} />+</p>
-              <p className="text-sm font-bold text-slate-400 tracking-wider uppercase mt-2">Years Legacy Network</p>
-            </div>
-            <div>
-              <p className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue">UAE</p>
-              <p className="text-sm font-bold text-slate-400 tracking-wider uppercase mt-2">In-House Manufacturing</p>
-            </div>
-            <div>
-              <p className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue">GCC</p>
-              <p className="text-sm font-bold text-slate-400 tracking-wider uppercase mt-2">Supply Grid Integrity</p>
-            </div>
+          <div className="mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-16 border-t border-[#DDF4E7]/10">
+            {[
+              { value: <><Counter value={44} />+</>, label: "System Profiles" },
+              { value: <><Counter value={40} />+</>, label: "Years Operations Network" },
+              { value: "UAE", label: "Production Plants" },
+              { value: "GCC", label: "Enterprise Dispatch Hubs" },
+            ].map((stat, idx) => (
+              <div key={idx}>
+                <p className="text-4xl md:text-5xl font-mono font-black text-white">{stat.value}</p>
+                <p className="text-[10px] font-mono uppercase tracking-widest text-[#67C090] mt-1 font-bold">{stat.label}</p>
+              </div>
+            ))}
           </div>
 
         </div>
       </section>
 
-      {/* ABOUT US SECTION */}
+      {/* --- SECTION 4: HISTORICAL TIMELINE (PREMIUM CARD DESIGN WITH NEW HEADING) --- */}
       <section className="py-36 max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-150px" }}
-            variants={sectionReveal}
-            className="lg:col-span-7"
-          >
-            <span className="text-brand-blue font-black tracking-widest uppercase text-xs block mb-4">Historical Foundation</span>
-            <h2 className="text-4xl md:text-6xl font-black text-brand-navy mb-8 tracking-tight leading-tight">Nearly Four Decades <br /> of Regional Domain Power</h2>
-            <p className="text-slate-500 text-lg font-medium leading-relaxed mb-12">
-              Born from the corporate foundations of Hashim Darwish Commission LLC (Est. 1986), ALUGRIDX infuses industrial HVAC distribution platforms with technical intelligence and absolute localized manufacturing supremacy.
-            </p>
-            
-            {/* Minimalist Tech Timeline */}
-            <div className="relative pl-10 space-y-12 before:absolute before:inset-y-2 before:left-[15px] before:w-[3px] before:bg-gradient-to-b before:from-brand-blue before:via-cyan-500 to-slate-200">
-              <div className="relative group">
-                <div className="absolute -left-[44px] top-1.5 w-6 h-6 bg-white border-4 border-brand-navy rounded-full transition-transform group-hover:scale-125 duration-300" />
-                <span className="font-black text-brand-navy text-3xl tracking-tighter">1986</span>
-                <p className="text-lg font-extrabold text-brand-blue mt-1">Hashim Darwish Commission LLC Founded</p>
-                <p className="text-sm text-slate-500 mt-2 font-light">Established a landmark trade network for premium building frameworks across commercial sectors.</p>
-              </div>
-              <div className="relative group">
-                <div className="absolute -left-[44px] top-1.5 w-6 h-6 bg-cyan-400 border-4 border-brand-navy rounded-full transition-transform group-hover:scale-125 duration-300 shadow-[0_0_15px_rgba(0,255,255,0.6)]" />
-                <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-brand-blue text-3xl tracking-tighter">2025</span>
-                <p className="text-lg font-extrabold text-brand-navy mt-1">ALUGRIDX Air Conditioning Industry LLC Launched</p>
-                <p className="text-sm text-slate-500 mt-2 font-light">Evolving systems into automated tooling lines for tight-tolerance aerodynamic engineering designs.</p>
-              </div>
-            </div>
-          </motion.div>
+          <div className="lg:col-span-4">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] leading-none">Corporate Roots</h2>
+          </div>
 
-          {/* Mission/Vision Panel */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} viewport={{ once: true }}
-            className="lg:col-span-5 relative"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-brand-blue/5 rounded-3xl transform rotate-2 scale-102 -z-10 blur-sm"></div>
-            <div className="bg-gradient-to-br from-white to-slate-50/50 rounded-3xl p-10 lg:p-12 border border-slate-100 shadow-2xl relative overflow-hidden backdrop-blur-md">
-              <div className="mb-12">
-                <h3 className="text-2xl font-black text-brand-navy mb-4 flex items-center gap-3">
-                  <span className="w-10 h-[3px] bg-cyan-500 block rounded"></span> Mission
-                </h3>
-                <p className="text-slate-600 leading-relaxed text-sm font-medium">To invent and manufacture innovative, high-precision thermodynamic air terminal networks that optimize indoor climates and structural energy profiles responsibly.</p>
+          {/* Premium Cards Grid with Borders & Interactive Shading */}
+          <div className="lg:col-span-8 space-y-6">
+            {[
+              { year: "1986", title: "Strategic Foundation & GCC Network Setup", desc: "Inaugurated structural-scale architectural products supply loops across key GCC commercial zones, establishing an unshakeable ecosystem of trust and supply precision." },
+              { year: "2025", title: "Technological Evolution & Automation Launch", desc: "Transitioned workflow execution into automated precision machinery lines, establishing tight thermodynamic parameters and zero-vibration air terminal setups." }
+            ].map((item, idx) => (
+              <div 
+                key={idx} 
+                className="group relative bg-white/40 backdrop-blur-sm border-2 border-white/40 hover:border-[#67C090]/50 p-8 rounded-[2rem] shadow-[rgba(18,65,112,0.04)_0px_20px_30px_0px] transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start">
+                  {/* Years with interactive glow */}
+                  <span className="text-5xl font-mono font-black text-[#26667F]/30 group-hover:text-[#67C090] transition-colors duration-300 select-none">
+                    {item.year}
+                  </span>
+                  <div className="space-y-2">
+                    <h4 className="text-xl font-extrabold text-[#124170] group-hover:text-[#26667F] transition-colors leading-tight">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-slate-600 font-light leading-relaxed max-w-xl">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h3 className="text-2xl font-black text-brand-navy mb-4 flex items-center gap-3">
-                  <span className="w-10 h-[3px] bg-brand-blue block rounded"></span> Vision
-                </h3>
-                <p className="text-slate-600 leading-relaxed text-sm font-medium">To govern the GCC air distribution paradigm as the most trusted manufacturing destination, defining supreme benchmarks in quality matrixes and environmental reliability.</p>
-              </div>
-            </div>
-          </motion.div>
+            ))}
+          </div>
 
         </div>
       </section>
 
-      {/* APPLICATIONS ZONE */}
-      <section className="py-36 bg-slate-50 border-y border-slate-200/60 relative z-10">
+      {/* --- SECTION 5: STRUCTURAL INTEGRATION NODES --- */}
+      <section className="py-36 bg-white relative z-10 rounded-t-[3rem] border-t border-[#67C090]/20">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-150px" }} variants={sectionReveal}
-            className="text-center mb-24"
-          >
-            <span className="text-brand-blue font-black tracking-widest uppercase text-xs block mb-4">Structural Adaptability</span>
-            <h2 className="text-4xl md:text-6xl font-black text-brand-navy tracking-tight">Architectural Specialization Zones</h2>
-          </motion.div>
+          
+          <div className="mb-20">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Integration Nodes</h2>
+          </div>
 
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
-          >
+          <div className="space-y-4">
             {applications.map((app, i) => (
               <motion.div 
-                variants={sectionReveal} 
-                key={i} 
-                className="group relative bg-white rounded-2xl p-6 shadow-sm border border-slate-200/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-500"
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                whileHover={{ x: 15, backgroundColor: "#124170", color: "#DDF4E7" }}
+                className="bg-[#DDF4E7]/20 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[#124170]/10 transition-colors duration-300 cursor-pointer rounded-lg"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-navy to-brand-blue opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0" />
-                <div className="relative z-10 flex flex-col justify-between h-24">
-                  <p className="font-extrabold text-xl text-brand-navy group-hover:text-white transition-colors duration-300">{app.title}</p>
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-md group-hover:bg-white/10 group-hover:text-cyan-300 transition-all">{app.count}</span>
-                    <ArrowRight size={18} className="text-slate-400 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-cyan-400 transition-all duration-300" />
-                  </div>
+                <div className="flex items-center gap-6">
+                  <span className="font-mono text-xs text-[#26667F]">0{i + 1} //</span>
+                  <h4 className="font-bold text-xl tracking-tight uppercase">{app.title}</h4>
+                </div>
+                <div className="flex items-center gap-4 mt-4 sm:mt-0">
+                  <span className="font-mono text-xs opacity-60">Verified Deployments</span>
+                  <div className="w-12 h-[1px] bg-[#67C090]" />
+                  <span className="font-mono text-sm font-bold text-[#26667F]">{app.count} Units</span>
+                  <Plus size={14} className="opacity-40" />
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* PREMIUM TECHNICAL CATALOGUE PANEL */}
-      <section className="py-28 bg-gradient-to-br from-brand-navy via-[#071324] to-[#01060d] text-white text-center px-6 relative overflow-hidden z-10">
-        <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:2rem_2rem]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-brand-blue/10 rounded-full blur-[150px] pointer-events-none" />
-        
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} viewport={{ once: true }}
-          className="max-w-4xl mx-auto relative z-10"
-        >
-          <h2 className="text-4xl md:text-7xl font-black mb-8 tracking-tight leading-tight">Access Engineering <br />Dimensional Data Matrixes</h2>
-          <p className="text-slate-400 md:text-xl mb-12 font-light max-w-3xl mx-auto leading-relaxed">Download architectural product metrics including noise quotients, throw variables, k-factors, and custom size mapping tools.</p>
-          <Link href="/request-catalogue/" className="inline-flex items-center gap-3 bg-gradient-to-r from-brand-blue to-cyan-500 text-white px-10 py-5 font-black text-base rounded-xl shadow-[0_10px_30px_rgba(0,120,255,0.3)] hover:shadow-[0_0_40px_rgba(0,255,255,0.5)] hover:scale-103 transition-all duration-300">
-            Download Core Technical Catalogue <ArrowRight size={20} />
-          </Link>
-        </motion.div>
-      </section>
-
-      {/* 🚀 5. LIGHT-THEMED PREMIUM CTA TRANSITION BANNER */}
-      {/* पुराने डार्क कॉन्टैक्ट ग्रिड को हटाकर इसे यहाँ जोड़ दिया गया है ताकि ग्लोबल डार्क फ़ुटर के साथ परफेक्ट विज़ुअल ब्रेक बने */}
-      <section className="bg-slate-50 border-t border-slate-200/60 py-24 relative overflow-hidden z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a03_1px,transparent_1px),linear-gradient(to_bottom,#0f172a05_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[20rem] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-6">
-          <span className="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-white text-brand-blue font-black tracking-widest uppercase text-[9px] border border-slate-200 shadow-sm">
-            Next-Gen Air Management
-          </span>
-          
-          <h2 className="text-3xl md:text-5xl font-black text-brand-navy tracking-tight max-w-2xl mx-auto leading-tight">
-            Ready to Integrate <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-cyan-600">ALUGRIDX Systems?</span>
+      {/* --- SECTION 6: BRANDED CTA BANNER --- */}
+      <section className="py-32 text-center px-6 relative z-10 bg-[#124170] text-[#DDF4E7]">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+            Request Core Data Overlays
           </h2>
-          
-          <p className="text-slate-500 font-medium text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
-            Connect directly with our engineering department to extract precise dimensional parameters, AutoCAD blueprint detail blocks, and quick factory RFQ dispatch grids.
+          <p className="text-[#DDF4E7]/60 font-light text-sm max-w-xl mx-auto leading-relaxed">
+            Gain immediate access to building engineering blueprints, k-factors, noise ceilings, and fully compatible detail block packages.
           </p>
 
           <div className="pt-6 flex flex-wrap justify-center gap-4">
             <Link 
-              href="/products/" 
-              className="bg-brand-navy text-white font-black text-xs uppercase tracking-widest px-7 py-4 rounded-xl shadow-md hover:bg-brand-blue transition-all duration-300"
+              href="/request-catalogue" 
+              className="bg-[#67C090] hover:bg-[#DDF4E7] text-[#124170] font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 transition-all duration-300"
             >
-              Explore Components
+              Extract Core Catalogue
             </Link>
             <Link 
-              href="/contact-us/" 
-              className="bg-white text-brand-navy border-2 border-slate-200 hover:border-brand-blue font-black text-xs uppercase tracking-widest px-7 py-4 rounded-xl transition-all shadow-sm"
+              href="/contact-us" 
+              className="bg-transparent border border-[#DDF4E7]/20 text-white hover:text-[#67C090] hover:border-[#67C090] font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 transition-all"
             >
-              Contact Engineering
+              Connect with Desk
             </Link>
           </div>
         </div>
       </section>
+      <SlidingMarquee />
 
     </div>
   );

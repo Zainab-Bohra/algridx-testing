@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, Clock, Tag, User } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -9,12 +11,9 @@ export default async function BlogDetail({
 }) {
   const { slug } = await params;
 
-  const res = await fetch(
-    `${API_URL}/api/blogs/${slug}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     notFound();
@@ -23,61 +22,57 @@ export default async function BlogDetail({
   const blog = await res.json();
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="bg-[#DDF4E7] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170]">
+      {/* Blueprint structural background framework overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:2rem_2rem] pointer-events-none" />
 
-      {/* HERO */}
-      <section className="pt-44 pb-40 bg-gradient-to-br from-[#061224] via-[#0b1f3d] to-[#102a4c] relative overflow-hidden">
-
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.15),transparent_30%),radial-gradient(circle_at_left,rgba(59,130,246,0.12),transparent_35%)]" />
-
-        <div className="max-w-5xl mx-auto px-6 relative z-10">
-
-          <div className="flex flex-wrap items-center gap-3 mb-8">
-
-            <span className="px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-300 text-xs font-bold uppercase tracking-widest">
-              {blog.category}
-            </span>
-
-            <span className="text-slate-400">•</span>
-
-            <span className="text-slate-300 text-sm">
-              {blog.readTime}
-            </span>
-
-            <span className="text-slate-400">•</span>
-
-            <span className="text-slate-300 text-sm">
-              ALUGRIDX
-            </span>
-
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight max-w-5xl">
-            {blog.title}
-          </h1>
-
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        
+        {/* PREMIUM CAPSULE RETIREMENT ACTUATOR (BACK BUTTON) */}
+        <div className="mb-8 flex justify-start">
+          <Link 
+            href="/blog" 
+            className="inline-flex items-center gap-2.5 text-xs font-mono font-bold uppercase tracking-wider text-[#124170] bg-white/70 hover:bg-white border border-[#67C090]/30 px-5 py-2.5 rounded-full shadow-sm transition-all group"
+          >
+            <ArrowLeft size={13} className="transform group-hover:-translate-x-1 transition-transform text-[#67C090]" />
+            <span>[ Return to Engineering Logs ]</span>
+          </Link>
         </div>
-      </section>
 
-      {/* ARTICLE */}
-      <section className="-mt-28 pb-24 relative z-20">
-
-        <div className="max-w-4xl mx-auto px-6">
-
-          <article className="bg-white rounded-[36px] shadow-[0_25px_80px_rgba(0,0,0,0.12)] p-8 md:p-16 border border-slate-100">
-
-            <div className="text-slate-700 text-lg leading-10 whitespace-pre-line">
-
-              {blog.content}
-
+        {/* COMPREHENSIVE TEXT SHEET LAYOUT WITH ROBUST BOUNDARY */}
+        <article className="bg-white rounded-[3rem] border-2 border-[#124170]/10 shadow-[rgba(18,65,112,0.03)_0px_30px_60px_-15px] overflow-hidden">
+          
+          {/* HEADER PARAMETERS METADATA ROW */}
+          <div className="p-8 md:p-12 bg-slate-50/50 border-b border-slate-100 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono font-bold bg-[#DDF4E7] text-[#26667F] rounded uppercase border border-[#67C090]/10">
+                <Tag size={10} /> {blog.category || "HVAC Tech"}
+              </span>
+              <span className="text-slate-300 font-light">•</span>
+              <div className="flex items-center gap-1 text-slate-500 font-mono text-[11px]">
+                <Clock size={12} className="text-[#67C090]" />
+                <span>{blog.readTime || "5 min read"}</span>
+              </div>
+              <span className="text-slate-300 font-light">•</span>
+              <div className="flex items-center gap-1 text-slate-500 font-mono text-[11px]">
+                <User size={12} className="text-[#67C090]" />
+                <span>By {blog.author || "ALUGRIDX"}</span>
+              </div>
             </div>
 
-          </article>
+            <h1 className="text-3xl md:text-5xl font-black uppercase text-[#124170] tracking-tight leading-[1.08]">
+              {blog.title}
+            </h1>
+          </div>
 
-        </div>
+          {/* MAIN INTELLECTUAL CONTENT WORKSPACE */}
+          <div className="p-8 md:p-14 text-slate-600 font-light text-sm md:text-base leading-relaxed whitespace-pre-line tracking-wide selection:bg-[#124170] selection:text-white">
+            {blog.content}
+          </div>
 
-      </section>
+        </article>
 
+      </div>
     </div>
   );
 }

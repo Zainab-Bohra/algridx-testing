@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Mail, Phone, ArrowRight, ShieldCheck, FileText, Sparkles } from "lucide-react";
+import { Mail, Phone, ArrowUpRight, ShieldCheck, FileText, Sparkles, LayoutGrid } from "lucide-react";
 
 export default function CatalogueClient() {
   const [formData, setFormData] = useState({ email: "", phone: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,158 +14,167 @@ export default function CatalogueClient() {
   };
 
   return (
-    <div className="bg-white min-h-screen pt-32 pb-24 overflow-hidden relative selection:bg-cyan-500 selection:text-white">
+    <div className="bg-[#DDF4E7] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170]">
       
-      {/* BACKGROUND MESH */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a04_1px,transparent_1px),linear-gradient(to_bottom,#0f172a04_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
-      <div className="absolute top-[-10%] left-[-10%] w-[50rem] h-[50rem] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
+      {/* ARCHITECTURAL BACKGROUND GRAPH GRID */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417004_1px,transparent_1px),linear-gradient(to_bottom,#12417006_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#67C090]/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-16">
         
-        {/* HERO HEADER */}
-        <div className="max-w-3xl mb-20 text-left">
-          <motion.span 
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-slate-100 text-brand-blue font-black tracking-widest uppercase text-[10px] mb-4 border border-slate-200"
-          >
-            <Sparkles size={12} className="text-brand-blue animate-spin-slow" />
-            ALUGRIDX 2026 Master Release
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="text-5xl md:text-7xl font-black text-brand-navy tracking-tight leading-none"
-          >
-            Product <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-cyan-500 to-blue-600">Catalogue</span>
-          </motion.h1>
+        {/* STRUCTURAL HEADER SECTION */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#124170]/10 pb-8 gap-6">
+          <div className="space-y-2 max-w-xl text-left">
+            <span className="inline-flex items-center gap-2 py-1 px-3 rounded-md bg-[#124170]/5 font-mono text-[9px] font-bold uppercase tracking-widest border border-[#124170]/10">
+              <Sparkles size={10} className="text-[#67C090]" />
+              Engineering Release v2.6
+            </span>
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+              Technical <span className="font-light italic font-serif text-[#67C090] lowercase tracking-normal">Vault</span>.
+            </h1>
+          </div>
+          
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* ASYMMETRIC GRID STRUCTURAL LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* LEFT SIDE: CATALOGUE PREVIEW WITH LOGO */}
-          <div className="lg:col-span-6 space-y-10">
+          {/* 1. HERO MAIN BOOK BLOCK (Stretched to fit height and eliminate empty space) */}
+          <div className="lg:col-span-5 flex flex-col justify-between bg-white rounded-[2.5rem] p-10 border-2 border-[#124170]/10 shadow-[rgba(18,65,112,0.02)_0px_20px_40px] relative overflow-hidden group min-h-[500px]">
+            <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-[#67C090]/15 to-transparent rounded-bl-full pointer-events-none" />
             
-            {/* 📚 UPDATED BOOK MOCKUP WITH LOGO */}
-            <div className="relative w-full h-52 bg-slate-50 border-2 border-slate-200/60 rounded-3xl p-8 flex items-center justify-between overflow-hidden group hover:border-brand-blue/40 transition-all duration-500 shadow-sm">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-bl-full pointer-events-none" />
-              <div className="max-w-xs relative z-10">
-                <span className="text-[10px] font-black tracking-widest text-brand-blue uppercase bg-white border border-slate-200 px-2.5 py-1 rounded shadow-sm">Official Submittal</span>
-                <h4 className="text-2xl font-black text-brand-navy mt-3 italic">ALUGRIDX 2026</h4>
-                <p className="text-xs text-slate-400 font-medium mt-1 leading-relaxed">Unified Engineering Reference Matrix & AutoCAD Blocks</p>
-              </div>
-              
-              {/* Floating Pages with Logo Overlay */}
-              <div className="relative w-40 h-full flex items-center justify-center shrink-0">
-                <div className="absolute w-28 h-36 bg-slate-200 rounded-lg transform rotate-6 translate-x-4 shadow-md border border-slate-300/50" />
-                <div className="absolute w-28 h-36 bg-slate-100 rounded-lg transform -rotate-3 translate-x-2 shadow-lg border border-slate-200" />
-                
-                {/* Main Dark Cover */}
-                <div className="absolute w-28 h-36 bg-gradient-to-br from-brand-navy to-[#051122] rounded-lg shadow-2xl border border-white/10 flex flex-col justify-between p-4 transform group-hover:-translate-y-2 group-hover:-rotate-6 transition-all duration-700 ease-out">
-                  
-                  {/* 🖼️ FIXED NEXT.JS COMPLIANT LOGO PATH */}
-                  <div className="w-10 h-10 flex items-center justify-center overflow-hidden rounded bg-white/5 p-1">
-                    <img 
-                      src="/images/alugridx-without-bg-1.webp" 
-                      alt="ALUGRIDX"
-                      className="w-full h-full object-contain filter brightness-110"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.parentElement!.innerHTML = '<span class="text-cyan-400 font-black text-[10px]">AX</span>';
-                      }}
-                    />
-                  </div>
-
-                  <div className="text-[10px] font-black text-white leading-none tracking-tight">
-                    SPEC SHEET<br/>
-                    <span className="text-cyan-400 text-[8px] font-light tracking-widest uppercase">2026 MATRIX</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* DIRECTORY LIST SUMMARY */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-black text-brand-navy uppercase tracking-widest flex items-center gap-2">
-                <FileText size={16} className="text-brand-blue" />
-                What's in the catalogue
+            <div className="space-y-4 relative z-10">
+              <span className="text-[9px] font-mono font-bold tracking-widest text-[#26667F] bg-[#DDF4E7] px-2.5 py-1 rounded border border-[#67C090]/10 uppercase">
+                Core Submittal
+              </span>
+              <h3 className="text-4xl font-black uppercase tracking-tight leading-none pt-2">
+                ALUGRIDX <br />Master Book
               </h3>
-              <p className="text-slate-500 font-medium text-sm leading-relaxed">
-                Complete technical specifications, dimensional drawings, k-factors, throw and noise data — across all 15+ product series.
+              <p className="text-xs text-slate-500 font-light max-w-xs leading-relaxed">
+                Unified architectural reference manual complete with dynamic performance nodes for GCC consultants.
               </p>
             </div>
 
-            {/* SPECIFICATIONS TOKENS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                "Ceiling Diffusers — SAD, RAD series",
-                "Linear Slot Diffusers — SLSD, RLSD series",
-                "Supply & Return Air Grilles",
-                "Linear Bar Grilles — SLBR series",
-                "Louvers — Exhaust & Sand Trap",
-                "Dampers — VCD, NRD series",
-                "Technical specifications & installation guides",
-                "Custom sizing & project consultation"
-              ].map((item, index) => (
-                <div 
-                  key={index} 
-                  className="flex gap-3 items-center text-xs font-bold text-slate-600 bg-slate-50/60 border-2 border-slate-200/50 p-3.5 rounded-2xl hover:bg-white hover:border-brand-blue/40 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div className="w-6 h-6 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300 shrink-0">
-                    <CheckCircle2 size={13} className="text-cyan-500 group-hover:text-white" />
-                  </div>
-                  <span className="leading-snug">{item}</span>
+            {/* EXPANDED 3D FLOATING BOOK SHOWCASE (Fills the upper and bottom whitespace perfectly) */}
+            <div className="h-64 flex items-center justify-center mt-6 mb-4 relative z-10">
+              {/* Back Pages Shadow Layers */}
+              <div className="absolute w-40 h-52 bg-slate-200/60 rounded-2xl transform rotate-12 translate-x-8 border border-slate-300/30 shadow-sm transition-transform duration-500 group-hover:rotate-6" />
+              <div className="absolute w-40 h-52 bg-slate-100 rounded-2xl transform -rotate-3 translate-x-4 border border-slate-200 shadow-md transition-transform duration-500 group-hover:rotate-[-1deg]" />
+              
+              {/* Main Extended 3D Book Cover */}
+              <motion.div 
+                whileHover={{ y: -10, rotate: -6 }}
+                className="absolute w-40 h-52 bg-gradient-to-br from-[#26667F] to-[#124170] rounded-2xl shadow-[0_30px_60px_rgba(18,65,112,0.25)] border border-white/10 flex flex-col justify-between p-5 transition-transform duration-500 ease-out cursor-pointer origin-bottom"
+              >
+                <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 p-1.5 shadow-inner">
+                  <img src="/images/alugridx-without-bg-1.webp" alt="AX" className="w-full h-full object-contain filter brightness-200 grayscale" />
                 </div>
-              ))}
+                <div className="text-[10px] font-mono font-bold text-white tracking-[3px] uppercase leading-tight">
+                  MATRIX <br /><span className="text-[#67C090] text-[8px] tracking-widest font-light">2026 RELEASE</span>
+                </div>
+              </motion.div>
             </div>
           </div>
 
-          {/* RIGHT SIDE: SECURE FORM */}
-          <div className="lg:col-span-6">
+          {/* 2. BENTO TECH SPECIFICATION MATRIX & FORM BLOCK */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+            
+            {/* UPPER BENTO CARD: SYSTEM PARAMETERS */}
+            <div className="bg-white/50 backdrop-blur-md rounded-[2.5rem] p-8 border-2 border-[#124170]/5 space-y-4">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#26667F] uppercase tracking-wider">
+                <LayoutGrid size={14} className="text-[#67C090]" />
+                <span>Structured Architectural Grid Elements</span>
+              </div>
+              
+              <div className="flex flex-wrap gap-2.5 pt-2">
+                {[
+                  "Ceiling Diffusers (SAD/RAD)", 
+                  "Linear Slot Arrays (LSD Matrix)", 
+                  "Return Louver Registers", 
+                  "Linear Bar Profiles", 
+                  "Sand Trap Weather Hoods", 
+                  "Volume Control Dampers (VCD)", 
+                  "Mechanical NRD Nodes",
+                  "AutoCAD DWG Integration Blocks"
+                ].map((tag, i) => (
+                  <span 
+                    key={i} 
+                    className="text-[11px] font-medium bg-white border border-[#124170]/10 px-3.5 py-2 rounded-xl shadow-[rgba(18,65,112,0.01)_0px_4px_12px] flex items-center gap-2 hover:border-[#67C090]/50 transition-colors"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#67C090]" />
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* LOWER INTAKE FORM CONSOLE CARD */}
             <AnimatePresence mode="wait">
               {!isSubmitted ? (
                 <motion.div 
-                  key="form-block" initial={{ opacity: 0, y: 30, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="bg-gradient-to-b from-[#0a192f] via-[#051122] to-[#01060d] text-white p-8 md:p-12 rounded-3xl border-2 border-white/10 shadow-[0_20px_50px_rgba(10,25,47,0.3)] relative overflow-hidden"
+                  key="form-console" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98 }}
+                  className="bg-white rounded-[2.5rem] p-8 md:p-10 border-2 border-[#124170]/10 shadow-[rgba(18,65,112,0.03)_0px_30px_60px_-15px] relative flex flex-col justify-between grow"
                 >
-                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-cyan-500/10 to-transparent pointer-events-none rounded-bl-full" />
-                  
-                  <div className="mb-8">
-                    <span className="text-[9px] font-black tracking-widest text-cyan-400 uppercase bg-white/5 border border-white/10 px-2.5 py-1 rounded shadow-sm inline-block">Catalogue 2026</span>
-                    <h3 className="text-2xl md:text-3xl font-black tracking-tight text-white mt-3">Get the catalogue</h3>
-                    <p className="text-slate-400 text-xs font-light mt-1.5">Just your email and phone — we'll send it across within 24 hours.</p>
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-black uppercase tracking-tight">Data Submittal Request</h3>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2">Email Address *</label>
+                  <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+                    {/* EMAIL INPUT */}
+                    <div className="space-y-1.5 relative">
+                      <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "email" ? "text-[#67C090]" : "text-slate-400"}`}>Corporate Email Link</label>
                       <div className="relative">
-                        <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white/[0.02] border-2 border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-xs focus:outline-none focus:border-cyan-400 focus:bg-white/[0.05] transition-all font-bold text-white tracking-wide placeholder-slate-600" placeholder="corporate@company.com" />
-                        <Mail size={14} className="absolute left-4 top-4 text-slate-500" />
+                        <input 
+                          type="email" required value={formData.email} onFocus={() => setFocusedField("email")} onBlur={() => setFocusedField(null)}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                          className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors placeholder-slate-300" 
+                          placeholder="name@company.com" 
+                        />
+                        <Mail size={12} className="absolute left-0 top-2.5 text-slate-400" />
                       </div>
+                      {focusedField === "email" && <motion.div layoutId="consoleGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_8px_#67C090]" />}
                     </div>
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2">Phone Number *</label>
+
+                    {/* PHONE INPUT */}
+                    <div className="space-y-1.5 relative">
+                      <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "phone" ? "text-[#67C090]" : "text-slate-400"}`}>Telecom Router Link</label>
                       <div className="relative">
-                        <input type="tel" required value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-white/[0.02] border-2 border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-xs focus:outline-none focus:border-cyan-400 focus:bg-white/[0.05] transition-all font-bold text-white tracking-wide placeholder-slate-600" placeholder="+971 50 000 0000" />
-                        <Phone size={14} className="absolute left-4 top-4 text-slate-500" />
+                        <input 
+                          type="tel" required value={formData.phone} onFocus={() => setFocusedField("phone")} onBlur={() => setFocusedField(null)}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                          className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors placeholder-slate-300" 
+                          placeholder="+971 50 000 0000" 
+                        />
+                        <Phone size={12} className="absolute left-0 top-2.5 text-slate-400" />
                       </div>
+                      {focusedField === "phone" && <motion.div layoutId="consoleGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_8px_#67C090]" />}
                     </div>
-                    <motion.button whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} type="submit" className="w-full bg-gradient-to-r from-brand-blue via-cyan-500 to-blue-600 text-white font-black text-xs uppercase tracking-widest py-4 rounded-xl flex items-center justify-center gap-2 transition-all mt-8 border border-white/10">
-                      <span>Submit Request</span> <ArrowRight size={14} />
-                    </motion.button>
+
+                    {/* ACTION BUTTON PILL */}
+                    <div className="md:col-span-2 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-slate-100 mt-4 gap-4">
+                      <p className="text-[10px] text-slate-400 font-light max-w-xs leading-tight">Docs are securely dispatched by the technical department inside a short automated window.</p>
+                      <button 
+                        type="submit" 
+                        className="group bg-[#124170] hover:bg-[#67C090] text-white px-7 py-4 rounded-full text-xs font-mono font-bold uppercase tracking-widest transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-2 shrink-0 w-full sm:w-auto justify-center"
+                      >
+                        <span>Dispatch Bundle</span> 
+                        <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </button>
+                    </div>
                   </form>
                 </motion.div>
               ) : (
+                /* SUCCESS CONSOLE PLATFORM */
                 <motion.div 
-                  key="success-block" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
-                  className="bg-slate-50 border-2 border-slate-200 p-8 md:p-12 rounded-3xl text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]"
+                  key="success-console" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+                  className="bg-white border-2 border-[#124170]/10 p-8 rounded-[2.5rem] text-center shadow-[rgba(18,65,112,0.02)_0px_20px_40px] flex flex-col items-center justify-center grow min-h-[300px]"
                 >
-                  <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mb-6 border border-emerald-100 shadow-sm animate-pulse">
-                    <ShieldCheck size={32} />
+                  <div className="w-12 h-12 bg-[#DDF4E7] text-[#124170] rounded-full flex items-center justify-center mb-4 border border-[#67C090]/20 shadow-sm">
+                    <ShieldCheck size={22} className="text-[#67C090]" />
                   </div>
-                  <h3 className="text-2xl font-black text-brand-navy tracking-tight">Request Logged Safely</h3>
-                  <p className="text-slate-500 font-medium text-xs md:text-sm mt-3 max-w-sm leading-relaxed">
-                    Thank you. The complete **ALUGRIDX 2026 Master Technical Grid** is scheduled for delivery to <span className="text-brand-blue font-extrabold">{formData.email}</span> within 24 hours.
+                  <h3 className="text-lg font-black uppercase tracking-tight">Request Logged Safely</h3>
+                  <p className="text-slate-500 font-light text-xs mt-2 max-w-md leading-relaxed">
+                    The complete <span className="text-[#26667F] font-bold font-mono">ALUGRIDX 2026 Master Technical Grid</span> is scheduled for transmission to <span className="text-[#124170] font-bold font-mono break-all">{formData.email}</span> within a brief index window.
                   </p>
                 </motion.div>
               )}

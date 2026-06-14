@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import ProjectsClient from "./ProjectsClient";
 
-// 🚀 ENTERPRISE HVAC PROJECTS SEO METADATA
 export const metadata: Metadata = {
   title: "HVAC Project Portfolio & Case Studies | ALUGRIDX UAE",
   description: "Explore landmark ventilation and air distribution supply projects by ALUGRIDX across Dubai, Abu Dhabi, and the GCC. Review architectural submittals for commercial, medical, and residential towers.",

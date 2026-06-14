@@ -9,7 +9,7 @@ const items = [
 
 export default function SlidingMarquee() {
   return (
-    <div className="flex w-full overflow-hidden bg-brand-blue py-3 text-white">
+    <div className="flex w-full overflow-hidden bg-white py-3 text-[#124170]e">
       <motion.div
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}

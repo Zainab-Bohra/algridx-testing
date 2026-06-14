@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import ContactClient from "./ContactClient";
 
-// 🚀 HIGH-LEVEL SEO METADATA FOR UAE & GCC
 export const metadata: Metadata = {
   title: "Contact Our Engineering Team | ALUGRIDX UAE",
   description: "Connect with ALUGRIDX Air Conditioning Industry LLC. Request quotes, custom dimensions, technical submittals, and factory visits in Ajman & Dubai, UAE.",
