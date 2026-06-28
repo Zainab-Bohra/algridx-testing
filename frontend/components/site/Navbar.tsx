@@ -6,11 +6,11 @@ import { Menu, X, ArrowRight } from "lucide-react";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Products", href: "/products/" },
-  { name: "Projects", href: "/projects/" },
-  { name: "About Us", href: "/about-us/" },
-  { name: "Blog", href: "/blog/" },
-  { name: "Contact", href: "/contact-us/" },
+  { name: "Products", href: "/products" },
+  { name: "Projects", href: "/projects" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact-us" },
 ];
 
 export default function Navbar() {
@@ -27,20 +27,20 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans ${
         isScrolled
-          ? "bg-[#124170]/85 backdrop-blur-xl border-b border-[#67C090]/20 py-3.5 shadow-[rgba(18,65,112,0.15)_0px_15px_30px_-10px]"
-          : "bg-gradient-to-b from-[#124170]/70 via-[#124170]/20 to-transparent border-b border-transparent py-6"
+          ? "bg-[#0A2540]/90 backdrop-blur-xl border-b border-[#3B82F6]/20 py-3 shadow-[0_10px_30px_rgba(10,37,64,0.15)]"
+          : "bg-gradient-to-b from-[#0A2540]/80 via-[#0A2540]/30 to-transparent border-b border-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         
-        {/* Logo Section */}
-        <Link href="/" className="flex items-center z-50 transition-transform hover:scale-102">
+        {/* Logo Section Frame (Bada Size aur Smooth Scale Touch) */}
+        <Link href="/" className="flex items-center z-50 transition-transform hover:scale-[1.01] shrink-0">
           <img 
             src="/images/alugridx-without-bg-1.webp" 
             alt="ALUGRIDX" 
-            className="h-10 md:h-12 w-auto object-contain brightness-125"
+            className="h-12 md:h-14 w-auto object-contain brightness-110 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
           />
         </Link>
 
@@ -50,29 +50,29 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-xs font-mono font-bold uppercase tracking-widest text-[#DDF4E7] hover:text-[#67C090] transition-colors duration-300 relative py-1 group"
+              className="text-[11px] font-sans font-extrabold uppercase tracking-widest text-slate-200 hover:text-white transition-colors duration-300 relative py-1 group"
             >
               <span>{link.name}</span>
-              {/* Minimalist Micro-line Indicator below link */}
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#67C090] transition-all duration-300 group-hover:w-full" />
+              {/* Minimalist Electric Blue Micro-line Indicator below link */}
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#3B82F6] transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </nav>
 
-        {/* Branded Rounded CTA Button */}
+        {/* Premium Branded CTA Accent Button */}
         <div className="hidden md:block">
           <Link
-            href="/request-catalogue/"
-            className="group bg-[#67C090] hover:bg-[#DDF4E7] text-[#124170] px-6 py-3 rounded-full text-xs font-mono font-bold uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5"
+            href="/request-catalogue"
+            className="group bg-[#3B82F6] hover:bg-white text-white hover:text-[#124170] px-6 py-3 rounded-full text-[11px] font-sans font-extrabold uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-[0_10px_20px_rgba(59,130,246,0.3)] flex items-center gap-1.5 border border-transparent hover:border-white"
           >
             <span>Request Catalogue</span>
             <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        {/* Mobile Menu Action Toggle */}
+        {/* Mobile Menu Action Toggle Switch */}
         <button
-          className="md:hidden text-[#DDF4E7] z-50 p-1 hover:text-[#67C090] transition-colors"
+          className="md:hidden text-slate-200 z-50 p-2 hover:text-[#3B82F6] transition-colors cursor-pointer"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -80,7 +80,7 @@ export default function Navbar() {
 
       </div>
 
-      {/* Mobile Glassmorphism Overlay Menu */}
+      {/* Mobile Glassmorphism Overlay Menu Plane */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -88,7 +88,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="absolute top-0 left-0 w-full h-screen bg-[#124170]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 z-40"
+            className="absolute top-0 left-0 w-full h-screen bg-[#0A2540]/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-10 z-40"
           >
             <div className="flex flex-col items-center gap-6">
               {navLinks.map((link) => (
@@ -96,7 +96,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-xl font-mono font-bold uppercase tracking-widest text-[#DDF4E7] hover:text-[#67C090] transition-colors"
+                  className="text-lg font-sans font-extrabold uppercase tracking-widest text-slate-200 hover:text-[#3B82F6] transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -104,9 +104,9 @@ export default function Navbar() {
             </div>
             
             <Link
-              href="/request-catalogue/"
+              href="/request-catalogue"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="mt-4 bg-[#67C090] text-[#124170] px-8 py-4 rounded-full text-xs font-mono font-bold uppercase tracking-widest shadow-lg"
+              className="bg-[#3B82F6] text-white px-8 py-4 rounded-full text-xs font-sans font-extrabold uppercase tracking-widest shadow-lg shadow-blue-500/10"
             >
               Request Catalogue
             </Link>

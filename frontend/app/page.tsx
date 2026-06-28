@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
-import { motion, Variants, animate } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, Variants, animate, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, HardHat, Zap, Layers, Activity, Plus, ChevronRight } from "lucide-react";
+import { ArrowRight, HardHat, Zap, Layers, Activity, ChevronRight } from "lucide-react";
 import Hero from "@/components/site/Hero";
 import SlidingMarquee from "@/components/site/SlidingMarquee";
 
@@ -29,6 +29,92 @@ function Counter({ value }: { value: number }) {
   );
 }
 
+function Interactive3DCard({ cat }: { cat: any }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [-240, 240], [15, -15]);
+  const rotateY = useTransform(x, [-160, 160], [-15, 15]);
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    x.set(mouseX);
+    y.set(mouseY);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <div className="w-full h-[460px] md:h-[480px] [perspective:1500px] group cursor-pointer" ref={cardRef}>
+      <motion.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full h-full rounded-[32px] md:rounded-[40px] bg-gradient-to-br from-[#124170] to-[#0A2540] relative transition-all duration-200 shadow-[0_15px_35px_rgba(10,37,64,0.2)] sm:group-hover:shadow-[0_45px_70px_rgba(59,130,246,0.3)] border border-white/10"
+      >
+        <div className="absolute left-0 top-0 [transform-style:preserve-3d] z-30 pointer-events-none">
+          <span className="absolute block aspect-square rounded-full top-[12px] left-[12px] bg-white/5 w-[200px] md:w-[260px] [transform:translate3d(0,0,20px)] transition-transform duration-500" />
+          <span className="absolute block aspect-square rounded-full top-[14px] left-[14px] bg-white/10 w-[170px] md:w-[220px] [transform:translate3d(0,0,40px)] sm:group-hover:[transform:translate3d(0,0,55px)] transition-transform duration-500" />
+          <span className="absolute block aspect-square rounded-full top-[16px] left-[16px] bg-white/15 w-[140px] md:w-[190px] [transform:translate3d(0,0,60px)] sm:group-hover:[transform:translate3d(0,0,75px)] transition-transform duration-500" />
+          
+          <span className="absolute aspect-square rounded-full top-[24px] left-[24px] bg-white shadow-[0_15px_35px_rgba(10,37,64,0.25)] w-[120px] md:w-[160px] [transform:translate3d(0,0,85px)] sm:group-hover:[transform:translate3d(0,0,120px)] transition-all duration-500 grid place-content-center p-4 overflow-hidden border border-slate-100">
+            <img
+              src={`/images/products/${cat.name.toLowerCase().replace(/\s+/g, "-")}.avif`}
+              alt={cat.name}
+              className="max-h-full max-w-full object-contain scale-110 sm:group-hover:scale-125 transition-transform duration-500"
+            />
+          </span>
+        </div>
+
+        <div className="pt-[210px] md:pt-[245px] px-6 md:px-7 pb-6 [transform:translate3d(0,0,40px)] relative z-10 flex flex-col justify-end h-full">
+          <div className="mb-4">
+            <span className="block text-white font-extrabold text-base md:text-lg tracking-tight uppercase leading-tight font-sans">
+              {cat.name}
+            </span>
+            <span className="block text-[10px] tracking-widest text-[#3B82F6] uppercase font-bold mt-1 font-sans">
+              {cat.code}
+            </span>
+            <p className="block text-xs text-slate-300 leading-relaxed font-normal mt-2 font-sans line-clamp-3 md:line-clamp-none">
+              {cat.desc}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            <div className="flex gap-1.5">
+              {[1, 2, 3].map((dot) => (
+                <div 
+                  key={dot}
+                  className="w-2 h-2 rounded-full bg-[#3B82F6]/60 sm:group-hover:bg-[#3B82F6] transition-colors"
+                  style={{ transitionDelay: `${dot * 0.05}s` }}
+                />
+              ))}
+            </div>
+
+            <Link 
+              href={`/products/?category=${cat.name.replace(/\s+/g, "-").toLowerCase()}`}
+              className="flex items-center gap-0.5 text-[#3B82F6] sm:group-hover:text-white text-xs font-bold font-sans transition-colors group/btn"
+            >
+              <span>Explore</span>
+              <ChevronRight size={13} className="transition-transform sm:group-hover/btn:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 const categories = [
   { name: "Ceiling Diffusers", code: "SAD / RAD Series", desc: "Engineered for optimal omnidirectional air distribution with whisper-quiet acoustics." },
   { name: "Linear Slot Diffusers", code: "SLSD / RLSD Series", desc: "Architectural linear profiles delivering high-capacity fluid airflow design." },
@@ -41,172 +127,103 @@ const categories = [
 ];
 
 const features = [
-  { title: "6063-T6 Extrusions", desc: "Premium grade alloy foundations crafted for high structural rigidity and corrosion prevention.", icon: Layers },
+  { title: "AlugridX 6063-T6 Extrusions", desc: "Premium grade alloy foundations crafted for high structural rigidity and corrosion prevention.", icon: Layers },
   { title: "Flow Calibrations", desc: "Components micro-machined to ensure total conformance with global ASHRAE airflow rules.", icon: Activity },
   { title: "GCC Logistics Node", desc: "Direct manufacturing dispatch loops providing bulk distribution across regional fields.", icon: Zap },
   { title: "Engineering Desk", desc: "Dedicated specialists executing blueprint checks from early stages down to site testing.", icon: HardHat },
 ];
 
 const applications = [
-  { title: "Commercial Architecture", count: "120+" },
-  { title: "Residential Towers", count: "85+" },
-  { title: "Hospitality Frameworks", count: "40+" },
-  { title: "Sterile Clinical Environments", count: "65+" },
-  { title: "Industrial Complexes", count: "50+" },
-  { title: "Infrastructure Hubs", count: "30+" },
-  { title: "Aviation Terminals", count: "15+" },
-  { title: "High-Traffic Retail", count: "70+" },
+  { title: "Commercial Architecture", scope: "Corporate Headquarters & Retail Podiums" },
+  { title: "Residential Towers", scope: "High-Rise Enclaves & Luxury Spatial Living" },
+  { title: "Hospitality Frameworks", scope: "Resorts & Premium Grade Entertainment Hubs" },
+  { title: "Sterile Clinical Fields", scope: "Air Filtration Systems for Clean Medical Zones" },
+  { title: "Industrial Complexes", scope: "Manufacturing Plants & Precision Infrastructure" },
+  { title: "Infrastructure Hubs", scope: "Aviation Terminals & High-Traffic Rail Logistics" },
 ];
 
 export default function Home() {
   return (
-    <div className="bg-[#DDF4E7] min-h-screen text-[#124170] selection:bg-[#26667F] selection:text-white overflow-hidden relative">
+    <div className="bg-[#F8FAFC] min-h-screen text-[#124170] selection:bg-[#124170] selection:text-white overflow-hidden relative font-sans">
       
-      {/* Structural Minimal Grid Overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417005_1px,transparent_1px),linear-gradient(to_bottom,#12417005_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
 
-      {/* Hero Component */}
       <Hero />
 
-      {/* --- SECTION 2: HARDWARE INDEX (MASSIVE IMAGE + BOTTOM ANCHORED TEXT) --- */}
-      <section className="py-36 px-6 max-w-7xl mx-auto relative z-10">
-        
+      {/* --- SECTION 2: HARDWARE INDEX --- */}
+      <section className="py-24 md:py-36 px-6 max-w-7xl mx-auto relative z-10">
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true }}
           variants={sectionReveal}
-          className="border-b border-[#124170]/10 pb-12 mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
+          className="border-b border-[#124170]/10 pb-8 mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-4"
         >
           <div>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Hardware Index</h2>
+            <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] bg-[#3B82F6]/10 border border-[#3B82F6]/20 px-3 py-1 rounded-full">
+              Engineered Catalog
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] mt-3">AlugridX Hardware Index</h2>
           </div>
-          
+          <p className="text-xs text-slate-500 font-medium max-w-xs leading-relaxed">
+            High-performance architectural aluminum air terminals built with industrial structural precision.
+          </p>
         </motion.div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {categories.map((cat, i) => (
-            <div
-              key={i}
-              className="w-full h-[480px] [perspective:1200px] group cursor-pointer"
-            >
-              {/* THE 3D CARD CONTAINER */}
-              <div 
-                className="w-full h-full rounded-[40px] bg-gradient-to-br from-[#26667F] to-[#124170] relative transition-all duration-700 ease-in-out [transform-style:preserve-3d] shadow-[0_25px_25px_-5px_rgba(18,65,112,0.2)] group-hover:[transform:rotate3d(1,-1,0,22deg)] group-hover:shadow-[30px_50px_25px_-40px_rgba(18,65,112,0.3),0_25px_30px_0_rgba(18,65,112,0.15)]"
-              >
-                
-                {/* FLOATING 3D CIRCLE LAYERS */}
-                <div className="absolute left-0 top-0 [transform-style:preserve-3d] z-30">
-                  <span className="absolute block aspect-square rounded-full top-[12px] left-[12px] bg-white/5 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[260px] [transform:translate3d(0,0,25px)] transition-all duration-600 ease-in-out" />
-                  <span className="absolute block aspect-square rounded-full top-[14px] left-[14px] bg-white/10 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[220px] [transform:translate3d(0,0,45px)] transition-all duration-600 ease-in-out delay-75 group-hover:[transform:translate3d(0,0,65px)]" />
-                  <span className="absolute block aspect-square rounded-full top-[16px] left-[16px] bg-white/15 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[190px] [transform:translate3d(0,0,65px)] transition-all duration-600 ease-in-out delay-150 group-hover:[transform:translate3d(0,0,85px)]" />
-                  <span className="absolute block aspect-square rounded-full top-[20px] left-[20px] bg-white/20 shadow-[10px_10px_20px_0_rgba(0,0,0,0.02)] w-[170px] [transform:translate3d(0,0,85px)] transition-all duration-600 ease-in-out delay-225 group-hover:[transform:translate3d(0,0,105px)]" />
-                  
-                  {/* ULTRA MASSIVE IMAGE FRAME */}
-                  <span className="absolute aspect-square rounded-full top-[24px] left-[24px] bg-[#DDF4E7] shadow-[10px_10px_25px_0_rgba(18,65,112,0.3)] w-[160px] [transform:translate3d(0,0,105px)] transition-all duration-600 ease-in-out delay-300 group-hover:[transform:translate3d(0,0,140px)] grid place-content-center p-4 overflow-hidden border border-white/30">
-                    <img
-                      src={`/images/products/${cat.name.toLowerCase().replace(/\s+/g, "-")}.avif`}
-                      alt={cat.name}
-                      className="max-h-full max-w-full object-contain mix-blend-multiply scale-110"
-                    />
-                  </span>
-                </div>
-
-                {/* GLASSMORPHISM LAYER */}
-                <div 
-                  className="absolute inset-[10px] rounded-[45px] rounded-tl-[100%] bg-gradient-to-b from-white/20 to-white/5 [transform:translate3d(0,0,30px)] border-r border-b border-white/10 transition-all duration-600 ease-in-out [transform-style:preserve-3d]" 
-                />
-
-                {/* TEXT CONTENT LAYER */}
-                <div className="pt-[245px] px-6 pb-5 [transform:translate3d(0,0,31px)] relative z-10 flex flex-col justify-end h-full">
-                  <div className="mb-4">
-                    <span className="block text-[#DDF4E7] font-black text-base tracking-tight uppercase leading-tight font-sans drop-shadow-sm">
-                      {cat.name}
-                    </span>
-                    <span className="block text-[9px] font-mono tracking-widest text-white/40 uppercase font-bold mt-0.5">
-                      {cat.code}
-                    </span>
-                    <p className="block text-[11px] text-[#DDF4E7]/70 leading-relaxed font-light mt-1.5">
-                      {cat.desc}
-                    </p>
-                  </div>
-
-                  {/* BOTTOM ACTION BAR */}
-                  <div className="flex items-center justify-between [transform-style:preserve-3d] pt-3 border-t border-white/5">
-                    
-                    {/* Micro Spec Nodes */}
-                    <div className="flex gap-1.5 [transform-style:preserve-3d]">
-                      {[1, 2, 3].map((dot) => (
-                        <div 
-                          key={dot}
-                          className="w-5 h-5 rounded-full bg-white/90 border border-[#26667F]/20 grid place-content-center text-[8px] font-mono font-bold text-[#124170] shadow-sm transition-all duration-500 hover:bg-[#124170] hover:text-white"
-                          style={{
-                            transform: "translate3d(0,0,0px)",
-                            transitionDelay: `${dot * 0.12}s`,
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Explore Link */}
-                    <Link 
-                      href={`/products/?category=${cat.name.replace(/\s+/g, "-").toLowerCase()}`}
-                      className="flex items-center gap-0.5 text-[#DDF4E7] hover:text-white text-[11px] font-mono font-bold transition-transform duration-300 hover:[transform:translate3d(0,0,12px)] group/btn"
-                    >
-                      <span>Explore</span>
-                      <ChevronRight size={12} className="transition-transform group-hover/btn:translate-x-0.5" />
-                    </Link>
-
-                  </div>
-                </div>
-
-              </div>
-            </div>
+            <Interactive3DCard key={i} cat={cat} />
           ))}
         </div>
       </section>
 
       {/* --- SECTION 3: SYSTEM RIGIDITY & ACCURACY --- */}
-      <section className="py-36 bg-[#124170] text-[#DDF4E7] relative z-10 rounded-t-[3rem]">
+      <section className="py-24 md:py-36 bg-[#0A2540] text-white relative z-10 rounded-t-[2.5rem] md:rounded-t-[4rem] shadow-[0_-20px_50px_rgba(10,37,64,0.15)]">
         <div className="max-w-7xl mx-auto px-6">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 md:mb-24">
             <div className="lg:col-span-8">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none text-white">
-                Rigidity & Dynamic Accuracy
+              <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] block mb-2">Performance Standards</span>
+              <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tight leading-none text-white">
+                Rigidity & Accuracy
               </h2>
             </div>
-            <div className="lg:col-span-4 border-l border-[#26667F] pl-6">
-              <p className="text-sm text-[#DDF4E7]/60 font-light leading-relaxed">
-                Every frame leaving our workspace line undergoes calibrated pressure testing to survive structural fluctuations.
+            <div className="lg:col-span-4 lg:border-l border-white/10 lg:pl-6">
+              <p className="text-sm text-slate-300 font-normal leading-relaxed">
+                Every AlugridX matrix layout profile undergoes calibrated high-pressure load checking to guarantee absolute zero acoustic deflection across multi-tier regional developments.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {features.map((feat, i) => {
               const Icon = feat.icon;
               return (
                 <motion.div 
                   key={i} 
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  whileHover={{ scale: 1.02, borderColor: "#67C090", boxShadow: "0 10px 30px rgba(18,65,112,0.3)" }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ 
+                    y: -6, 
+                    borderColor: "#3B82F6", 
+                    boxShadow: "0 25px 50px -15px rgba(59,130,246,0.25)" 
+                  }}
+                  whileTap={{ scale: 0.98 }}
                   viewport={{ once: true }}
-                  className="bg-[#26667F]/30 border-2 border-transparent p-10 flex gap-6 items-start transition-all duration-300 relative rounded-xl"
+                  transition={{ type: "spring", stiffness: 150, damping: 20 }}
+                  className="bg-white/5 border-2 border-white/5 p-6 md:p-10 flex gap-4 md:gap-6 items-start transition-all rounded-[2rem] md:rounded-[2.5rem] backdrop-blur-xl"
                 >
-                  <div className="bg-[#124170] text-[#67C090] p-3 rounded-lg">
-                    <Icon size={22} />
+                  <div className="bg-[#124170] text-[#3B82F6] p-3 md:p-4 rounded-xl md:rounded-2xl shadow-inner shadow-black/30 shrink-0">
+                    <Icon size={20} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold tracking-tight mb-2 text-white">{feat.title}</h3>
-                    <p className="text-sm text-[#DDF4E7]/70 font-light leading-relaxed">{feat.desc}</p>
+                    <h3 className="text-lg md:text-xl font-bold tracking-tight mb-2 text-white">{feat.title}</h3>
+                    <p className="text-xs md:text-sm text-slate-300 font-normal leading-relaxed">{feat.desc}</p>
                   </div>
                 </motion.div>
               );
             })}
           </div>
 
-          <div className="mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-16 border-t border-[#DDF4E7]/10">
+          <div className="mt-20 md:mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-12 md:pt-16 border-t border-white/10">
             {[
               { value: <><Counter value={44} />+</>, label: "System Profiles" },
               { value: <><Counter value={40} />+</>, label: "Years Operations Network" },
@@ -214,8 +231,8 @@ export default function Home() {
               { value: "GCC", label: "Enterprise Dispatch Hubs" },
             ].map((stat, idx) => (
               <div key={idx}>
-                <p className="text-4xl md:text-5xl font-mono font-black text-white">{stat.value}</p>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#67C090] mt-1 font-bold">{stat.label}</p>
+                <p className="text-3xl md:text-5xl font-black text-white bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">{stat.value}</p>
+                <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[#3B82F6] mt-2 font-extrabold">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -223,73 +240,104 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- SECTION 4: HISTORICAL TIMELINE (PREMIUM CARD DESIGN WITH NEW HEADING) --- */}
-      <section className="py-36 max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          
+      {/* --- SECTION 4: HISTORICAL TIMELINE (Corporate Roots - HIGH CONTRAST DARK CARDS FOR MOBILE) --- */}
+      <section className="py-24 md:py-36 max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] leading-none">Corporate Roots</h2>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight  text-[#124170]">Corporate Roots</h2>
+            <p className="text-xs text-slate-400 font-normal mt-4 leading-relaxed max-w-sm hidden lg:block">
+              Tracing the technological execution lineage of AlugridX architectural frameworks across global delivery grids.
+            </p>
           </div>
 
-          {/* Premium Cards Grid with Borders & Interactive Shading */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-8 flex flex-col gap-6">
             {[
               { year: "1986", title: "Strategic Foundation & GCC Network Setup", desc: "Inaugurated structural-scale architectural products supply loops across key GCC commercial zones, establishing an unshakeable ecosystem of trust and supply precision." },
               { year: "2025", title: "Technological Evolution & Automation Launch", desc: "Transitioned workflow execution into automated precision machinery lines, establishing tight thermodynamic parameters and zero-vibration air terminal setups." }
             ].map((item, idx) => (
-              <div 
+              <motion.div 
                 key={idx} 
-                className="group relative bg-white/40 backdrop-blur-sm border-2 border-white/40 hover:border-[#67C090]/50 p-8 rounded-[2rem] shadow-[rgba(18,65,112,0.04)_0px_20px_30px_0px] transition-all duration-300 hover:-translate-y-1"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                whileTap={{ scale: 0.99 }}
+                className="group relative bg-[#124170] border border-white/10 sm:bg-white sm:border-[#124170]/10 sm:hover:border-[#3B82F6]/50 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_12px_24px_rgba(10,37,64,0.15)] sm:hover:-translate-y-1.5 sm:hover:shadow-[0_25px_50px_rgba(59,130,246,0.1)] active:border-[#3B82F6] transition-all duration-300"
               >
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start">
-                  {/* Years with interactive glow */}
-                  <span className="text-5xl font-mono font-black text-[#26667F]/30 group-hover:text-[#67C090] transition-colors duration-300 select-none">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-transparent group-active:bg-[#3B82F6] rounded-l-[2rem] sm:hidden transition-colors" />
+                
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-start">
+                  <span className="text-4xl md:text-5xl font-black text-white/20 sm:text-[#124170]/15 group-hover:text-[#3B82F6] group-active:text-[#3B82F6] transition-colors duration-300 select-none">
                     {item.year}
                   </span>
-                  <div className="space-y-2">
-                    <h4 className="text-xl font-extrabold text-[#124170] group-hover:text-[#26667F] transition-colors leading-tight">
+                  <div className="space-y-1.5">
+                    <h4 className="text-base md:text-xl font-extrabold text-white sm:text-[#124170] sm:group-hover:text-[#2563EB] group-active:text-[#2563EB] transition-colors leading-tight">
                       {item.title}
                     </h4>
-                    <p className="text-sm text-slate-600 font-light leading-relaxed max-w-xl">
+                    <p className="text-xs md:text-sm text-slate-300 sm:text-slate-600 font-normal leading-relaxed max-w-xl">
                       {item.desc}
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* --- SECTION 5: STRUCTURAL INTEGRATION NODES --- */}
-      <section className="py-36 bg-white relative z-10 rounded-t-[3rem] border-t border-[#67C090]/20">
+      {/* --- SECTION 5: PREMIUM INTEGRATION NODES --- */}
+      <section className="py-24 md:py-36 bg-gradient-to-b from-[#F8FAFC] to-[#FFFFFF] relative z-10 rounded-t-[2.5rem] md:rounded-t-[4rem] border-t border-slate-200/80 shadow-[0_-15px_40px_rgba(10,37,64,0.02)]">
         <div className="max-w-7xl mx-auto px-6">
-          
-          <div className="mb-20">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Integration Nodes</h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#124170]/10 pb-8 mb-12 md:mb-16 gap-4">
+            <div>
+              <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] bg-[#3B82F6]/10 border border-[#3B82F6]/20 px-3.5 py-1.5 rounded-full">
+                AlugridX Matrix Configuration
+              </span>
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] mt-3">
+                Integration Nodes
+              </h2>
+            </div>
+            
           </div>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {applications.map((app, i) => (
               <motion.div 
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                whileHover={{ x: 15, backgroundColor: "#124170", color: "#DDF4E7" }}
-                className="bg-[#DDF4E7]/20 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[#124170]/10 transition-colors duration-300 cursor-pointer rounded-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                whileHover={{ 
+                  y: -8, 
+                  borderColor: "#3B82F6",
+                  boxShadow: "0_25px_50px_-12px_rgba(59,130,246,0.25)"
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-[#0A2540] border border-white/10 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col justify-between transition-all duration-300 relative overflow-hidden group h-56 md:h-60 active:border-[#3B82F6]"
               >
-                <div className="flex items-center gap-6">
-                  <span className="font-mono text-xs text-[#26667F]">0{i + 1} //</span>
-                  <h4 className="font-bold text-xl tracking-tight uppercase">{app.title}</h4>
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#3B82F6]/10 to-transparent rounded-bl-full pointer-events-none transition-colors" />
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-extrabold text-white bg-white/10 border border-white/5 w-8 h-8 rounded-full flex items-center justify-center shadow-inner">
+                    0{i + 1}
+                  </span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
                 </div>
-                <div className="flex items-center gap-4 mt-4 sm:mt-0">
-                  <span className="font-mono text-xs opacity-60">Verified Deployments</span>
-                  <div className="w-12 h-[1px] bg-[#67C090]" />
-                  <span className="font-mono text-sm font-bold text-[#26667F]">{app.count} Units</span>
-                  <Plus size={14} className="opacity-40" />
+
+                <div className="space-y-1.5 mt-6 md:mt-8">
+                  <h4 className="font-extrabold text-base md:text-xl tracking-tight uppercase text-white group-hover:text-[#3B82F6] transition-colors line-clamp-1">
+                    {app.title}
+                  </h4>
+                  <p className="text-xs text-slate-300 font-normal leading-relaxed line-clamp-2">
+                    {app.scope}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between">
+                  <span className="text-[9px] text-[#3B82F6] font-bold tracking-wider uppercase">Active Data Matrix</span>
+                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest font-black text-[#3B82F6] sm:text-slate-400 group-hover:text-[#3B82F6] transition-colors">
+                    Matrix Spec <ChevronRight size={10} className="mt-0.5" />
+                  </span>
                 </div>
               </motion.div>
             ))}
@@ -298,33 +346,39 @@ export default function Home() {
       </section>
 
       {/* --- SECTION 6: BRANDED CTA BANNER --- */}
-      <section className="py-32 text-center px-6 relative z-10 bg-[#124170] text-[#DDF4E7]">
-        <div className="max-w-3xl mx-auto space-y-8">
-          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
-            Request Core Data Overlays
+      <section className="py-24 md:py-32 text-center px-6 relative z-10 bg-[#0A2540] text-white">
+        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+          <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tight text-white leading-tight">
+            Request AlugridX Technical Blueprint Data
           </h2>
-          <p className="text-[#DDF4E7]/60 font-light text-sm max-w-xl mx-auto leading-relaxed">
-            Gain immediate access to building engineering blueprints, k-factors, noise ceilings, and fully compatible detail block packages.
+          <p className="text-slate-300 font-normal text-sm md:text-base max-w-2xl mx-auto leading-relaxed px-2">
+            Gain immediate access to building engineering blueprints, k-factors, noise ceilings, and fully compatible details optimized for structural integration blocks.
           </p>
 
-          <div className="pt-6 flex flex-wrap justify-center gap-4">
-            <Link 
-              href="/request-catalogue" 
-              className="bg-[#67C090] hover:bg-[#DDF4E7] text-[#124170] font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 transition-all duration-300"
-            >
-              Extract Core Catalogue
+          <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4 sm:gap-5 max-w-md mx-auto sm:max-w-none">
+            <Link href="/request-catalogue" className="w-full sm:w-auto">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -4, boxShadow: "0px 15px 30px rgba(59,130,246,0.3)" }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-extrabold uppercase tracking-widest px-8 py-4.5 md:py-5 rounded-full shadow-md transition-colors cursor-pointer text-center"
+              >
+                Extract Core Catalogue
+              </motion.div>
             </Link>
-            <Link 
-              href="/contact-us" 
-              className="bg-transparent border border-[#DDF4E7]/20 text-white hover:text-[#67C090] hover:border-[#67C090] font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 transition-all"
-            >
-              Connect with Desk
+            <Link href="/contact-us" className="w-full sm:w-auto">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -4, backgroundColor: "rgba(255,255,255,1)", color: "#0A2540" }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-transparent border border-white/30 text-white text-xs font-extrabold uppercase tracking-widest px-8 py-4.5 md:py-5 rounded-full transition-all cursor-pointer text-center"
+              >
+                Connect with Desk
+              </motion.div>
             </Link>
           </div>
         </div>
       </section>
+      
       <SlidingMarquee />
-
     </div>
   );
 }

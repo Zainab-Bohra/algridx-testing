@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { motion } from "framer-motion";
-import { Package, ArrowRight } from "lucide-react";
+import { Package, ArrowRight, Loader2 } from "lucide-react";
 
 interface Product {
   _id: string;
@@ -15,6 +15,25 @@ interface Product {
   series?: string;
   code?: string;
   isAvailable?: boolean;
+}
+
+// PREMIUM 3D SPINNING GEOMETRIC LOADER COMPONENT
+function GeometricLoader() {
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center gap-4">
+      <div className="relative w-16 h-16 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 rounded-2xl border-4 border-t-[#3B82F6] border-r-transparent border-b-[#124170] border-l-transparent shadow-lg"
+        />
+        <Loader2 size={24} className="animate-spin text-[#124170]" />
+      </div>
+      <span className="font-sans text-xs font-extrabold uppercase tracking-[0.2em] text-[#124170] mt-2 animate-pulse">
+        Loading...
+      </span>
+    </div>
+  );
 }
 
 function ProductsContent() {
@@ -59,11 +78,7 @@ function ProductsContent() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#DDF4E7] flex items-center justify-center text-[#124170] font-mono text-xs font-bold uppercase tracking-widest">
-        [ Initializing Component Directory... ]
-      </div>
-    );
+    return <GeometricLoader />;
   }
 
   const filteredProducts = products.filter((prod) => {
@@ -80,35 +95,35 @@ function ProductsContent() {
   });
 
   return (
-    <div className="bg-[#DDF4E7] min-h-screen pt-32 pb-20 px-4 md:px-8 text-[#124170]">
-      {/* Blueprint grid layout background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417003_1px,transparent_1px),linear-gradient(to_bottom,#12417005_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+    <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 px-6 md:px-8 text-[#124170] font-sans relative">
+      {/* Fine-lined corporate spatial grid layout overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto space-y-10 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-12 relative z-10">
 
-        {/* REFINED HEADER */}
+        {/* REFINED ARCHITECTURAL HEADER */}
         <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
             System Components
           </h1>
-          <p className="text-slate-600 text-sm font-light mt-1">
-            High-quality architectural grilles and diffusers calibrated strictly for high-tier GCC infrastructures.
+          <p className="text-slate-500 text-base font-normal mt-2 max-w-2xl">
+            High-quality architectural grilles and diffusers calibrated strictly for high-tier commercial and industrial GCC infrastructures.
           </p>
         </div>
 
-        {/* NEW: PREMIUM TOP CATEGORY BAR (Horizontal & Centered) */}
+        {/* PREMIUM TOP CATEGORY CONTROL BAR */}
         <div className="w-full flex justify-center pb-4">
-          <div className="flex flex-wrap gap-2.5 bg-white/60 backdrop-blur-md p-2 rounded-2xl border border-[#67C090]/20 shadow-[rgba(18,65,112,0.03)_0px_10px_25px_-5px] justify-center">
+          <div className="flex flex-wrap gap-3 bg-white p-2.5 rounded-2xl border border-[#124170]/5 shadow-[0_10px_30px_rgba(10,37,64,0.04)] justify-center">
             {categoriesList.map((cat, index) => {
               const isActive = (!categoryParam && cat.slug === null) || categoryParam === cat.slug;
               return (
                 <button
                   key={index}
                   onClick={() => handleCategoryChange(cat.slug)}
-                  className={`px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
+                  className={`px-6 py-2.5 rounded-xl text-xs font-sans font-extrabold uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? "bg-[#124170] text-[#DDF4E7] shadow-md scale-102"
-                      : "text-slate-600 hover:bg-[#DDF4E7]/60 hover:text-[#124170]"
+                      ? "bg-[#124170] text-white shadow-md shadow-[#124170]/20 scale-[1.03]"
+                      : "text-slate-500 hover:bg-slate-50 hover:text-[#124170]"
                   }`}
                 >
                   {cat.name}
@@ -118,65 +133,67 @@ function ProductsContent() {
           </div>
         </div>
 
-        {/* FULL WIDTH PRODUCTS GRID (lg:col-span-12 equivalent) */}
+        {/* COMPONENT INTERACTION GRID MONTAGES */}
         <div className="w-full">
           {filteredProducts.length === 0 ? (
-            <div className="text-center py-24 bg-white rounded-3xl border border-[#67C090]/20 shadow-sm space-y-3">
-              <Package className="mx-auto text-slate-400" size={36} />
-              <p className="text-sm font-mono uppercase text-slate-500">[ Zero Profile Nodes Registered ]</p>
+            <div className="text-center py-24 bg-white rounded-[2.5rem] border border-[#124170]/5 shadow-[0_15px_40px_rgba(0,0,0,0.02)] space-y-4">
+              <Package className="mx-auto text-slate-300" size={40} />
+              <p className="text-sm font-sans font-bold uppercase tracking-wider text-slate-400">No matching components registered</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-16 gap-x-8 pt-4">
               {filteredProducts.map((prod) => {
                 const imageSrc = prod.images && prod.images.length > 0
                   ? prod.images[0].startsWith("http") ? prod.images[0] : `${process.env.NEXT_PUBLIC_API_URL}${prod.images[0]}`
-                  : "https://placehold.co/400x300/f8f9fa/adb5bd?text=ALUGRIDX";
+                  : "https://placehold.co/400x300/ffffff/124170?text=ALUGRIDX";
 
                 return (
-                  <div
+                  <motion.div
                     key={prod._id}
                     onClick={() => router.push(`/products/${prod.slug || prod._id}`)}
-                    className="group relative w-full h-[400px] bg-white rounded-2xl p-5 flex flex-col justify-between cursor-pointer shadow-[0_20px_25px_-5px_rgba(18,65,112,0.05)]"
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                    className="group relative w-full h-[400px] bg-white rounded-[2.5rem] p-6 flex flex-col justify-between cursor-pointer shadow-[0_15px_35px_rgba(10,37,64,0.04)] border border-slate-100 transition-colors duration-300 hover:bg-[#0A2540]"
                   >
                     
-                    {/* BACKGROUND SHAPE: Rotates exactly -10deg on hover */}
-                    <div className="absolute inset-0 -left-1 m-auto w-[calc(100%+8px)] h-[calc(100%+8px)] rounded-2xl bg-gradient-to-br from-[#67C090] to-[#124170] -z-10 pointer-events-none transform transition-transform duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group-hover:rotate-[-10deg] " />
+                    {/* BACK LAYER BACKGROUND 3D MATRIX FLIP - Rotates -10deg with brand blue gradient */}
+                    <div className="absolute inset-0 -left-1 m-auto w-[calc(100%+8px)] h-[calc(100%+8px)] rounded-[2.5rem] bg-gradient-to-br from-[#3B82F6] to-[#0A2540] -z-10 pointer-events-none transform transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.1)] group-hover:rotate-[-8deg]" />
                     
-                    {/* BLURRY GLOW SHADOW */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#67C090] to-[#26667F] -z-20 pointer-events-none transform scale-[0.95] blur-[20px] transition-all duration-500 group-hover:blur-[32px]" />
+                    {/* UNDER-GLOW HIGH DEPTH SHADOW */}
+                    <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-[#3B82F6] to-[#0A2540] -z-20 pointer-events-none transform scale-[0.93] blur-[15px] opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:blur-[25px]" />
 
-                    {/* Product Image Frame */}
-                    <div className="h-44 bg-[#DDF4E7]/30 rounded-xl p-4 flex items-center justify-center overflow-hidden border border-[#67C090]/10 relative z-20">
+                    {/* Pure Ice White Solid Product Image Frame */}
+                    <div className="h-44 bg-slate-50 rounded-2xl p-5 flex items-center justify-center overflow-hidden border border-slate-100/60 relative z-20">
                       <img
                         src={imageSrc}
                         alt={prod.name}
-                        className="max-h-36 object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+                        className="max-h-36 object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
-                          e.currentTarget.src = "https://placehold.co/400x300/f8f9fa/adb5bd?text=ALUGRIDX";
+                          e.currentTarget.src = "https://placehold.co/400x300/ffffff/124170?text=ALUGRIDX";
                         }}
                       />
                     </div>
 
-                    {/* Content Section & Bottom Anchoring */}
+                    {/* FIXED: Metadata Specs & Typography Title Headers - Text color shifts to crisp white/light-blue on hover */}
                     <div className="space-y-2 pt-2 relative z-20">
-                      <span className="text-[9px] font-mono font-bold uppercase text-[#124170] bg-[#DDF4E7] px-2 py-0.5 rounded">
-                        {prod.code || "Series"} Node
+                      <span className="inline-block text-[9px] font-sans font-extrabold uppercase tracking-wider text-[#3B82F6] bg-[#3B82F6]/5 group-hover:bg-white/10 group-hover:text-[#60A5FA] px-2.5 py-1 rounded-lg border border-[#3B82F6]/10 group-hover:border-white/10 shadow-sm transition-colors">
+                        {prod.code || "Series"} Specification
                       </span>
-                      <h3 className="font-black text-[#124170] text-lg uppercase tracking-tight leading-tight group-hover:text-[#26667F] transition-colors line-clamp-2 pt-1">
+                      <h3 className="font-extrabold text-[#124170] group-hover:text-white text-lg uppercase tracking-tight leading-tight transition-colors line-clamp-2 pt-1 font-sans">
                         {prod.name}
                       </h3>
                     </div>
 
-                    {/* Bottom Footer Item */}
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-100 relative z-20 text-xs font-mono uppercase tracking-wider font-bold">
-                      <span className="text-slate-400 text-[10px]">Technical Spec</span>
-                      <span className="text-[#26667F] flex items-center gap-1 group-hover:text-[#67C090] transition-colors">
+                    {/* FIXED: Refined Action Footer Layout - Borders and links adapt cleanly for optimal visibility */}
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 group-hover:border-white/10 relative z-20 text-xs font-sans uppercase tracking-wider font-bold transition-colors">
+                      <span className="text-slate-400 group-hover:text-slate-400/70 text-[10px] font-semibold transition-colors">Technical Profile</span>
+                      <span className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors">
                         <span>View</span>
-                        <ArrowRight size={12} />
+                        <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>
                     </div>
 
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -190,7 +207,7 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#DDF4E7] flex items-center justify-center text-[#124170] font-mono text-xs uppercase tracking-widest">[ Fetching Core Repositories... ]</div>}>
+    <Suspense fallback={<GeometricLoader />}>
       <ProductsContent />
     </Suspense>
   );
