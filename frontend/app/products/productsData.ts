@@ -36,10 +36,10 @@ export const staticProductsList: StaticProduct[] = [
     desc: "Premium grade terminal cleanroom filtration housings designed to seal high-efficiency filters directly to ceiling grids for flawless air purification cycles.",
     image: "/images/products/ceiling-housing-with-hepa-filter.png",
     features: [
-"HEPA filtration (H10–H14)",
-  "ULPA filtration up to U16 (AFV-8G)",
-  "85%–99.995% filtration efficiency",
-  "Captures particles down to 0.3 μm"
+      "HEPA filtration (H10–H14)",
+      "ULPA filtration up to U16 (AFV-8G)",
+      "85%–99.995% filtration efficiency",
+      "Captures particles down to 0.3 μm"
     ],
     dimensions: [ "Custom sizes available"],
     kFactors: "99.99% micro-particle collection tracking rating"
@@ -52,11 +52,11 @@ export const staticProductsList: StaticProduct[] = [
     desc: "Acoustically insulated flow bypass terminals built with top-mounted mechanical calibration indicators for instant zone pressure routing.",
     image: "/images/products/bypass-terminal-unit.png",
     features: [
-   "Constant fan airflow",
-  "24–1900 LPS airflow capacity",
-  "Pneumatic, Electrical & ACS controls",
-  "Low noise performance",
-  "Adjustable minimum airflow (20%)"
+      "Constant fan airflow",
+      "24–1900 LPS airflow capacity",
+      "Pneumatic, Electrical & ACS controls",
+      "Low noise performance",
+      "Adjustable minimum airflow (20%)"
     ],
     dimensions: ["Custom sizes available"],
     kFactors: "High capacity pressure attenuation response limits"
@@ -69,19 +69,19 @@ export const staticProductsList: StaticProduct[] = [
     desc: "Heavy-duty opposing blade dampers designed for high-precision volumetric control and pressure balancing across main duct nodes.",
     image: "/images/products/volume-control-dampers.png",
     features: [
-   "Opposed & Parallel Blade designs",
-  "Rectangular & Circular variants",
-  "Galvanized steel construction",
-  "Aluminum airfoil blades",
-  "Smooth PVC/Nylon bearings"
+      "Opposed & Parallel Blade designs",
+      "Rectangular & Circular variants",
+      "Galvanized steel construction",
+      "Aluminum airfoil blades",
+      "Smooth PVC/Nylon bearings"
     ],
-    dimensions: ["100 × 100 mm",
-  "Up to 2000 × 1500 mm",
-  "Round Sizes Available",
-  "Custom sizes available"
-],
-
-  kFactors: "Airflow Regulation, Pressure Control, Leakage Performance"
+    dimensions: [
+      "100 × 100 mm",
+      "Up to 2000 × 1500 mm",
+      "Round Sizes Available",
+      "Custom sizes available"
+    ],
+    kFactors: "Airflow Regulation, Pressure Control, Leakage Performance"
   },
   {
     slug: "ceiling-diffusers",
@@ -173,26 +173,28 @@ export const staticProductsList: StaticProduct[] = [
     name: "Disc Valves",
     code: "DV-Series",
     category: "filters",
-    desc:  "Round ceiling diffuser designed for uniform radial air distribution with low noise and pressure drop for supply and return air applications.",
+    desc: "Round ceiling diffuser designed for uniform radial air distribution with low noise and pressure drop for supply and return air applications.",
     image: "/images/products/disc-valves.png",
     features: [
- "Uniform radial airflow",
-  "Low noise & pressure drop",
-  "High-quality aluminum construction",
-  "Butterfly damper (Supply model)",
-  "Suitable for supply & return air",
-  "Easy airflow adjustment"
+      "Uniform radial airflow",
+      "Low noise & pressure drop",
+      "High-quality aluminum construction",
+      "Butterfly damper (Supply model)",
+      "Suitable for supply & return air",
+      "Easy airflow adjustment"
     ],
-    dimensions: [  "134 mm",
-  "190 mm",
-  "247 mm",
-  "303 mm",
-  "362 mm",
-  "416 mm",
-  "469 mm",
-  "521 mm",
-  "573 mm",
-  "625 mm"],
+    dimensions: [
+      "134 mm",
+      "190 mm",
+      "247 mm",
+      "303 mm",
+      "362 mm",
+      "416 mm",
+      "469 mm",
+      "521 mm",
+      "573 mm",
+      "625 mm"
+    ],
     kFactors: "Micro-calibrated air distribution grids"
   },
   {
@@ -225,85 +227,91 @@ export const staticProductsList: StaticProduct[] = [
     name: "Jet Diffusers",
     code: "JD-Series",
     category: "grilles-registers",
-    desc:    "High-performance sand trap louvre designed to remove dust and sand from incoming air while maintaining low pressure drop.",
+    desc: "High-performance sand trap louvre designed to remove dust and sand from incoming air while maintaining low pressure drop.",
     image: "/images/products/jet-diffusers.png",
     features: [
- "Long throw up to 25 m",
-  "Suitable for cooling & heating",
-  "Adjustable airflow direction",
-  "Wall or ceiling mounting",
-  "Aluminum construction"
+      "Long throw up to 25 m",
+      "Suitable for cooling & heating",
+      "Adjustable airflow direction",
+      "Wall or ceiling mounting",
+      "Aluminum construction"
     ],
-    dimensions: [  "125 mm",
-  "150 mm",
-  "160 mm",
-  "200 mm",
-  "250 mm",
-  "315 mm",
-  "350 mm",
-  "400 mm",
-  "450 mm",
-  "500 mm",
-  "630 mm"],
-    kFactors:  "Long Throw Performance"
+    dimensions: [
+      "125 mm",
+      "150 mm",
+      "160 mm",
+      "200 mm",
+      "250 mm",
+      "315 mm",
+      "350 mm",
+      "400 mm",
+      "450 mm",
+      "500 mm",
+      "630 mm"
+    ],
+    kFactors: "Long Throw Performance"
   },
   {
     slug: "gravity-louvers",
     name: "Gravity Louvers",
     code: "GL-Series",
     category: "louvers",
-    desc:   "Air-operated non-return damper designed to prevent reverse airflow in HVAC systems with smooth, low-noise gravity operation.",
+    desc: "Air-operated non-return damper designed to prevent reverse airflow in HVAC systems with smooth, low-noise gravity operation.",
     image: "/images/products/gravity-louver.png",
     features: [
- "Automatic backdraft prevention",
-  "Gravity-operated blades",
-  "Aluminum or galvanized steel construction",
-  "Smooth, rattle-free operation",
-  "Nylon bush bearings",
-  "Suitable for wall & duct mounting",
-  "Low maintenance"
+      "Automatic backdraft prevention",
+      "Gravity-operated blades",
+      "Aluminum or galvanized steel construction",
+      "Smooth, rattle-free operation",
+      "Nylon bush bearings",
+      "Suitable for wall & duct mounting",
+      "Low maintenance"
     ],
-    dimensions: [  "150 × 150 mm",
-  "200 × 200 mm",
-  "300 × 300 mm",
-  "400 × 400 mm",
-  "500 × 500 mm",
-  "600 × 600 mm",
-  "700 × 700 mm",
-  "800 × 800 mm",
-  "900 × 900 mm",
-  "1000 × 1000 mm",
-  "Custom sizes available"],
-    kFactors:   "Pressure Drop"
+    dimensions: [
+      "150 × 150 mm",
+      "200 × 200 mm",
+      "300 × 300 mm",
+      "400 × 400 mm",
+      "500 × 500 mm",
+      "600 × 600 mm",
+      "700 × 700 mm",
+      "800 × 800 mm",
+      "900 × 900 mm",
+      "1000 × 1000 mm",
+      "Custom sizes available"
+    ],
+    kFactors: "Pressure Drop"
   },
   {
     slug: "sand-trap-louvers",
     name: "Sand Trap Louver",
     code: "STL-Series",
     category: "louvers",
-    desc:   "Sand trap louver designed to remove dust and sand from incoming air while maintaining low pressure drop for HVAC air intake systems.",
+    desc: "Sand trap louver designed to remove dust and sand from incoming air while maintaining low pressure drop for HVAC air intake systems.",
     image: "/images/products/sand-trap-louvers.png",
     features: [
- "Efficient dust & sand separation",
-  "Low pressure drop",
-  "Self-draining base plate",
-  "Mill finish aluminum or galvanized steel",
-  "Optional removable filter",
-  "Optional volume control damper",
-  "Bird & insect screen options"
+      "Efficient dust & sand separation",
+      "Low pressure drop",
+      "Self-draining base plate",
+      "Mill finish aluminum or galvanized steel",
+      "Optional removable filter",
+      "Optional volume control damper",
+      "Bird & insect screen options"
     ],
-    dimensions: [ "200 × 150 mm",
-  "300 × 200 mm",
-  "400 × 300 mm",
-  "500 × 400 mm",
-  "600 × 500 mm",
-  "700 × 600 mm",
-  "800 × 700 mm",
-  "900 × 800 mm",
-  "1000 × 900 mm",
-  "1100 × 1000 mm",
-  "1200 × 1200 mm",
-  "Custom sizes available"],
+    dimensions: [
+      "200 × 150 mm",
+      "300 × 200 mm",
+      "400 × 300 mm",
+      "500 × 400 mm",
+      "600 × 500 mm",
+      "700 × 600 mm",
+      "800 × 700 mm",
+      "900 × 800 mm",
+      "1000 × 900 mm",
+      "1100 × 1000 mm",
+      "1200 × 1200 mm",
+      "Custom sizes available"
+    ],
     kFactors: "High level sand rejection efficiency tracking configuration"
   },
   {
