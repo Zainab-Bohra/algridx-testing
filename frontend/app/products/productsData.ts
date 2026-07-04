@@ -81,9 +81,7 @@ export const staticProductsList: StaticProduct[] = [
   "Custom sizes available"
 ],
 
-    kFactors: ["Airflow Regulation",
-  "Pressure Control",
-  "Leakage Performance"]
+  kFactors: "Airflow Regulation, Pressure Control, Leakage Performance"
   },
   {
     slug: "ceiling-diffusers",
