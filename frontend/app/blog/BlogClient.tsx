@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2 } from "lucide-react";
+import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// Fallback handling check to avoid client-side undefined breaks
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 // PREMIUM 3D SPINNING GEOMETRIC LOADER COMPONENT
 function GeometricLoader() {
@@ -20,7 +21,8 @@ function GeometricLoader() {
         <Loader2 size={20} className="animate-spin text-[#124170]" />
       </div>
       <span className="font-sans text-xs font-extrabold uppercase tracking-widest text-[#124170] mt-2 animate-pulse">
-       Loading...      </span>
+        Loading...
+      </span>
     </div>
   );
 }
@@ -31,20 +33,40 @@ export default function BlogClient() {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // 🚀 STANDARD MODE LOCKED: Locked to 6 components per view matrix index
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6; 
+
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/blogs`);
+        const res = await fetch(`${API_URL}/api/blogs`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        
+        if (!res.ok) {
+          throw new Error(`Network response error: ${res.status}`);
+        }
+
         const data = await res.json();
-        setBlogs(data);
+        setBlogs(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error(error);
+        console.error("❌ Failed to fetch dynamic blogs from Cluster0:", error);
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
     };
     fetchBlogs();
   }, []);
+
+  // Reset active page down to index 1 whenever a filter or text search is executed
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchQuery]);
 
   const categories = ["All", ...new Set(blogs.map((blog) => blog.category || "Engineering"))];
 
@@ -57,9 +79,20 @@ export default function BlogClient() {
     return matchesCategory && matchesSearch;
   });
 
+  // MATH CALCULATION MATRIX FOR SLICING ACTIVE RENDER ARRAYS
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentDisplayedBlogs = filteredBlogs.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    // Smooth scroll straight back up to filters header so user doesn't get disoriented
+    window.scrollTo({ top: 250, behavior: "smooth" });
+  };
+
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170] font-sans">
-      {/* Fine-lined corporate spatial architecture overlay layout lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
@@ -109,76 +142,108 @@ export default function BlogClient() {
 
         {/* BROADCASTED ARTICLES INDEX GRID MATRIX */}
         {!loading && (
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
-            <AnimatePresence mode="popLayout">
-              {filteredBlogs.map((blog) => (
-                <motion.article
-                  key={blog._id}
-                  layout
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  whileHover={{ 
-                    y: -8,
-                    boxShadow: "0px 35px 60px rgba(10, 37, 64, 0.12)"
-                  }}
-                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                  className="group bg-white border border-slate-100 rounded-[2.5rem] rounded-tr-[4.5rem] p-8 flex flex-col justify-between h-[390px] cursor-pointer relative overflow-hidden z-10 transition-colors duration-300 hover:bg-[#0A2540]"
-                >
-                  {/* Subtle Tech Grid Patch Layer inside Card */}
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[radial-gradient(rgba(18,65,112,0.03)_1px,transparent_1px)] group-hover:bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:10px_10px] rounded-tr-[4.5rem] pointer-events-none transition-colors" />
-                  
-                  {/* Kinetic Electric Blue Indicator Reveal on Hover */}
-                  <div className="absolute top-0 left-0 bottom-0 w-[4px] bg-transparent group-hover:bg-[#3B82F6] transition-colors duration-300" />
-                  
-                  <div className="space-y-5 relative z-10">
-                    {/* Upper Meta Specifications Header Row */}
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-sans font-extrabold bg-[#3B82F6]/5 text-[#3B82F6] group-hover:bg-white/10 group-hover:text-[#60A5FA] border border-[#3B82F6]/10 group-hover:border-white/10 shadow-sm transition-colors uppercase tracking-wider">
-                        <Tag size={10} />
-                        {blog.category || "Engineering"}
-                      </span>
-                      
-                      <div className="flex items-center gap-1.5 text-slate-400 group-hover:text-slate-400/80 font-sans text-[10px] font-bold uppercase tracking-wide transition-colors">
-                        <Clock size={11} className="text-[#3B82F6]" />
-                        <span>{blog.readTime || "4 Min Read"}</span>
-                      </div>
-                    </div>
-
-                    {/* Technical Article Data Fields */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#124170]/20 group-hover:bg-[#3B82F6] transition-colors" />
-                        <span className="text-[10px] font-sans text-slate-400 group-hover:text-slate-400/70 uppercase tracking-widest font-bold block transition-colors">
-                          {new Date(blog.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+          <>
+            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+              <AnimatePresence mode="popLayout">
+                {currentDisplayedBlogs.map((blog) => (
+                  <motion.article
+                    key={blog._id}
+                    layout
+                    initial={{ opacity: 0, y: 25 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    whileHover={{ 
+                      y: -8,
+                      boxShadow: "0px 35px 60px rgba(10, 37, 64, 0.12)"
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="group bg-white border border-slate-100 rounded-[2.5rem] rounded-tr-[4.5rem] p-8 flex flex-col justify-between h-[390px] cursor-pointer relative overflow-hidden z-10 transition-colors duration-300 hover:bg-[#0A2540]"
+                  >
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[radial-gradient(rgba(18,65,112,0.03)_1px,transparent_1px)] group-hover:bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:10px_10px] rounded-tr-[4.5rem] pointer-events-none transition-colors" />
+                    <div className="absolute top-0 left-0 bottom-0 w-[4px] bg-transparent group-hover:bg-[#3B82F6] transition-colors duration-300" />
+                    
+                    <div className="space-y-5 relative z-10">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-sans font-extrabold bg-[#3B82F6]/5 text-[#3B82F6] group-hover:bg-white/10 group-hover:text-[#60A5FA] border border-[#3B82F6]/10 group-hover:border-white/10 shadow-sm transition-colors uppercase tracking-wider">
+                          <Tag size={10} />
+                          {blog.category || "Engineering"}
                         </span>
+                        
+                        <div className="flex items-center gap-1.5 text-slate-400 group-hover:text-slate-400/80 font-sans text-[10px] font-bold uppercase tracking-wide transition-colors">
+                          <Clock size={11} className="text-[#3B82F6]" />
+                          <span>{blog.readTime || "4 Min Read"}</span>
+                        </div>
                       </div>
-                      
-                      <h2 className="text-xl font-black text-[#124170] group-hover:text-white uppercase tracking-tight leading-[1.25] transition-colors line-clamp-2 font-sans pt-0.5">
-                        {blog.title}
-                      </h2>
-                      
-                      <p className="text-slate-500 group-hover:text-slate-300 font-normal text-xs leading-relaxed line-clamp-3 pt-1 transition-colors">
-                        {blog.excerpt || blog.content?.substring(0, 140)}...
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* Operational Footer Layer Trigger - Color matching with dark mode variables */}
-                  <div className="pt-4 border-t border-slate-100 group-hover:border-white/10 flex items-center justify-between text-xs font-sans uppercase tracking-wider font-bold relative z-10 transition-colors">
-                    <div className="flex items-center gap-1.5">
-                      <Layers size={11} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
-                      <span className="text-slate-400 group-hover:text-slate-400/60 text-[10px] font-semibold transition-colors">Desk: {blog.author || "AX-DESK"}</span>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#124170]/20 group-hover:bg-[#3B82F6] transition-colors" />
+                          <span className="text-[10px] font-sans text-slate-400 group-hover:text-slate-400/70 uppercase tracking-widest font-bold block transition-colors">
+                            {new Date(blog.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                          </span>
+                        </div>
+                        
+                        <h2 className="text-xl font-black text-[#124170] group-hover:text-white uppercase tracking-tight leading-[1.25] transition-colors line-clamp-2 font-sans pt-0.5">
+                          {blog.title}
+                        </h2>
+                        
+                        <p className="text-slate-500 group-hover:text-slate-300 font-normal text-xs leading-relaxed line-clamp-3 pt-1 transition-colors">
+                          {blog.excerpt || blog.content?.substring(0, 140)}...
+                        </p>
+                      </div>
                     </div>
-                    <Link href={`/blog/${blog.slug || blog._id}`} className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors relative block">
-                      <span className="text-[11px] tracking-tight">Read more</span>
-                      <ArrowRight size={13} className="transform transition-transform duration-300 group-hover:translate-x-0.5" />
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+
+                    <div className="pt-4 border-t border-slate-100 group-hover:border-white/10 flex items-center justify-between text-xs font-sans uppercase tracking-wider font-bold relative z-10 transition-colors">
+                      <div className="flex items-center gap-1.5">
+                        <Layers size={11} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
+                        <span className="text-slate-400 group-hover:text-slate-400/60 text-[10px] font-semibold transition-colors">Desk: {blog.author || "AX-DESK"}</span>
+                      </div>
+                      <Link href={`/blog/${blog.slug || blog._id}`} className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors relative block">
+                        <span className="text-[11px] tracking-tight">Read more</span>
+                        <ArrowRight size={13} className="transform transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </Link>
+                    </div>
+                  </motion.article>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* DYNAMIC PAGINATION CONTROLLER MATRIX CONSOLE */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-12">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className="w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-[#124170] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#124170] hover:text-white transition-all cursor-pointer shadow-sm"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+
+                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNumber) => (
+                  <button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`w-10 h-10 rounded-xl text-xs font-extrabold transition-all cursor-pointer shadow-sm ${
+                      currentPage === pageNumber
+                        ? "bg-[#124170] text-white scale-105"
+                        : "bg-white border border-slate-200 text-[#124170] hover:bg-slate-50"
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                ))}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className="w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-[#124170] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#124170] hover:text-white transition-all cursor-pointer shadow-sm"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </>
         )}
 
         {/* EMPTY REGISTRY LAYER */}

@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
-const fs = require("fs"); // <-- FIXED: uploads फ़ोल्डर चेक करने के लिए fs इम्पोर्ट किया
+const fs = require("fs"); 
 
 const dbConnect = require("../lib/dbConnect"); 
 const Product = require("./models/Product"); 
@@ -24,13 +24,18 @@ app.use(express.urlencoded({ extended: true }));
 // 2. Strict Cross-Origin Resource Sharing Rules (Relaxed for localhost debugging)
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000"], // Next.js standard dev ports
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000"], 
     credentials: true,
   })
 );
 
-// 3. Ensure Uploads Directory Exists to prevent crash
-const uploadsDir = path.join(__dirname, "../../uploads"); // Your folder structure points outside src
+// =========================================================================
+// ⚡ OPTIMIZATION: ZERO-LOADING PATH CONFIGURATION
+// =========================================================================
+// Rasta point-out kiya gaya hai frontend ke public folder ke andar bane uploads folder par
+const uploadsDir = path.join(__dirname, "../../../frontend/public/uploads"); 
+
+// Ensure Uploads Directory Exists to prevent crash
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -39,14 +44,18 @@ app.use("/uploads", express.static(uploadsDir));
 // Register Blog External Routes
 app.use("/api/blogs", blogRoutes);
 
-// Multer Storage Configuration Framework
+// Multer Storage Configuration Framework (Auto renaming files based on clean slug)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    const safeName = file.originalname.replace(/\s+/g, "-");
-    cb(null, Date.now() + "-" + safeName);
+    // Agar body me product name hai, toh filename ko clean slug format mil jayega
+    const baseSlug = req.body.name
+      ? req.body.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")
+      : "component-" + Date.now();
+    
+    cb(null, `${baseSlug}${path.extname(file.originalname)}`);
   },
 });
 
@@ -58,12 +67,13 @@ app.post("/api/upload", upload.single("image"), (req, res) => {
     return res.status(400).json({ error: "Please select a file to upload" });
   }
 
-  const imageUrl = `${process.env.BASE_URL}/uploads/${req.file.filename}`;
+  // Frontend standard path response injection
+  const imageUrl = `/uploads/${req.file.filename}`;
   res.status(200).json({ imageUrl });
 });
 
 // =========================================================================
-// 🎯 FIXED: INLINE CONTACT RFQ EMAIL TRANSMISSION NODE (Fully Secure)
+// 🎯 INLINE CONTACT RFQ EMAIL TRANSMISSION NODE (Fully Secure)
 // =========================================================================
 app.post("/api/contact", async (req, res) => {
   try {
@@ -73,7 +83,6 @@ app.post("/api/contact", async (req, res) => {
       return res.status(400).json({ success: false, error: "Required fields are missing." });
     }
 
-    // Checking SMTP credentials existence
     if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.log("⚠️ Missing SMTP environment variables inside backend/.env");
       return res.status(500).json({ success: false, error: "Server SMTP Configuration Missing." });
@@ -117,28 +126,34 @@ app.post("/api/contact", async (req, res) => {
 });
 
 // =========================================================================
-// PRODUCTS MANAGEMENT REGISTRY API STACK
+// PRODUCTS MANAGEMENT REGISTRY API STACK (AUTO GENERATES STATIC OPTIMIZED PATHS)
 // =========================================================================
-app.post("/api/products", async (req, res) => {
+app.post("/api/products", upload.single("image"), async (req, res) => {
   try {
-    const { name, category, shortDescription, image, images, isAvailable } = req.body;
+    const { name, category, shortDescription, isAvailable, series, specifications, keyFeatures } = req.body;
 
     const slug = name
       .toLowerCase()
+      .trim()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
+
+    // Path Logic: Pehle check karega multer file aayi hai ya nahi, nahi toh template predict laga dega
+    let savedImagePath = `/uploads/${slug}.avif`;
+    if (req.file) {
+      savedImagePath = `/uploads/${req.file.filename}`;
+    }
 
     const newProduct = new Product({
       name,
       slug,
       category,
+      code: series || req.body.code,
       shortDescription,
-      images: images?.length
-        ? images
-        : image
-        ? [image]
-        : [`${process.env.BASE_URL}/uploads/default.webp`],
+      images: [savedImagePath], // Auto optimized clean relative string mapping
       isAvailable: isAvailable !== undefined ? isAvailable : true,
+      specifications: specifications ? JSON.parse(specifications) : [],
+      keyFeatures: keyFeatures ? JSON.parse(keyFeatures) : []
     });
 
     const savedProduct = await newProduct.save();
@@ -170,17 +185,34 @@ app.get("/api/products/:slug", async (req, res) => {
   }
 });
 
-app.put("/api/products/:id", async (req, res) => {
+app.put("/api/products/:id", upload.single("image"), async (req, res) => {
   try {
     if (req.body.name) {
       req.body.slug = req.body.name
         .toLowerCase()
+        .trim()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)+/g, "");
     }
     
     if (req.body.series) {
       req.body.code = req.body.series;
+    }
+
+    // Update case me agar nayi file bhej rahe ho toh images array automatically restructure hoga
+    if (req.file) {
+      req.body.images = [`/uploads/${req.file.filename}`];
+    } else if (req.body.name) {
+      // Agar sirf name change ho raha hai bina nayi image ke, toh image fallback name setup trigger hoga
+      req.body.images = [`/uploads/${req.body.slug}.avif`];
+    }
+
+    // Specifications updates handle parsing corrections
+    if (req.body.specifications && typeof req.body.specifications === "string") {
+      req.body.specifications = JSON.parse(req.body.specifications);
+    }
+    if (req.body.keyFeatures && typeof req.body.keyFeatures === "string") {
+      req.body.keyFeatures = JSON.parse(req.body.keyFeatures);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(

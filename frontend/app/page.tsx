@@ -1,10 +1,13 @@
 "use client";
+
 import { useState, useRef } from "react";
 import { motion, Variants, animate, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, HardHat, Zap, Layers, Activity, ChevronRight } from "lucide-react";
 import Hero from "@/components/site/Hero";
 import SlidingMarquee from "@/components/site/SlidingMarquee";
+// Centralized mapping lookup matrix import pointer
+import { staticProductsList } from "./products/productsData";
 
 const sectionReveal: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -53,59 +56,67 @@ function Interactive3DCard({ cat }: { cat: any }) {
     y.set(0);
   }
 
+  // Find exact mapping from centralized static pipeline array
+  const linkedProduct = staticProductsList.find((p) => p.slug === cat.slug);
+  // Fallback default format layout if link structure is missing
+  const finalImageSrc = linkedProduct ? linkedProduct.image : `/images/products/${cat.slug}.png`;
+
   return (
-    <div className="w-full h-[460px] md:h-[480px] [perspective:1500px] group cursor-pointer" ref={cardRef}>
+    <div className="w-full h-[400px] md:h-[420px] [perspective:1500px] group cursor-pointer" ref={cardRef}>
       <motion.div
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="w-full h-full rounded-[32px] md:rounded-[40px] bg-gradient-to-br from-[#124170] to-[#0A2540] relative transition-all duration-200 shadow-[0_15px_35px_rgba(10,37,64,0.2)] sm:group-hover:shadow-[0_45px_70px_rgba(59,130,246,0.3)] border border-white/10"
+        className="w-full h-full rounded-[32px] md:rounded-[40px] bg-[#1D4ED8] relative transition-all duration-200 shadow-[0_15px_35px_rgba(10,37,64,0.06)] sm:group-hover:shadow-[0_45px_70px_rgba(29,78,216,0.25)] border border-white/10"
       >
+        {/* Piche wali shadow layer matrix (Dark Navy Blue) */}
+        <div className="absolute inset-0 -left-1 m-auto w-[calc(100%+8px)] h-[calc(100%+8px)] rounded-[32px] md:rounded-[40px] bg-[#0A2540] -z-10 pointer-events-none transform transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.1)] group-hover:rotate-[-8deg]" />
+        
         <div className="absolute left-0 top-0 [transform-style:preserve-3d] z-30 pointer-events-none">
-          <span className="absolute block aspect-square rounded-full top-[12px] left-[12px] bg-white/5 w-[200px] md:w-[260px] [transform:translate3d(0,0,20px)] transition-transform duration-500" />
-          <span className="absolute block aspect-square rounded-full top-[14px] left-[14px] bg-white/10 w-[170px] md:w-[220px] [transform:translate3d(0,0,40px)] sm:group-hover:[transform:translate3d(0,0,55px)] transition-transform duration-500" />
-          <span className="absolute block aspect-square rounded-full top-[16px] left-[16px] bg-white/15 w-[140px] md:w-[190px] [transform:translate3d(0,0,60px)] sm:group-hover:[transform:translate3d(0,0,75px)] transition-transform duration-500" />
+          <span className="absolute block aspect-square rounded-full top-[12px] left-[12px] bg-white/5 w-[180px] md:w-[220px] [transform:translate3d(0,0,20px)] transition-transform duration-500" />
+          <span className="absolute block aspect-square rounded-full top-[14px] left-[14px] bg-white/10 w-[150px] md:w-[190px] [transform:translate3d(0,0,40px)] sm:group-hover:[transform:translate3d(0,0,55px)] transition-transform duration-500" />
+          <span className="absolute block aspect-square rounded-full top-[16px] left-[16px] bg-white/15 w-[120px] md:w-[160px] [transform:translate3d(0,0,60px)] sm:group-hover:[transform:translate3d(0,0,75px)] transition-transform duration-500" />
           
-          <span className="absolute aspect-square rounded-full top-[24px] left-[24px] bg-white shadow-[0_15px_35px_rgba(10,37,64,0.25)] w-[120px] md:w-[160px] [transform:translate3d(0,0,85px)] sm:group-hover:[transform:translate3d(0,0,120px)] transition-all duration-500 grid place-content-center p-4 overflow-hidden border border-slate-100">
+          <span className="absolute aspect-square rounded-full top-[20px] left-[24px] bg-white shadow-[0_15px_35px_rgba(10,37,64,0.25)] w-[110px] md:w-[140px] [transform:translate3d(0,0,85px)] sm:group-hover:[transform:translate3d(0,0,110px)] transition-all duration-500 grid place-content-center p-3.5 overflow-hidden border border-slate-100">
             <img
-              src={`/images/products/${cat.name.toLowerCase().replace(/\s+/g, "-")}.avif`}
+              src={finalImageSrc}
               alt={cat.name}
-              className="max-h-full max-w-full object-contain scale-110 sm:group-hover:scale-125 transition-transform duration-500"
+              className="max-h-full max-w-full object-contain scale-110 sm:group-hover:scale-125 transition-transform duration-500 mix-blend-multiply"
             />
           </span>
         </div>
 
-        <div className="pt-[210px] md:pt-[245px] px-6 md:px-7 pb-6 [transform:translate3d(0,0,40px)] relative z-10 flex flex-col justify-end h-full">
-          <div className="mb-4">
-            <span className="block text-white font-extrabold text-base md:text-lg tracking-tight uppercase leading-tight font-sans">
+        <div className="pt-[180px] md:pt-[210px] px-6 md:px-7 pb-6 [transform:translate3d(0,0,40px)] relative z-10 flex flex-col justify-end h-full">
+          <div className="mb-3">
+            <span className="block text-white font-sans font-black text-base md:text-lg uppercase tracking-tight leading-tight transition-colors duration-300">
               {cat.name}
             </span>
-            <span className="block text-[10px] tracking-widest text-[#3B82F6] uppercase font-bold mt-1 font-sans">
-              {cat.code}
+            <span className="block text-[9px] tracking-widest text-white/80 bg-white/10 border border-white/10 px-2 py-0.5 rounded-md inline-block uppercase font-bold mt-1.5 font-sans">
+              {cat.code} Framework
             </span>
-            <p className="block text-xs text-slate-300 leading-relaxed font-normal mt-2 font-sans line-clamp-3 md:line-clamp-none">
+            <p className="block text-[11px] text-slate-100 leading-relaxed font-normal mt-2.5 font-sans line-clamp-3">
               {cat.desc}
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+          <div className="flex items-center justify-between pt-3 border-t border-white/10">
             <div className="flex gap-1.5">
               {[1, 2, 3].map((dot) => (
                 <div 
                   key={dot}
-                  className="w-2 h-2 rounded-full bg-[#3B82F6]/60 sm:group-hover:bg-[#3B82F6] transition-colors"
+                  className="w-1.5 h-1.5 rounded-full bg-white/40 sm:group-hover:bg-white transition-colors"
                   style={{ transitionDelay: `${dot * 0.05}s` }}
                 />
               ))}
             </div>
 
             <Link 
-              href={`/products/?category=${cat.name.replace(/\s+/g, "-").toLowerCase()}`}
-              className="flex items-center gap-0.5 text-[#3B82F6] sm:group-hover:text-white text-xs font-bold font-sans transition-colors group/btn"
+              href={linkedProduct ? `/products/${linkedProduct.slug}` : `/products`}
+              className="flex items-center gap-0.5 text-white flex items-center gap-1 transition-colors duration-300 text-xs font-bold font-sans group/btn"
             >
-              <span>Explore</span>
+              <span>Explore Matrix</span>
               <ChevronRight size={13} className="transition-transform sm:group-hover/btn:translate-x-0.5" />
             </Link>
           </div>
@@ -115,15 +126,16 @@ function Interactive3DCard({ cat }: { cat: any }) {
   );
 }
 
+// Slugs synchronized directly with central productsData matrix keys
 const categories = [
-  { name: "Ceiling Diffusers", code: "SAD / RAD Series", desc: "Engineered for optimal omnidirectional air distribution with whisper-quiet acoustics." },
-  { name: "Linear Slot Diffusers", code: "SLSD / RLSD Series", desc: "Architectural linear profiles delivering high-capacity fluid airflow design." },
-  { name: "Supply Air Grilles", code: "SAG Series", desc: "Precision double-deflection blades optimized for mechanical directional throw control." },
-  { name: "Return Air Grilles", code: "RAG Series", desc: "High-free-area grilles built for high volume exhaust with zero pressure drag." },
-  { name: "Linear Bar Grilles", code: "SLBR Series", desc: "Heavy-duty extruded aluminum profiles ideal for premium floor and sidewall integrations." },
-  { name: "Louvers", code: "Exhaust & Sand Trap", desc: "High-efficiency weather protection keeping intake systems free of desert sand and rain." },
-  { name: "Volume Control Dampers", code: "VCD Series", desc: "Aerofoil opposing blades crafted for microscopic air volume and pressure balance." },
-  { name: "Non Return Dampers", code: "NRD Series", desc: "Pressure-operated backdraft shutters engineered for automated single-direction flow." },
+  { slug: "ceiling-diffusers", name: "Ceiling Diffusers", code: "SAD / RAD Series", desc: "Engineered for optimal omnidirectional air distribution with whisper-quiet acoustics." },
+  { slug: "linear-slot-diffusers", name: "Linear Slot Diffusers", code: "LSD-Series", desc: "Architectural linear profiles delivering high-capacity fluid airflow design." },
+  { slug: "linear-bar-grilles", name: "Linear Bar Grilles", code: "LBG-Series", desc: "Heavy-duty extruded aluminum profiles ideal for premium floor and sidewall integrations." },
+  { slug: "gravity-louvers", name: "Gravity Louvers", code: "GL-Series", desc: "Pressure-operated exhaust louvers engineered for automatic air release loops." },
+  { slug: "volume-control-dampers", name: "Volume Control Dampers", code: "VCD-Series", desc: "Aerofoil opposing blades crafted for microscopic air volume and pressure balance." },
+  { slug: "non-return-dampers", name: "Non-Return Dampers", code: "NRD-Series", desc: "Velocity actuated backdraft dampers designed for automatic airflow isolation." },
+  { slug: "sand-trap-louvers", name: "Sand Trap Louvers", code: "STL-Series", desc: "High-capacity heavy architectural sand trap louvers engineered to separate desert sand." },
+  { slug: "external-louvers", name: "External Weather Louvers", code: "EWL-Series", desc: "Architectural external intake or exhaust louvers optimized for structural facades." },
 ];
 
 const features = [
@@ -240,11 +252,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- SECTION 4: HISTORICAL TIMELINE (Corporate Roots - HIGH CONTRAST DARK CARDS FOR MOBILE) --- */}
+      {/* --- SECTION 4: HISTORICAL TIMELINE --- */}
       <section className="py-24 md:py-36 max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight  text-[#124170]">Corporate Roots</h2>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Corporate Roots</h2>
             <p className="text-xs text-slate-400 font-normal mt-4 leading-relaxed max-w-sm hidden lg:block">
               Tracing the technological execution lineage of AlugridX architectural frameworks across global delivery grids.
             </p>
@@ -296,7 +308,6 @@ export default function Home() {
                 Integration Nodes
               </h2>
             </div>
-            
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
