@@ -100,11 +100,8 @@ export default function BlogClient() {
         {/* REFINED ARCHITECTURAL HEADER BLOCK */}
         <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
-            Engineering Press
-          </h1>
-          <p className="text-slate-500 text-base font-normal mt-2 max-w-2xl">
-            Technical breakdowns, thermodynamics whitepapers, and air management data matrices curated straight from the ALUGRIDX design desk.
-          </p>
+Blogs          </h1>
+          
         </div>
 
         {/* INTEGRATED FILTERS & SEARCH CONTROL CONSOLE BAR */}

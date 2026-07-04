@@ -31,7 +31,7 @@ function ProductsContent() {
       <div className="max-w-7xl mx-auto space-y-12 relative z-10">
         <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
-            System Components
+            Our Products
           </h1>
           <p className="text-slate-500 text-base font-normal mt-2 max-w-2xl">
             High-quality architectural grilles and diffusers calibrated strictly for high-tier commercial and industrial GCC infrastructures.
@@ -103,9 +103,8 @@ function ProductsContent() {
 
                   {/* FIXED: Refined Action Footer Layout */}
                   <div className="flex items-center justify-between pt-4 border-t border-slate-100 group-hover:border-white/10 relative z-20 text-xs font-sans uppercase tracking-wider font-bold transition-colors duration-300">
-                    <span className="text-slate-400 group-hover:text-slate-300/80 text-[10px] font-semibold transition-colors duration-300">Technical Profile</span>
                     <span className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors duration-300">
-                      <span>View</span>
+                      <span>View More</span>
                       <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                     </span>
                   </div>
