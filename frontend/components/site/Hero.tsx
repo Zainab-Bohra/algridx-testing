@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useTransform, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ShieldCheck, Grid3X3, ChevronLeft, ChevronRight, Activity, Cpu } from "lucide-react";
+import { ArrowDown, ArrowRight, ShieldCheck, Grid3X3, ChevronLeft, ChevronRight } from "lucide-react";
 
 const carouselProducts = [
   {
@@ -76,7 +76,8 @@ export default function Hero() {
     setCurrentIndex((prev) => (prev + 1) % carouselProducts.length);
   };
 
-  const slideVariants = {
+  // 🚀 FIXED: Bound explicit 'Variants' schema mapping parameter framework to clear cubic-bezier arrays compatibility
+  const slideVariants: Variants = {
     enter: (dir: number) => ({
       x: dir > 0 ? 40 : -40,
       opacity: 0,
@@ -223,7 +224,7 @@ export default function Hero() {
           )}
         </div>
 
-        {/* 🚀 FIXED: Shshifted side pod wrapper container layout to hidden on mobile views via 'hidden lg:flex' utility triggers */}
+        {/* RIGHT SIDE: PREMIUM 3D RADIAL CAROUSEL DECK POD */}
         <div className="hidden lg:col-span-5 w-full lg:flex flex-col items-center justify-center relative mt-6 lg:mt-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
