@@ -5,15 +5,12 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, ShieldCheck } from "lucide-react";
-// Centralized mapping lookup matrix import pointer
-import { staticProductsList } from "../productsData";
-
+import { staticProductsList } from "@/app/products/productsData";
 export default function ProductDetailClient() {
   const params = useParams();
   const slug = typeof params?.slug === "string" ? params.slug : "";
   const [activeTab, setActiveTab] = useState("specs");
 
-  // 🚀 FIXED: In-memory dynamic single lookups using routing keys (Zero Network Latency)
   const product = staticProductsList.find((p) => p.slug === slug);
 
   if (!product) {
