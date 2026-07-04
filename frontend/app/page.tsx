@@ -7,8 +7,7 @@ import { ArrowRight, HardHat, Zap, Layers, Activity, ChevronRight, ArrowDown } f
 import Hero from "@/components/site/Hero";
 import SlidingMarquee from "@/components/site/SlidingMarquee";
 // Centralized mapping lookup matrix import pointer
-import { staticProductsList } from "./products/productsData";
-
+import { staticProductsList } from "@/app/products/productsData";
 const sectionReveal: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
