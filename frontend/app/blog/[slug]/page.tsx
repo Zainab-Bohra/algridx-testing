@@ -2,25 +2,46 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Tag, User } from "lucide-react";
 
- 
- 
+// 🚀 FIXED: Hardcoded target to lock straight to your local backend for active debugging
 const API_URL = "http://localhost:5000";
+
 export default async function BlogDetail({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  
+  // 🚀 FIXED: Declare blog outside the try block so it is accessible in the entire component scope
+  let blog: any = null;
 
-  const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
-    cache: "no-store",
-  });
+  try {
+    console.log("Fetching:", `${API_URL}/api/blogs/${slug}`);
 
-  if (!res.ok) {
+    const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
+      cache: "no-store",
+    });
+
+    console.log("Status:", res.status);
+
+    if (!res.ok) {
+      console.error(await res.text());
+      notFound();
+    }
+
+    blog = await res.json();
+    console.log("Blog successfully parsed:", blog);
+
+  } catch (error) {
+    console.error("SERVER ERROR:", error);
+    // Real-time server side tracking context mapping fallback
     notFound();
   }
 
-  const blog = await res.json();
+  // Double check catch validation safety block
+  if (!blog) {
+    notFound();
+  }
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-40 pb-24 relative text-[#124170] font-sans overflow-hidden">
