@@ -6,8 +6,10 @@ import Link from "next/link";
 import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 
 // 🚀 FIXED: Fallback URL point out straight to live production Render domain instead of localhost boundary break
-const API_URL = "http://localhost:5000";
- 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://algridx-testing.onrender.com";
+
 function GeometricLoader() {
   return (
     <div className="text-center py-32 flex flex-col items-center justify-center gap-4">
@@ -46,12 +48,13 @@ const cleanBaseUrl = API_URL.endsWith("/")
         // Safe check loop parameters structure adjustment
         const cleanBaseUrl = API_URL.endsWith("/") ? API_URL.slice(0, -1) : API_URL;
 
-        const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
+      const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
+  method: "GET",
+  mode: "cors",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
         
 if (!res.ok) {
   throw new Error(`Failed to fetch blogs (${res.status})`);
