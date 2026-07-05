@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 
-// 🚀 FIXED: Hardcoded fallback direct targeting to bypass any Next.js local environment variables caching glitch
-const API_URL = "http://localhost:5000";
+// 🚀 FIXED: Fallback URL point out straight to live production Render domain instead of localhost boundary break
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://algridx-testing.onrender.com";
 
 function GeometricLoader() {
   return (
@@ -36,27 +38,33 @@ export default function BlogClient() {
   const postsPerPage = 6; 
 
   useEffect(() => {
+
+const cleanBaseUrl = API_URL.endsWith("/")
+  ? API_URL.slice(0, -1)
+  : API_URL;
+
     const fetchBlogs = async () => {
       try {
+        // Safe check loop parameters structure adjustment
         const cleanBaseUrl = API_URL.endsWith("/") ? API_URL.slice(0, -1) : API_URL;
-        
-        // 🚨 Debug Tracer: Browser console mein verify karne ke liye exact URL trace print hoga
-        console.log("📡 Frontend runtime now triggering active fetch to URL:", `${cleanBaseUrl}/api/blogs`);
 
-        const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+      const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
+  method: "GET",
+  mode: "cors",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
         
-        if (!res.ok) {
-          throw new Error(`Failed to fetch blogs (${res.status})`);
-        }
+if (!res.ok) {
+  throw new Error(`Failed to fetch blogs (${res.status})`);
+}
 
-        const data = await res.json();
-        console.log("✅ Successfully received array objects payload count:", data.length);
-        setBlogs(Array.isArray(data) ? data : []);
+       const data = await res.json();
+
+
+
+setBlogs(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("❌ Failed to fetch dynamic blogs from Cluster0:", error);
         setBlogs([]);
@@ -73,14 +81,18 @@ export default function BlogClient() {
 
   const categories = ["All", ...new Set(blogs.map((blog) => blog.category || "Engineering"))];
 
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesCategory = activeTab === "All" || blog.category === activeTab;
-    const matchesSearch =
-      blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
+const filteredBlogs = blogs.filter((blog) => {
+  const matchesCategory =
+    activeTab === "All" || blog.category === activeTab;
 
-    return matchesCategory && matchesSearch;
-  });
+  const matchesSearch =
+    blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
+
+  return matchesCategory && matchesSearch;
+});
+
+
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
