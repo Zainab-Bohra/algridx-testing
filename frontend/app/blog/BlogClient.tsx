@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Fallback handling check to avoid client-side undefined breaks
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-// PREMIUM 3D SPINNING GEOMETRIC LOADER COMPONENT
+// 🚀 FIXED: Fallback URL point out straight to live production Render domain instead of localhost boundary break
+const API_URL = "http://localhost:5000";
+ 
 function GeometricLoader() {
   return (
     <div className="text-center py-32 flex flex-col items-center justify-center gap-4">
@@ -33,26 +32,36 @@ export default function BlogClient() {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 🚀 STANDARD MODE LOCKED: Locked to 6 components per view matrix index
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6; 
 
   useEffect(() => {
+
+const cleanBaseUrl = API_URL.endsWith("/")
+  ? API_URL.slice(0, -1)
+  : API_URL;
+
     const fetchBlogs = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/blogs`, {
+        // Safe check loop parameters structure adjustment
+        const cleanBaseUrl = API_URL.endsWith("/") ? API_URL.slice(0, -1) : API_URL;
+
+        const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           }
         });
         
-        if (!res.ok) {
-          throw new Error(`Network response error: ${res.status}`);
-        }
+if (!res.ok) {
+  throw new Error(`Failed to fetch blogs (${res.status})`);
+}
 
-        const data = await res.json();
-        setBlogs(Array.isArray(data) ? data : []);
+       const data = await res.json();
+
+
+
+setBlogs(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("❌ Failed to fetch dynamic blogs from Cluster0:", error);
         setBlogs([]);
@@ -63,23 +72,25 @@ export default function BlogClient() {
     fetchBlogs();
   }, []);
 
-  // Reset active page down to index 1 whenever a filter or text search is executed
   useEffect(() => {
     setCurrentPage(1);
   }, [activeTab, searchQuery]);
 
   const categories = ["All", ...new Set(blogs.map((blog) => blog.category || "Engineering"))];
 
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesCategory = activeTab === "All" || blog.category === activeTab;
-    const matchesSearch =
-      blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
+const filteredBlogs = blogs.filter((blog) => {
+  const matchesCategory =
+    activeTab === "All" || blog.category === activeTab;
 
-    return matchesCategory && matchesSearch;
-  });
+  const matchesSearch =
+    blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
 
-  // MATH CALCULATION MATRIX FOR SLICING ACTIVE RENDER ARRAYS
+  return matchesCategory && matchesSearch;
+});
+
+
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentDisplayedBlogs = filteredBlogs.slice(indexOfFirstPost, indexOfLastPost);
@@ -87,7 +98,6 @@ export default function BlogClient() {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    // Smooth scroll straight back up to filters header so user doesn't get disoriented
     window.scrollTo({ top: 250, behavior: "smooth" });
   };
 
@@ -97,14 +107,12 @@ export default function BlogClient() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
         
-        {/* REFINED ARCHITECTURAL HEADER BLOCK */}
         <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
-Blogs          </h1>
-          
+            Blogs
+          </h1>
         </div>
 
-        {/* INTEGRATED FILTERS & SEARCH CONTROL CONSOLE BAR */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-100 shadow-[0_10px_30px_rgba(10,37,64,0.03)]">
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 px-1">
             {categories.map((tab) => (
@@ -134,10 +142,8 @@ Blogs          </h1>
           </div>
         </div>
 
-        {/* LOADING NODES STATE */}
         {loading && <GeometricLoader />}
 
-        {/* BROADCASTED ARTICLES INDEX GRID MATRIX */}
         {!loading && (
           <>
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
@@ -206,7 +212,6 @@ Blogs          </h1>
               </AnimatePresence>
             </motion.div>
 
-            {/* DYNAMIC PAGINATION CONTROLLER MATRIX CONSOLE */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 pt-12">
                 <button
@@ -243,7 +248,6 @@ Blogs          </h1>
           </>
         )}
 
-        {/* EMPTY REGISTRY LAYER */}
         {!loading && filteredBlogs.length === 0 && (
           <div className="text-center py-24 bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.01)] space-y-3">
             <Newspaper className="mx-auto text-slate-300" size={36} />

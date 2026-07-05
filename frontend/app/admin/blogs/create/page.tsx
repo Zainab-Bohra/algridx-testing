@@ -3,8 +3,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, FileText, Send, CheckCircle, Clock, Tag, Heading, Key, ArrowUpRight, Monitor, LayoutGrid, Terminal } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 export default function BlogAdmin() {
   const [form, setForm] = useState({
     title: "",

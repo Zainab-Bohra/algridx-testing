@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Tag, User } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+ 
+ 
+const API_URL = "http://localhost:5000";
 export default async function BlogDetail({
   params,
 }: {
