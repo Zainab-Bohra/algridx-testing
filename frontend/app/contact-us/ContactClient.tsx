@@ -32,7 +32,6 @@ export default function ContactClient() {
         body: JSON.stringify(formState),
       });
 
-      // 🌟 SAFE SHIELD: यहाँ चेक करें कि रिस्पॉन्स HTML है या असली JSON
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new Error("The server dynamic response was altered. Verify if your Backend Server is active on Port 5000.");
@@ -42,7 +41,7 @@ export default function ContactClient() {
 
       if (response.ok && data.success) {
         setIsSubmitted(true);
-        setFormState({ name: "", email: "", phone: "", company: "", msg: "" }); // Reset form upon successful sync
+        setFormState({ name: "", email: "", phone: "", company: "", msg: "" });
         setTimeout(() => setIsSubmitted(false), 6000);
       } else {
         setErrorMessage(data.error || "Something went wrong. Please check SMTP credentials inside .env");
@@ -56,37 +55,60 @@ export default function ContactClient() {
   };
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170] font-sans">
+    <div className="bg-[#F8FAFC] min-h-screen pt-28 pb-24 overflow-hidden relative text-[#124170] font-sans">
       
       {/* FINE SPATIAL ARCHITECTURE GRID OVERLAY */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
 
+      {/* TOP SLEEPING BANNER WITH 3D ASSET */}
+      <div className="relative z-10 w-full mb-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="relative w-full h-48 md:h-56 rounded-3xl overflow-hidden bg-gradient-to-r from-[#0A2540] via-[#124170] to-[#1E568B] border border-slate-200/20 shadow-xl flex items-center justify-between px-8 md:px-14">
+            
+            {/* BACKGROUND TEXTURE GRID */}
+            <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+
+            {/* LEFT TEXT CONTENT */}
+            <div className="relative z-10 max-w-xl space-y-3">
+              <motion.span 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full bg-white/10 text-blue-300 text-[10px] font-extrabold uppercase tracking-wider border border-white/20 backdrop-blur-md"
+              >
+                <Activity size={12} className="animate-pulse text-blue-400" />
+                Global Network Channels
+              </motion.span>
+              
+              <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white">
+                Contact Us
+              </h1>
+              
+              <p className="text-slate-200 text-xs md:text-sm font-normal max-w-md hidden sm:block leading-relaxed opacity-90">
+                Connect directly with our Ajman factory desk for instant dimensional parameters, AutoCAD blueprints, and RFQs.
+              </p>
+            </div>
+
+            {/* RIGHT SIDE FLOATING 3D PHONE GRAPHIC */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              className="relative z-10 h-36 md:h-48 shrink-0 hidden sm:flex items-center justify-end"
+            >
+              <img 
+                src="/images/contact-us-banner.jpg" 
+                alt="Contact Us 3D Icon" 
+                className="h-full w-auto object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.35)]"
+              />
+            </motion.div>
+
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto space-y-12 relative z-10 px-6">
         
-        {/* REFINED ARCHITECTURAL HEADER SECTION */}
-        <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
-          <motion.span 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2.5 py-2 px-5 rounded-full bg-white text-[#3B82F6] text-[11px] font-extrabold uppercase tracking-wider border border-slate-100 shadow-[0_4px_15px_rgba(0,0,0,0.02)] mb-4"
-          >
-            <Activity size={13} className="animate-pulse text-[#3B82F6]" />
-            Global Network Channels
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170] leading-tight"
-          >
-            Request Quotation Matrix
-          </motion.h1>
-          <p className="text-slate-500 text-base font-normal mt-2 max-w-2xl">
-            Connect directly with our Ajman factory desk for instant dimensional parameters, AutoCAD blueprints, and rapid manufacturing scale estimations.
-          </p>
-        </div>
-
         {/* MAIN SPLIT WORKSPACE GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
@@ -115,7 +137,7 @@ export default function ContactClient() {
               })}
             </div>
 
-            {/* HIGH-DEPTH INTERACTIVE BLUEPRINT MAP BOX */}
+            {/* MAP BOX */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -135,7 +157,7 @@ export default function ContactClient() {
             </motion.div>
           </div>
 
-          {/* RIGHT COLUMN: HIGH-END CONTACT SUBMITTAL FORM */}
+          {/* RIGHT COLUMN: CONTACT FORM */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -154,7 +176,7 @@ export default function ContactClient() {
                   <input 
                     type="text" required value={formState.name} onChange={(e)=>setFormState({...formState, name: e.target.value})}
                     className="w-full bg-slate-50/60 border border-slate-100 rounded-xl px-4 py-3.5 text-xs font-semibold text-[#124170] placeholder-slate-400 focus:outline-none focus:border-[#3B82F6] focus:bg-white transition-all shadow-inner" 
-                    placeholder="e.g. John Doe"
+                    placeholder="e.g. David Doe"
                     disabled={isLoading}
                   />
                 </div>
@@ -171,7 +193,7 @@ export default function ContactClient() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Phone Link *</label>
+                  <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Phone *</label>
                   <input 
                     type="tel" required value={formState.phone} onChange={(e)=>setFormState({...formState, phone: e.target.value})}
                     className="w-full bg-slate-50/60 border border-slate-100 rounded-xl px-4 py-3.5 text-xs font-semibold text-[#124170] placeholder-slate-400 focus:outline-none focus:border-[#3B82F6] focus:bg-white transition-all shadow-inner" 
@@ -180,7 +202,7 @@ export default function ContactClient() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Company Identity</label>
+                  <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Company Name</label>
                   <input 
                     type="text" value={formState.company} onChange={(e)=>setFormState({...formState, company: e.target.value})}
                     className="w-full bg-slate-50/60 border border-slate-100 rounded-xl px-4 py-3.5 text-xs font-semibold text-[#124170] placeholder-slate-400 focus:outline-none focus:border-[#3B82F6] focus:bg-white transition-all shadow-inner" 
@@ -200,7 +222,6 @@ export default function ContactClient() {
                 />
               </div>
 
-              {/* ACTION ACTUATOR CORE BUTTON */}
               <div className="pt-2">
                 <motion.button 
                   whileHover={!isLoading ? { scale: 1.02, y: -1, boxShadow: "0px 10px 25px rgba(59, 130, 246, 0.3)" } : {}}
@@ -223,7 +244,6 @@ export default function ContactClient() {
                 </motion.button>
               </div>
 
-              {/* MESSAGES TRANSLATION TRANSMISSION OVERLAY */}
               <AnimatePresence>
                 {isSubmitted && (
                   <motion.div 

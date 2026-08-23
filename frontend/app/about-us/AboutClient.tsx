@@ -1,8 +1,9 @@
 "use client";
+
 import { useRef } from "react";
 import { motion, Variants, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
-import { Shield, Target, Compass, Award, Building2, Zap, ArrowRight, Activity, Cpu, Sliders } from "lucide-react";
+import { Shield, Target, Compass, Award, Building2, Zap, ArrowRight, Cpu, Sliders } from "lucide-react";
 
 const fadeUpInteractive: Variants = {
   hidden: { opacity: 0, y: 30, scale: 0.98 },
@@ -61,11 +62,11 @@ export default function AboutClient() {
               initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-3 py-2.5 px-6 rounded-full bg-white text-[#124170] border border-slate-100 shadow-[0_10px_25px_rgba(10,37,64,0.04)]"
+              className="inline-flex items-center gap-3 py-2.5 px-6 rounded-full bg-white text-[#124170] border border-sky-200 shadow-[0_10px_25px_rgba(10,37,64,0.04)]"
             >
-              <div className="w-6 h-6 flex items-center justify-center rounded bg-slate-50 p-0.5 shrink-0 border border-slate-100">
+              <div className="w-6 h-6 flex items-center justify-center rounded bg-white p-0.5 shrink-0 border border-sky-100">
                 <img 
-                  src="/images/alugridx-without-bg-1.webp" 
+                  src="/images/alugridx-logo.png" 
                   alt="ALUGRIDX Brand Icon" 
                   className="max-w-full max-h-full object-contain"
                 />
@@ -113,7 +114,7 @@ export default function AboutClient() {
                 </div>
                 <span className="text-[#124170] text-sm font-extrabold">Premium Products</span>
               </div>
-              <div className="flex items-center gap-2 border-l border-slate-100 null pl-4">
+              <div className="flex items-center gap-2 border-l border-slate-100 pl-4">
                 <div className="bg-[#3B82F6]/5 p-2 rounded-xl text-[#3B82F6]">
                   <Sliders size={15} />
                 </div>
@@ -146,27 +147,26 @@ export default function AboutClient() {
             </p>
           </motion.div>
 
-          {/* Right Area Workspace Side: SINGLE FULL BRAND LOGO CARD (Fixed Syntax) */}
+          {/* Right Area Workspace Side: FULL BRAND LOGO CARD WITH WHITE BACKGROUND & BLUE BORDER */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end [perspective:1500px]" ref={cardRef}>
             <motion.div 
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
               whileHover={{ scale: 1.02 }}
-              className="relative w-full max-w-md h-[440px] bg-white border border-[#124170]/10 rounded-[3rem] p-4 shadow-[0_20px_50px_rgba(10,37,64,0.06)] hover:shadow-[0_40px_90px_rgba(59,130,246,0.22)] border-b-4 border-b-[#3B82F6]/30 transition-all duration-200 cursor-pointer"
+              className="relative w-full max-w-md h-[440px] bg-white border-2 border-[#3B82F6] rounded-[3rem] p-4 shadow-[0_15px_40px_rgba(59,130,246,0.15)] hover:shadow-[0_25px_60px_rgba(59,130,246,0.3)] transition-all duration-200 cursor-pointer"
             >
-              {/* Core Canvas Frame featuring Full Uncropped AlugridX Identity Mark */}
-              <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-[#0A2540] p-6 flex items-center justify-center relative [transform:translate3d(0,0,20px)] shadow-inner">
+              {/* Pure White Image Frame with Solid White Background & Blue Accent Inner Border */}
+              <div className="w-full h-full rounded-[2.5rem] bg-white border border-[#3B82F6]/30 p-8 flex items-center justify-center relative [transform:translate3d(0,0,20px)] shadow-sm">
                 <img 
                   src="/images/alugridx-logo.png" 
                   alt="ALUGRIDX Full Corporate Brand Mark" 
-                  className="max-w-full max-h-full object-contain transition-transform duration-700 hover:scale-[1.03]"
+                  className="max-w-full max-h-full object-contain bg-white transition-transform duration-700 hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
               </div>
 
               {/* Minimal floating trust parameters capsule label */}
-              <div className="absolute -bottom-5 right-8 bg-[#0A2540] text-white border border-white/10 px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2 [transform:translate3d(0,0,45px)]">
+              <div className="absolute -bottom-5 right-8 bg-[#0A2540] text-white border border-[#3B82F6]/50 px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2 [transform:translate3d(0,0,45px)]">
                 <Award size={14} className="text-[#3B82F6]" />
                 <span className="text-xs font-black uppercase tracking-wider">40 Yrs Trust Registry</span>
               </div>
@@ -254,8 +254,6 @@ export default function AboutClient() {
           className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white rounded-[3rem] p-8 md:p-16 border border-white/5 shadow-[0_20px_50px_rgba(10,37,64,0.15)] relative overflow-hidden text-center"
         >
           <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:12px_12px] pointer-events-none" />
-
-         
 
           <h3 className="text-2xl md:text-5xl font-black uppercase tracking-tight leading-tight max-w-3xl mx-auto relative z-10">
             Deploy High-Fidelity Grids For Your Project Framework

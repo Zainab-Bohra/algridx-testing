@@ -3,34 +3,60 @@
 import { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ShieldCheck, Grid3X3, ChevronLeft, ChevronRight } from "lucide-react";
+import { 
+  ArrowRight, 
+  ShieldCheck, 
+  ChevronLeft, 
+  ChevronRight, 
+  Sparkles, 
+  Award, 
+  SlidersHorizontal,
+  Compass,
+  Zap
+} from "lucide-react";
 
 const carouselProducts = [
   {
     title: "Linear Slot Profile",
-    desc: "Micro-Calibrated Air Terminal",
+    subtitle: "Micro-Calibrated Air Terminal",
+    tag: "Architectural Series",
+    code: "LSP-6063",
     img: "/images/products/linear-slot-diffusers.png"
   },
   {
     title: "Ceiling Diffuser",
-    desc: "Omnidirectional Jet Deflection",
+    subtitle: "Omnidirectional Jet Deflection",
+    tag: "High Volume",
+    code: "CD-360X",
     img: "/images/products/ceiling-diffusers.png"
   },
   {
     title: "Sand Trap Louver",
-    desc: "High-Capacity Airborne Particulate Purge",
+    subtitle: "High-Capacity Airborne Purge",
+    tag: "Industrial Grade",
+    code: "STL-9000",
     img: "/images/products/sand-trap-louvers.png"
   },
   {
     title: "Ceiling Housing with HEPA",
-    desc: "Hermetic Cleanroom Terminal Filtration",
+    subtitle: "Hermetic Cleanroom Terminal",
+    tag: "ISO-Class Safe",
+    code: "HEPA-H14",
     img: "/images/products/ceiling-housing-with-hepa-filter.png"
   },
   {
     title: "Volume Control Damper",
-    desc: "Microscopic Pressure Balance",
+    subtitle: "Microscopic Pressure Balance",
+    tag: "Precision Flow",
+    code: "VCD-PRO",
     img: "/images/products/volume-control-dampers.png"
   }
+];
+
+const features = [
+  { icon: Award, label: "6063-T6 Extruded Alloy" },
+  { icon: Compass, label: "UAE Precision Crafting" },
+  { icon: SlidersHorizontal, label: "ASHRAE Certified" }
 ];
 
 export default function Hero() {
@@ -38,6 +64,7 @@ export default function Hero() {
   const [direction, setDirection] = useState(0);
   const [isMobile, setIsMobile] = useState(true);
 
+  // Mouse tilt / spotlight values
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -55,14 +82,15 @@ export default function Hero() {
     mouseY.set(clientY - top);
   }
 
-  const transformX = useTransform(mouseX, (v) => `${v}px`);
-  const transformY = useTransform(mouseY, (v) => `${v}px`);
+  const spotlightX = useTransform(mouseX, (v) => `${v}px`);
+  const spotlightY = useTransform(mouseY, (v) => `${v}px`);
 
+  // Auto-play carousel
   useEffect(() => {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % carouselProducts.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
@@ -76,22 +104,24 @@ export default function Hero() {
     setCurrentIndex((prev) => (prev + 1) % carouselProducts.length);
   };
 
-  // 🚀 FIXED: Bound explicit 'Variants' schema mapping parameter framework to clear cubic-bezier arrays compatibility
   const slideVariants: Variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 40 : -40,
+      x: dir > 0 ? 50 : -50,
       opacity: 0,
+      scale: 0.92,
       filter: "blur(6px)",
     }),
     center: {
       x: 0,
       opacity: 1,
+      scale: 1,
       filter: "blur(0px)",
       transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -40 : 30,
+      x: dir > 0 ? -50 : 50,
       opacity: 0,
+      scale: 0.92,
       filter: "blur(6px)",
       transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
     })
@@ -100,159 +130,156 @@ export default function Hero() {
   return (
     <div 
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen lg:h-screen w-full overflow-hidden bg-[#0A2540] flex items-center justify-center group/hero select-none"
+      className="relative min-h-screen lg:h-screen w-full overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-blue-50/30 flex items-center justify-center select-none font-sans"
     >
-      {/* 1. LAYERS: BACKGROUND MESH & VIDEO BLEND GRAPHICS */}
-      <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          controls={false}
-          key="alugridx-hero-video"
-          className="absolute inset-0 h-full w-full object-cover opacity-[0.22] lg:opacity-[0.32] mix-blend-screen scale-105 pointer-events-none transition-opacity duration-700 z-0" 
-        >
-          <source src="/videos/hero-video.mp4" type="video/mp4" />
-        </video>
-        
+      {/* ================= 1. DYNAMIC LIGHTING & BACKGROUND GRAPHICS ================= */}
+      <div className="absolute inset-0 h-full w-full pointer-events-none z-0">
+        <div className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-[140px] animate-pulse" />
+        <div className="absolute top-1/3 -right-20 w-[500px] h-[500px] bg-sky-300/15 rounded-full blur-[130px]" />
+        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-blue-600/5 rounded-full blur-[120px]" />
+
         {!isMobile && (
           <motion.div 
-            className="absolute -inset-[500px] opacity-0 group-hover/hero:opacity-50 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(circle_at_var(--x,50%_50%)_var(--y,50%_50%),rgba(59,130,246,0.22)_0%,transparent_50%)] z-10"
+            className="absolute -inset-[300px] opacity-0 group-hover/hero:opacity-100 transition-opacity duration-700 pointer-events-none z-10"
             style={{
-              // @ts-ignore
-              "--x": transformX,
-              // @ts-ignore
-              "--y": transformY,
+              background: `radial-gradient(circle 500px at ${spotlightX} ${spotlightY}, rgba(59, 130, 246, 0.07) 0%, transparent 80%)`,
             }}
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A2540]/50 via-[#0A2540]/80 to-[#0A2540] z-20" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] z-30" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.025)_1px,transparent_1px)] bg-[size:4rem_4rem] z-20" />
       </div>
 
-      {/* 2. MAIN GRID LAYOUT VIEWPORT */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-32 pb-20 lg:py-0 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      {/* ================= 2. MAIN LAYOUT CONTAINER ================= */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-28 pb-16 lg:py-0 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         
-        {/* LEFT CONSOLE: BRAND CONTENT TYPOGRAPHY */}
-        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 sm:space-y-8 relative">
+        {/* -------------- LEFT CONTENT COLUMN -------------- */}
+        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-7 relative">
           
+          {/* Top Trust Badge */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-white/[0.06] to-white/[0.01] backdrop-blur-xl border border-white/[0.1] px-4 py-2 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
+            className="inline-flex items-center gap-2.5 bg-white border border-blue-200/80 shadow-[0_4px_20px_rgba(59,130,246,0.08)] px-4 py-2 rounded-full backdrop-blur-md"
           >
-            <ShieldCheck size={14} className="text-[#3B82F6] animate-pulse" />
-            <span className="text-white text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] font-sans">
-              ASHRAE Certified Structural Standard
+            <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shadow-xs">
+              <ShieldCheck size={13} />
+            </div>
+            <span className="text-blue-950 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em]">
+              GCC Certified Structural Air Systems
             </span>
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
           </motion.div>
 
-          <div className="space-y-4 w-full">
-            <motion.h1 
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black text-white tracking-tighter uppercase leading-[0.85] font-sans drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
-            >
-              Alugrid<span className="text-[#3B82F6] bg-gradient-to-r from-[#3B82F6] via-[#60A5FA] to-white bg-clip-text text-transparent">X</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.1 }}
-              className="text-lg sm:text-2xl md:text-3xl font-light text-slate-300 italic tracking-wide font-sans flex items-center justify-center lg:justify-start gap-3"
-            >
-              <span>engineered with</span> 
-              <span className="font-black text-white not-italic bg-gradient-to-r from-[#3B82F6]/20 to-transparent border-b-2 border-[#3B82F6] px-3 py-0.5 rounded-sm shadow-sm">
-                Absolute Precision
-              </span>
-            </motion.p>
-          </div>
+          {/* BRAND LOGO IMAGE HEADLINE SECTION */}
+          <motion.div 
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex justify-center lg:justify-start"
+          >
+            <img 
+              src="/images/alugridx-logo-font.png" 
+              alt="ALUGRIDX - Airflow Redefined" 
+              className="w-full max-w-[340px] sm:max-w-[480px] lg:max-w-[540px] h-auto object-contain drop-shadow-sm"
+            />
+          </motion.div>
 
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
-            className="text-xs sm:text-sm text-slate-300/90 leading-relaxed tracking-wide font-sans max-w-xl font-normal"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-slate-600 text-sm sm:text-base leading-relaxed tracking-wide max-w-xl font-normal"
           >
-            AlugridX manufactures premium grade 6063-T6 extruded aluminium air terminals and system profiles. Fabricated in the UAE to withstand rigorous environmental loads, supplying elite architectural complexes and high-capacity infrastructure links globally.
+            AlugridX engineers high-performance 6063-T6 extruded aluminium air terminals, linear slot diffusers, and environmental control dampers tailored for modern architectural developments globally.
           </motion.p>
 
-          {/* DYNAMIC CTAs WITH METALLIC HOVER GLOWS */}
+          {/* Feature Micro-Badges */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-wrap gap-3 justify-center lg:justify-start pt-1"
+          >
+            {features.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div 
+                  key={idx} 
+                  className="flex items-center gap-2 bg-white/80 border border-slate-200/80 shadow-xs px-3.5 py-2 rounded-xl text-slate-800 text-xs font-bold backdrop-blur-sm"
+                >
+                  <Icon size={14} className="text-blue-600" />
+                  <span>{item.label}</span>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Primary Action Buttons */}
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start w-full sm:w-auto pt-2"
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start w-full sm:w-auto pt-3"
           >
             <Link href="/products" className="w-full sm:w-auto">
               <motion.div
-                whileHover={isMobile ? {} : { scale: 1.04, y: -3, boxShadow: "0px 20px 40px rgba(59, 130, 246, 0.4)" }}
+                whileHover={isMobile ? {} : { scale: 1.03, y: -2, boxShadow: "0px 20px 40px rgba(37, 99, 235, 0.3)" }}
                 whileTap={{ scale: 0.97 }}
-                className="group bg-[#3B82F6] hover:bg-[#2563EB] text-white px-9 py-4.5 text-xs font-black uppercase tracking-widest transition-all rounded-full flex items-center justify-center gap-2.5 cursor-pointer shadow-[0_10px_25px_rgba(59,130,246,0.2)] font-sans w-full"
+                className="group bg-gradient-to-r from-blue-600 via-blue-700 to-sky-600 hover:from-blue-700 hover:to-blue-800 text-white px-9 py-4 text-xs font-black uppercase tracking-widest transition-all rounded-full flex items-center justify-center gap-3 cursor-pointer shadow-[0_12px_28px_rgba(37,99,235,0.25)] w-full"
               >
                 <span>Explore Profiles</span>
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                <ArrowRight size={15} className="transition-transform group-hover:translate-x-1.5" />
               </motion.div>
             </Link>
             
             <Link href="/request-catalogue" className="w-full sm:w-auto">
               <motion.div
-                whileHover={isMobile ? {} : { scale: 1.04, y: -3, backgroundColor: "rgba(255, 255, 255, 1)", color: "#0A2540", borderColor: "white", boxShadow: "0px 20px 40px rgba(255, 255, 255, 0.1)" }}
+                whileHover={isMobile ? {} : { scale: 1.03, y: -2, backgroundColor: "#FFFFFF", borderColor: "#93C5FD" }}
                 whileTap={{ scale: 0.97 }}
-                className="text-white border border-white/20 hover:border-white/50 bg-white/[0.02] px-9 py-4.5 text-xs font-black uppercase tracking-widest transition-all rounded-full text-center backdrop-blur-sm cursor-pointer font-sans w-full"
+                className="text-slate-800 border border-slate-200/90 bg-white/90 backdrop-blur-md px-9 py-4 text-xs font-black uppercase tracking-widest transition-all rounded-full text-center cursor-pointer shadow-xs w-full"
               >
                 Request Catalogue
               </motion.div>
             </Link>
           </motion.div>
 
-          {/* NEW PREMIUM FEATURE: MICRO INLINE DASHBOARD WIDGET */}
-          {!isMobile && (
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 0.8 }} 
-              transition={{ delay: 0.6 }}
-              className="pt-8 grid grid-cols-2 gap-8 border-t border-white/5 w-full max-w-md"
-            >
-            </motion.div>
-          )}
         </div>
 
-        {/* RIGHT SIDE: PREMIUM 3D RADIAL CAROUSEL DECK POD */}
+        {/* -------------- RIGHT CAROUSEL SHOWCASE COLUMN -------------- */}
         <div className="hidden lg:col-span-5 w-full lg:flex flex-col items-center justify-center relative mt-6 lg:mt-0">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="relative w-full max-w-[350px] sm:max-w-[400px] aspect-square rounded-[2.5rem] sm:rounded-[3rem] bg-gradient-to-br from-white/[0.08] to-white/0 border border-white/[0.1] p-4 flex items-center justify-center shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] backdrop-blur-xl overflow-hidden group/product"
+            className="relative w-full max-w-[430px] aspect-square rounded-[3rem] bg-gradient-to-b from-white/90 to-blue-50/70 border border-white p-5 flex items-center justify-center shadow-[0_35px_90px_rgba(15,23,42,0.09)] backdrop-blur-3xl overflow-hidden group/product"
           >
-            {/* Dynamic Glow Aura Core */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12)_0%,transparent_65%)]" />
-            <div className="absolute w-72 h-72 border border-white/[0.04] rounded-full animate-[spin_120s_linear_infinite]" />
-            <div className="absolute w-52 h-52 border border-dashed border-white/[0.04] rounded-full animate-[spin_60s_linear_infinite_reverse]" />
+            {/* Stage Background Glows */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.15)_0%,transparent_65%)]" />
+            <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-sky-300/30 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute w-80 h-80 border border-blue-200/40 rounded-full animate-[spin_90s_linear_infinite]" />
+            <div className="absolute w-60 h-60 border border-dashed border-blue-300/40 rounded-full animate-[spin_45s_linear_infinite_reverse]" />
 
-            {/* Premium Navigation Trigger Elements */}
+            {/* Navigation Arrows */}
             <button 
               onClick={handlePrev}
-              className="absolute left-4 z-30 w-9 h-9 rounded-full bg-slate-950/60 hover:bg-[#3B82F6] border border-white/[0.1] flex items-center justify-center text-white backdrop-blur-md transition-all active:scale-90"
+              aria-label="Previous Product"
+              className="absolute left-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200"
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={20} strokeWidth={2.5} />
             </button>
             <button 
               onClick={handleNext}
-              className="absolute right-4 z-30 w-9 h-9 rounded-full bg-slate-950/60 hover:bg-[#3B82F6] border border-white/[0.1] flex items-center justify-center text-white backdrop-blur-md transition-all active:scale-90"
+              aria-label="Next Product"
+              className="absolute right-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={20} strokeWidth={2.5} />
             </button>
 
-            {/* Core Display Container Box Framework */}
-            <div className="relative w-full h-full bg-gradient-to-b from-slate-900/50 to-slate-950/80 rounded-[1.85rem] sm:rounded-[2.2rem] border border-white/[0.08] p-6 flex flex-col justify-between shadow-[inset_0_1px_2px_rgba(255,255,255,0.15)] overflow-hidden">
+            {/* INNER CARD CONTAINER */}
+            <div className="relative w-full h-full bg-white/95 backdrop-blur-xl rounded-[2.3rem] border border-slate-100/90 p-6 flex flex-col justify-between shadow-[0_15px_35px_rgba(0,0,0,0.03)] overflow-hidden">
               
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
@@ -264,31 +291,39 @@ export default function Hero() {
                   exit="exit"
                   className="w-full h-full flex flex-col justify-between absolute inset-0 p-6"
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <Grid3X3 className="text-[#3B82F6]/50 group-hover/product:text-[#3B82F6] transition-colors duration-300" size={18} />
-                    <span className="text-[9px] font-mono tracking-widest text-[#3B82F6] font-black bg-[#3B82F6]/10 border border-[#3B82F6]/20 px-3 py-0.5 rounded-md uppercase">
-                      Profile Matrix 0{currentIndex + 1}
+                  {/* Top Bar Info */}
+                  <div className="flex items-center justify-between w-full z-10">
+                    <div className="flex items-center gap-1.5 bg-blue-50 text-blue-700 font-bold px-3 py-1 rounded-full text-[10px] tracking-wide border border-blue-100 shadow-2xs">
+                      <Sparkles size={13} className="text-blue-500" />
+                      <span>{carouselProducts[currentIndex].tag}</span>
+                    </div>
+                    <span className="text-[10px] font-mono font-black text-slate-400 bg-slate-50 border border-slate-100 px-3 py-1 rounded-full uppercase">
+                      {carouselProducts[currentIndex].code}
                     </span>
                   </div>
 
-                  {/* Enhanced Product Frame Wrapper Container */}
-                  <div className="my-auto py-2 grid place-content-center relative group/img cursor-pointer">
-                    <div className="absolute w-32 h-32 bg-[#3B82F6]/15 blur-3xl rounded-full transform scale-100 group-hover/product:scale-125 transition-transform duration-700" />
+                  {/* Product Display Stage */}
+                  <div className="my-auto py-2 grid place-content-center relative cursor-pointer">
+                    <div className="absolute w-44 h-44 bg-blue-500/10 blur-2xl rounded-full transform scale-100 group-hover/product:scale-125 transition-transform duration-700" />
                     <motion.img 
-                      whileHover={{ scale: 1.05, rotate: 1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      whileHover={{ scale: 1.08, rotate: 1.5 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 18 }}
                       src={carouselProducts[currentIndex].img} 
                       alt={carouselProducts[currentIndex].title} 
-                      className="max-h-32 sm:max-h-40 object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.65)] bg-white/95 rounded-[1.5rem] p-3 border border-white/10 shadow-xl transition-all duration-300"
+                      className="max-h-36 sm:max-h-44 object-contain bg-slate-50/80 rounded-2xl p-4 border border-slate-100 shadow-xs transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-1 bg-gradient-to-r from-slate-950/60 to-transparent backdrop-blur-md border border-white/[0.06] p-4 rounded-xl shadow-lg">
-                    <span className="text-white text-sm sm:text-base font-black uppercase tracking-wide block font-sans leading-tight">
-                      {carouselProducts[currentIndex].title}
-                    </span>
-                    <span className="text-slate-400 text-[10px] sm:text-[11px] font-medium block font-sans tracking-wide">
-                      {carouselProducts[currentIndex].desc}
+                  {/* Bottom Text Capsule */}
+                  <div className="space-y-1 bg-gradient-to-r from-slate-900 via-slate-950 to-blue-950 text-white p-4 rounded-2xl shadow-md">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-extrabold uppercase tracking-wide block">
+                        {carouselProducts[currentIndex].title}
+                      </span>
+                      <Zap size={14} className="text-sky-400" />
+                    </div>
+                    <span className="text-slate-300 text-[11px] font-medium block tracking-wide">
+                      {carouselProducts[currentIndex].subtitle}
                     </span>
                   </div>
                 </motion.div>
@@ -297,8 +332,8 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Slick Linear Progress Dash Navigation Dot Matrix */}
-          <div className="flex justify-center gap-2 mt-5">
+          {/* Carousel Progress Indicators */}
+          <div className="flex justify-center gap-2 mt-6">
             {carouselProducts.map((_, index) => (
               <button
                 key={index}
@@ -306,20 +341,15 @@ export default function Hero() {
                   setDirection(index > currentIndex ? 1 : -1);
                   setCurrentIndex(index);
                 }}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "w-8 bg-[#3B82F6]" : "w-2 bg-white/20 hover:bg-white/40"
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? "w-10 bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.6)]" : "w-2.5 bg-slate-200 hover:bg-slate-300"
                 }`}
               />
             ))}
           </div>
         </div>
 
-      </div>
-
-      {/* FOOTER DIRECTIVITY NAVIGATION ICON METRIC LOOP */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden lg:flex items-center gap-2.5 text-slate-400/50 text-[9px] font-black tracking-[0.25em] pointer-events-none font-sans">
-        <span>ALUGRIDX ARCHITECTURAL CONTEXT</span>
-        <ArrowDown size={12} className="animate-bounce text-[#3B82F6]" />
       </div>
     </div>
   );

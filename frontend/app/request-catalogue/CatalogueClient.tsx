@@ -38,7 +38,7 @@ export default function CatalogueClient() {
         {/* ASYMMETRIC GRID STRUCTURAL LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* 1. HERO MAIN BOOK BLOCK */}
+          {/* 1. HERO MAIN BRAND LOGO BLOCK */}
           <div className="lg:col-span-5 flex flex-col justify-between bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-[0_15px_35px_rgba(10,37,64,0.03)] relative overflow-hidden group min-h-[500px]">
             <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-[#3B82F6]/5 to-transparent rounded-bl-full pointer-events-none" />
             
@@ -54,24 +54,19 @@ export default function CatalogueClient() {
               </p>
             </div>
 
-            {/* EXPANDED 3D FLOATING BOOK SHOWCASE */}
-            <div className="h-64 flex items-center justify-center mt-6 mb-4 relative z-10">
-              {/* Back Pages Shadow Layers */}
-              <div className="absolute w-40 h-52 bg-slate-200/50 rounded-2xl transform rotate-12 translate-x-8 border border-slate-300/10 shadow-sm transition-transform duration-500 group-hover:rotate-6" />
-              <div className="absolute w-40 h-52 bg-slate-100/80 rounded-2xl transform -rotate-3 translate-x-4 border border-slate-200/40 shadow-md transition-transform duration-500 group-hover:rotate-[-1deg]" />
-              
-              {/* Main Extended 3D Book Cover */}
-              <motion.div 
-                whileHover={{ y: -10, rotate: -6 }}
-                className="absolute w-40 h-52 bg-gradient-to-br from-[#1E3A8A] to-[#0A2540] rounded-2xl shadow-[0_30px_60px_rgba(10,37,64,0.25)] border border-white/10 flex flex-col justify-between p-5 transition-transform duration-500 ease-out cursor-pointer origin-bottom"
-              >
-                <div className="w-30 h-30 flex items-center justify-center rounded-xl bg-white/10 p-1.5 shadow-inner border border-white/5">
-                  <img src="/images/alugridx-without-bg-1.webp" alt="AX" className="w-full h-full object-contain filter brightness-200" />
-                </div>
-                <div className="text-[10px] font-sans font-extrabold text-white tracking-widest uppercase leading-tight">
-                  MATRIX <br /><span className="text-[#3B82F6] text-[8px] tracking-wider font-bold">2026 RELEASE</span>
-                </div>
-              </motion.div>
+            {/* LARGE DIRECT LOGO (OUTER RECTANGULAR CONTAINER REMOVED) */}
+            <div className="h-72 flex items-center justify-center my-auto relative z-10 p-4">
+              <motion.img 
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                src="/images/alugridx-logo.png" 
+                alt="AlugridX Logo" 
+                className="w-full max-w-[340px] h-auto max-h-[200px] object-contain drop-shadow-sm" 
+              />
+            </div>
+
+            <div className="text-[10px] font-sans font-extrabold text-[#124170] tracking-widest uppercase leading-tight relative z-10">
+              MATRIX <span className="text-[#3B82F6] text-[10px] tracking-wider font-extrabold">2026 RELEASE</span>
             </div>
           </div>
 
@@ -137,7 +132,7 @@ export default function CatalogueClient() {
 
                     {/* PHONE INPUT */}
                     <div className="space-y-2 relative">
-                      <label className={`text-[10px] font-extrabold uppercase tracking-wider block transition-colors ${focusedField === "phone" ? "text-[#3B82F6]" : "text-slate-400"}`}>Telecom Router Link</label>
+                      <label className={`text-[10px] font-extrabold uppercase tracking-wider block transition-colors ${focusedField === "phone" ? "text-[#3B82F6]" : "text-slate-400"}`}>Phone</label>
                       <div className="relative">
                         <input 
                           type="tel" required value={formData.phone} onFocus={() => setFocusedField("phone")} onBlur={() => setFocusedField(null)}

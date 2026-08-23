@@ -11,7 +11,6 @@ export default function SplashLoader({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 2.6 seconds premium entry timeline trigger
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2600);
@@ -25,70 +24,90 @@ export default function SplashLoader({
         {loading && (
           <motion.div
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -20, filter: "blur(15px)" }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 bg-[#0A2540] flex flex-col items-center justify-center z-[99999] overflow-hidden select-none"
+            exit={{ 
+              opacity: 0, 
+              scale: 1.05, 
+              filter: "blur(16px)",
+              transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+            }}
+            className="fixed inset-0 bg-[#030b14] flex flex-col items-center justify-center z-[99999] overflow-hidden select-none"
           >
-            {/* Fine Corporate Blueprint Grid Layout Lines */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.012)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.012)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+            {/* 1. AMBIENT BACKGROUND & DYNAMIC AIRFLOW LINES */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(14,165,233,0.15)_0%,rgba(3,11,20,0.95)_75%)] pointer-events-none" />
             
-            {/* Soft Central Blue Glow Background Aura */}
-            <div className="absolute w-[35rem] h-[35rem] bg-[#3B82F6]/5 rounded-full blur-[100px] pointer-events-none" />
+            {/* Grid Pattern overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
 
-            {/* BRANDED IDENTITY MATRIX RENDER */}
-            <div className="relative z-10 flex flex-col items-center w-full max-w-xs px-4">
-              
-              {/* 1. BRAND LOGO (Bada Size aur Sharp Shadow) */}
+            {/* Floating Airflow Particles */}
+            {[...Array(3)].map((_, i) => (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mb-8 flex justify-center"
+                key={i}
+                initial={{ x: "-100%", opacity: 0 }}
+                animate={{ x: "200%", opacity: [0, 0.4, 0] }}
+                transition={{
+                  duration: 2.5 + i * 0.5,
+                  repeat: Infinity,
+                  ease: "linear",
+                  delay: i * 0.4,
+                }}
+                style={{ top: `${30 + i * 20}%` }}
+                className="absolute h-[1px] w-96 bg-gradient-to-r from-transparent via-sky-400/30 to-transparent pointer-events-none blur-[1px]"
+              />
+            ))}
+
+            {/* 2. CENTER STAGE */}
+            <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-xl px-6">
+              
+              {/* LOGO CONTAINER */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                className="relative flex justify-center items-center w-full"
               >
+                {/* Backlight Aura */}
+                <motion.div 
+                  animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute w-[260px] h-[260px] bg-sky-500/20 rounded-full blur-[80px] pointer-events-none" 
+                />
+                
                 <img 
                   src="/images/alugridx-without-bg-1.webp" 
-                  alt="AlugridX Symbol" 
-                  className="h-24 w-auto object-contain brightness-100 drop-shadow-[0_12px_25px_rgba(0,0,0,0.4)]"
+                  alt="AlugridX Logo" 
+                  className="h-48 sm:h-60 md:h-72 w-auto object-contain brightness-110 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)] relative z-10"
                 />
               </motion.div>
 
-              {/* 2. PREMIUM SLEEPING LINE */}
-              <div className="w-full h-[1px] bg-white/10 relative overflow-hidden mb-5">
-                <motion.div 
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: [0, 1, 1] }}
-                  transition={{ 
-                    duration: 2.2, 
-                    ease: [0.22, 1, 0.36, 1],
-                    repeat: Infinity,
-                    repeatDelay: 0.2
-                  }}
-                  className="absolute inset-y-0 left-0 right-0 bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent origin-left"
-                />
-              </div>
-
-              {/* 3. COMPANY BRAND NAME */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="text-center"
+              {/* 3. ANIMATED LINE DIRECTLY UNDER LOGO */}
+              <motion.div 
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full max-w-[220px] h-[2px] bg-sky-950/80 overflow-hidden rounded-full mt-6 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
               >
-                <h1 className="text-3xl font-black text-white uppercase tracking-[0.18em] pl-[0.18em] font-sans drop-shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
-                  Alugrid<span className="text-[#3B82F6] bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] bg-clip-text text-transparent">X</span>
-                </h1>
+                {/* Continuous Shimmer Light Beam */}
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "100%" }}
+                  transition={{ 
+                    duration: 1.4, 
+                    ease: "easeInOut", 
+                    repeat: Infinity 
+                  }}
+                  className="absolute inset-y-0 w-full bg-gradient-to-r from-transparent via-sky-400 to-transparent shadow-[0_0_12px_#38bdf8]"
+                />
               </motion.div>
 
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main Layout Entry transition blocks toggle */}
+      {/* Main Page Entry */}
       <motion.div 
         animate={{ opacity: loading ? 0 : 1 }} 
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         {!loading && children}
       </motion.div>

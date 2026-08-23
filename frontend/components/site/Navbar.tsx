@@ -31,9 +31,9 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans ${
-        isScrolled
-          ? "bg-[#0A2540]/90 backdrop-blur-xl border-b border-[#3B82F6]/20 py-3 shadow-[0_10px_30px_rgba(10,37,64,0.15)]"
-          : "bg-gradient-to-b from-[#0A2540]/80 via-[#0A2540]/30 to-transparent border-b border-transparent py-5"
+        // isScrolled
+            "bg-[#0A2540]/90 backdrop-blur-xl border-b border-[#3B82F6]/20 py-3 shadow-[0_10px_30px_rgba(10,37,64,0.15)]"
+          // : "bg-gradient-to-b from-[#0A2540]/80 via-[#0A2540]/30 to-transparent border-b border-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">

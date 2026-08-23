@@ -20,8 +20,12 @@ export default function ProductDetailClient() {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center text-[#124170] font-sans gap-4">
         <div className="text-xs font-bold uppercase tracking-[0.2em]">Component Model Grid Not Found</div>
-        <Link href="/products" className="text-xs text-[#3B82F6] underline uppercase font-bold tracking-wider">
-          Return to Catalog
+        <Link 
+          href="/products" 
+          className="inline-flex items-center gap-2 px-6 py-2.5 bg-white border-2 border-[#0A2540] text-[#0A2540] hover:bg-[#0A2540] hover:text-white text-xs font-black uppercase tracking-wider rounded-full transition-colors shadow-sm"
+        >
+          <ArrowLeft size={14} />
+          <span>Return to Catalog</span>
         </Link>
       </div>
     );
@@ -34,10 +38,16 @@ export default function ProductDetailClient() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        {/* Crisp clean Back to Catalog Trigger */}
-        <Link href="/products" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-[#3B82F6] mb-10 group transition-colors">
-          <ArrowLeft size={13} className="transform group-hover:-translate-x-1 transition-transform" />
-          <span>Return to Catalog</span>
+        {/* CAPSULE / PILL SHAPED BUTTON */}
+        <Link href="/products" className="inline-block mb-10">
+          <motion.div 
+            whileHover={{ scale: 1.03, x: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white border-2 border-[#0A2540] text-[#0A2540] hover:bg-[#0A2540] hover:text-white text-xs font-black uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer"
+          >
+            <ArrowLeft size={14} className="transform group-hover:-translate-x-1 transition-transform" />
+            <span>Return to Catalog</span>
+          </motion.div>
         </Link>
 
         {/* Core Product Grid Canvas */}

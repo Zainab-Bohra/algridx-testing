@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Mail, MapPin, ShieldCheck, ArrowRight, Award, Compass } from "lucide-react";
+import { Mail, MapPin, ShieldCheck, ArrowRight, Award } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -11,14 +11,16 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 pb-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
         
+        {/* Logo and Intro Section */}
         <div className="lg:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-6">
           
-          <div className="shrink-0 bg-white/[0.03] p-5 rounded-2xl rounded-tr-[3.5rem] border border-white/10 shadow-[inset_0_2px_4px_rgba(255,255,255,0.05)] group transition-all duration-300 hover:bg-white/[0.07] hover:border-[#3B82F6]/40 cursor-pointer">
+          {/* Logo without any box or background shape */}
+          <div className="shrink-0 group cursor-pointer">
             <Link href="/" className="inline-block">
               <img 
                 src="/images/alugridx-without-bg-1.webp" 
                 alt="ALUGRIDX Corporate Identity" 
-                className="h-16 w-auto object-contain brightness-110 transition-transform duration-500 group-hover:scale-[1.03]"
+                className="h-24 sm:h-28 md:h-32 w-auto object-contain brightness-110 transition-transform duration-500 group-hover:scale-105"
               />
             </Link>
           </div>
@@ -35,6 +37,7 @@ export default function Footer() {
 
         </div>
 
+        {/* Directory & Contact Links */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-10 lg:pl-8">
           
           <div className="space-y-4">
@@ -86,6 +89,7 @@ export default function Footer() {
 
       </div>
 
+      {/* Footer Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[10px] font-sans text-slate-400 font-bold uppercase tracking-wider gap-4 relative z-10">
         <span className="text-slate-400/80">© 2026 ALUGRIDX LLC. All Rights Reserved.</span>
         <div className="flex items-center gap-5">
