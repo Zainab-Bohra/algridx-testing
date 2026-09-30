@@ -5,17 +5,31 @@ const createBlog = async (req, res) => {
   try {
     const {
       title,
+      slug: customSlug,
       category,
       excerpt,
       content,
       author,
       readTime,
+      metaTitle,
+      metaDescription,
+      focusKeyword,
+      tags,
+      canonicalUrl,
     } = req.body;
 
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
+    // Custom slug ko priority dein, warna title se auto-generate karein
+    const slug = customSlug
+      ? customSlug
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "")
+      : title
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "");
 
     const blog = await Blog.create({
       title,
@@ -25,6 +39,12 @@ const createBlog = async (req, res) => {
       content,
       author: author || "ALUGRIDX",
       readTime: readTime || "5 min read",
+      // 🚀 SEO Fields with Fallbacks
+      metaTitle: metaTitle || `${title} | ALUGRIDX`,
+      metaDescription: metaDescription || excerpt || "",
+      focusKeyword: focusKeyword || "",
+      tags: Array.isArray(tags) ? tags : [],
+      canonicalUrl: canonicalUrl || `https://alugridx.com/blog/${slug}`,
     });
 
     res.status(201).json(blog);

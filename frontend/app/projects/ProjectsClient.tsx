@@ -2,60 +2,52 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Building2, ArrowRight } from "lucide-react";
+import { Building2, ArrowRight, ShieldCheck } from "lucide-react";
 
 const projectsData = [
   {
     id: 1,
-    title: "Commercial Tower Air Management",
-    location: "Dubai, UAE",
+    title: "City Centre Ajman Retail Expansion",
+    location: "Al Jurf, Ajman, UAE",
     category: "Commercial",
-    highlights: "Architectural Diffusers & Linear Grilles",
-    img: "/images/projects/commercial-tower-vents.avif"
+    highlights: "High-Capacity Linear Slot Diffusers & Geometric Atrium Vents",
+    img: "/images/products/city-centre-ajman.webp"
   },
   {
     id: 2,
-    title: "Industrial Complex Ventilation Hub",
-    location: "Ajman, UAE",
-    category: "Industrial",
-    highlights: "Heavy-Duty Louvers & Volume Control Dampers",
-    img: "/images/projects/industrial-dampers.avif"
+    title: "Dubai International Financial Centre (DIFC) Offices",
+    location: "Downtown Dubai, UAE",
+    category: "Commercial",
+    highlights: "Architectural Linear Bar Grilles & Integrated Ceiling Slots",
+    img: "/images/products/difc-corporate-offices.webp"
   },
   {
     id: 3,
-    title: "Luxury High-Rise Residence",
-    location: "Abu Dhabi, UAE",
-    category: "Residential",
-    highlights: "Supply Air Grilles & Ceiling Outlets",
-    img: "/images/projects/residential-diffusers.avif"
+    title: "Ajman Corniche Fine Dining & Hospitality Lounge",
+    location: "Corniche Road, Ajman, UAE",
+    category: "Hospitality",
+    highlights: "Exposed Duct Circular Diffusers & Architectural Disc Valves",
+    img: "/images/products/ajman-corniche-restaurant.webp"
   },
   {
     id: 4,
-    title: "Hospitality Resort Integration",
-    location: "Sharjah, UAE",
-    category: "Hospitality",
-    highlights: "High-Capacity Linear Slot Systems",
-    img: "/images/projects/hotel-slot-diffusers.avif"
+    title: "Al Jurf Industrial Logistics & Cold Storage Complex",
+    location: "Industrial Area, Ajman, UAE",
+    category: "Industrial",
+    highlights: "Heavy-Duty Weatherproof External Louvers & Motorized Dampers",
+    img: "/images/products/al-jurf-industrial.webp"
   },
   {
     id: 5,
-    title: "Aviation Infrastructure Terminal",
-    location: "Dubai, UAE",
-    category: "Commercial",
-    highlights: "Jet Diffusers & Sand Trap Weather Louvers",
-    img: "/images/projects/airport-jet-diffusers.avif"
-  },
-  {
-    id: 6,
-    title: "Retail Landmark Infrastructure",
-    location: "Ras Al Khaimah, UAE",
-    category: "Commercial",
-    highlights: "High-Volume Air Distribution Arrays",
-    img: "/images/projects/mall-ceiling-grilles.avif"
+    title: "Luxury Waterfront Hotel & Serviced Suites",
+    location: "Palm Jumeirah, Dubai, UAE",
+    category: "Hospitality",
+    highlights: "Concealed Cove Slot Diffusers & Architectural Ceiling Grilles",
+    img: "/images/products/palm-jumeirah-hotel.webp"
   }
 ];
 
-const filters = ["All Projects", "Commercial", "Industrial", "Residential", "Hospitality"];
+const filters = ["All Projects", "Commercial", "Industrial", "Hospitality"];
 
 export default function ProjectsClient() {
   const [activeFilter, setActiveFilter] = useState("All Projects");
@@ -66,27 +58,32 @@ export default function ProjectsClient() {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170] font-sans">
-      {/* Structural Minimal Fine Blueprint Lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
+      {/* 🚀 CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-10">
 
-        {/* REFINED ARCHITECTURAL HEADER SECTION */}
+        {/* HEADER SECTION */}
         <div className="border-b border-[#124170]/10 pb-6 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
-            Execution Portfolio
+          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#124170] pt-2">
+            Our <span className="font-light italic font-serif text-[#3B82F6] tracking-normal lowercase">Projects</span>
           </h1>
           <p className="text-slate-500 text-sm font-normal mt-2 max-w-xl leading-relaxed">
-            Engineered air distribution assemblies deployed across commercial, industrial, and high-specification GCC architectural developments.
+            Engineered air distribution assemblies deployed across commercial shopping malls, corporate office headquarters, hospitality venues, and industrial complexes in Dubai and Ajman.
           </p>
         </div>
 
-        {/* TOP CATEGORY FILTER CONTROL BAR */}
+        {/* CATEGORY FILTER BAR */}
         <div className="w-full flex justify-center md:justify-start">
           <div className="flex flex-wrap gap-2 bg-white p-1.5 rounded-2xl border border-slate-100 shadow-sm">
             {filters.map((category) => (
               <button
                 key={category}
+                type="button"
                 onClick={() => setActiveFilter(category)}
                 className={`px-4 py-2 rounded-xl text-xs font-sans font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer ${
                   activeFilter === category
@@ -100,7 +97,7 @@ export default function ProjectsClient() {
           </div>
         </div>
 
-        {/* CLEAN MINIMAL PROJECTS GRID */}
+        {/* PROJECTS GRID */}
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
@@ -115,8 +112,8 @@ export default function ProjectsClient() {
                 className="group bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  {/* Image Canvas */}
-                  <div className="h-48 w-full overflow-hidden relative bg-slate-50 border-b border-slate-100">
+                  {/* Image Container */}
+                  <div className="h-56 w-full overflow-hidden relative bg-slate-100 border-b border-slate-100">
                     <img 
                       src={project.img} 
                       alt={project.title} 
@@ -124,7 +121,7 @@ export default function ProjectsClient() {
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         const parent = e.currentTarget.parentElement;
-                        if(parent) {
+                        if (parent) {
                           parent.innerHTML = `
                             <div class="absolute inset-0 bg-gradient-to-br from-[#124170] to-[#0A2540] flex flex-col items-center justify-center p-6 text-center">
                               <span class="text-white font-extrabold text-sm uppercase tracking-tight">${project.title}</span>
@@ -135,24 +132,24 @@ export default function ProjectsClient() {
                       }}
                     />
                     <div className="absolute top-3 left-3 z-10">
-                      <span className="bg-white/90 backdrop-blur-md text-[#124170] font-sans font-extrabold text-[9px] tracking-wider uppercase px-2.5 py-1 rounded-md border border-slate-100">
+                      <span className="bg-white/95 backdrop-blur-md text-[#124170] font-sans font-extrabold text-[9px] tracking-wider uppercase px-3 py-1 rounded-full border border-slate-100 shadow-2xs">
                         {project.category}
                       </span>
                     </div>
                   </div>
 
-                  {/* Minimal Content */}
-                  <div className="p-5 space-y-2">
+                  {/* Project Details */}
+                  <div className="p-6 space-y-2.5">
                     <div className="flex items-center gap-1.5 text-slate-400 font-sans text-[11px] font-semibold uppercase tracking-wider">
-                      <Building2 size={12} className="text-[#3B82F6]" />
+                      <Building2 size={13} className="text-[#3B82F6]" />
                       <span>{project.location}</span>
                     </div>
 
-                    <h3 className="text-base font-extrabold text-[#124170] uppercase tracking-tight font-sans">
+                    <h3 className="text-base font-extrabold text-[#124170] uppercase tracking-tight font-sans leading-snug">
                       {project.title}
                     </h3>
 
-                    <p className="text-xs text-slate-500 font-normal">
+                    <p className="text-xs text-slate-500 font-normal leading-relaxed">
                       {project.highlights}
                     </p>
                   </div>
@@ -163,17 +160,26 @@ export default function ProjectsClient() {
         </motion.div>
 
         {/* DIRECT RFQ BANNER */}
-        <div className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white p-8 md:p-10 rounded-3xl shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 border border-white/5">
-          <div className="text-center md:text-left space-y-1.5 max-w-xl">
-            <span className="text-[10px] font-sans font-extrabold tracking-wider text-[#3B82F6] uppercase block">Custom Fabrication Node</span>
-            <h3 className="text-xl font-bold uppercase tracking-tight">Need Project-Specific Profiles?</h3>
-            <p className="text-slate-300 text-xs font-normal leading-relaxed">
-              Submit your architectural schedules for custom dimensions, custom RAL color powder-coating, and rapid shop drawing approvals.
+        <div className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white p-8 md:p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 border border-white/5">
+          <div className="text-center lg:text-left space-y-2 max-w-xl relative z-10">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-extrabold tracking-widest text-[#3B82F6] uppercase">
+              <ShieldCheck size={13} />
+              Direct Factory Support • Ajman
+            </span>
+            <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight">
+              Have Project-Specific Requirements?
+            </h3>
+            <p className="text-slate-300 text-xs md:text-sm font-normal leading-relaxed">
+              Share your BOQ schedules or duct layouts with our engineering team for custom sizing, architectural finishes, and fast-track submittal packages.
             </p>
           </div>
-          <div className="shrink-0 w-full md:w-auto">
-            <Link href="/contact-us" className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#3B82F6] hover:bg-white text-white hover:text-[#124170] font-sans text-xs font-extrabold uppercase tracking-widest px-7 py-3.5 rounded-full transition-all text-center cursor-pointer">
-              <span>Submit Project Inquiry</span>
+          
+          <div className="shrink-0 w-full lg:w-auto relative z-10">
+            <Link 
+              href="/contact-us" 
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#3B82F6] hover:bg-white text-white hover:text-[#124170] font-sans text-xs font-extrabold uppercase tracking-widest px-8 py-4 rounded-full transition-all text-center cursor-pointer shadow-lg hover:shadow-xl"
+            >
+              <span>Request Technical Submittal</span>
               <ArrowRight size={13} />
             </Link>
           </div>

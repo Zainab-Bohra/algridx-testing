@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+}
+
 :root {
   /* Brand Palette */
   --color-primary: #41431B;
@@ -34,6 +39,8 @@ html {
 body {
   background: var(--color-background);
   color: var(--color-body);
+  font-family: var(--font-sans);
+  letter-spacing: -0.015em;
   overflow-x: hidden;
   font-feature-settings: "ss01" on;
 }

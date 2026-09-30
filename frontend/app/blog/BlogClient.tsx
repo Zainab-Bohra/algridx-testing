@@ -38,33 +38,26 @@ export default function BlogClient() {
   const postsPerPage = 6; 
 
   useEffect(() => {
-
-const cleanBaseUrl = API_URL.endsWith("/")
-  ? API_URL.slice(0, -1)
-  : API_URL;
+    const cleanBaseUrl = API_URL.endsWith("/")
+      ? API_URL.slice(0, -1)
+      : API_URL;
 
     const fetchBlogs = async () => {
       try {
-        // Safe check loop parameters structure adjustment
-        const cleanBaseUrl = API_URL.endsWith("/") ? API_URL.slice(0, -1) : API_URL;
-
-      const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
-  method: "GET",
-  mode: "cors",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+        const res = await fetch(`${cleanBaseUrl}/api/blogs`, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         
-if (!res.ok) {
-  throw new Error(`Failed to fetch blogs (${res.status})`);
-}
+        if (!res.ok) {
+          throw new Error(`Failed to fetch blogs (${res.status})`);
+        }
 
-       const data = await res.json();
-
-
-
-setBlogs(Array.isArray(data) ? data : []);
+        const data = await res.json();
+        setBlogs(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("❌ Failed to fetch dynamic blogs from Cluster0:", error);
         setBlogs([]);
@@ -81,18 +74,16 @@ setBlogs(Array.isArray(data) ? data : []);
 
   const categories = ["All", ...new Set(blogs.map((blog) => blog.category || "Engineering"))];
 
-const filteredBlogs = blogs.filter((blog) => {
-  const matchesCategory =
-    activeTab === "All" || blog.category === activeTab;
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesCategory =
+      activeTab === "All" || blog.category === activeTab;
 
-  const matchesSearch =
-    blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
 
-  return matchesCategory && matchesSearch;
-});
-
-
+    return matchesCategory && matchesSearch;
+  });
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -106,7 +97,13 @@ const filteredBlogs = blogs.filter((blog) => {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170] font-sans">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
+      
+      {/* 🚀 CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
         

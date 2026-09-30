@@ -5,12 +5,10 @@ import { motion, useMotionValue, useTransform, AnimatePresence, Variants } from 
 import Link from "next/link";
 import { 
   ArrowRight, 
-  ShieldCheck, 
   ChevronLeft, 
   ChevronRight, 
   Sparkles, 
   Award, 
-  SlidersHorizontal,
   Compass,
   Zap
 } from "lucide-react";
@@ -19,36 +17,36 @@ const carouselProducts = [
   {
     title: "Linear Slot Profile",
     subtitle: "Micro-Calibrated Air Terminal",
+    code: "LSD-Series",
     tag: "Architectural Series",
-    code: "LSP-6063",
     img: "/images/products/linear-slot-diffusers.png"
   },
   {
     title: "Ceiling Diffuser",
     subtitle: "Omnidirectional Jet Deflection",
+    code: "SAD / RAD",
     tag: "High Volume",
-    code: "CD-360X",
     img: "/images/products/ceiling-diffusers.png"
   },
   {
     title: "Sand Trap Louver",
     subtitle: "High-Capacity Airborne Purge",
+    code: "STL-Series",
     tag: "Industrial Grade",
-    code: "STL-9000",
     img: "/images/products/sand-trap-louvers.png"
   },
   {
     title: "Ceiling Housing with HEPA",
     subtitle: "Hermetic Cleanroom Terminal",
+    code: "HEPA-BOX",
     tag: "ISO-Class Safe",
-    code: "HEPA-H14",
     img: "/images/products/ceiling-housing-with-hepa-filter.png"
   },
   {
     title: "Volume Control Damper",
     subtitle: "Microscopic Pressure Balance",
+    code: "VCD-Series",
     tag: "Precision Flow",
-    code: "VCD-PRO",
     img: "/images/products/volume-control-dampers.png"
   }
 ];
@@ -56,7 +54,6 @@ const carouselProducts = [
 const features = [
   { icon: Award, label: "6063-T6 Extruded Alloy" },
   { icon: Compass, label: "UAE Precision Crafting" },
-  { icon: SlidersHorizontal, label: "ASHRAE Certified" }
 ];
 
 export default function Hero() {
@@ -132,7 +129,7 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative min-h-screen lg:h-screen w-full overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-blue-50/30 flex items-center justify-center select-none font-sans"
     >
-      {/* ================= 1. DYNAMIC LIGHTING & BACKGROUND GRAPHICS ================= */}
+      {/* ================= 1. CLEAN AMBIENT LIGHTING (NO CHECKS / NO GRIDS) ================= */}
       <div className="absolute inset-0 h-full w-full pointer-events-none z-0">
         <div className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-[140px] animate-pulse" />
         <div className="absolute top-1/3 -right-20 w-[500px] h-[500px] bg-sky-300/15 rounded-full blur-[130px]" />
@@ -146,8 +143,6 @@ export default function Hero() {
             }}
           />
         )}
-
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.025)_1px,transparent_1px)] bg-[size:4rem_4rem] z-20" />
       </div>
 
       {/* ================= 2. MAIN LAYOUT CONTAINER ================= */}
@@ -155,22 +150,6 @@ export default function Hero() {
         
         {/* -------------- LEFT CONTENT COLUMN -------------- */}
         <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-7 relative">
-          
-          {/* Top Trust Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 bg-white border border-blue-200/80 shadow-[0_4px_20px_rgba(59,130,246,0.08)] px-4 py-2 rounded-full backdrop-blur-md"
-          >
-            <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shadow-xs">
-              <ShieldCheck size={13} />
-            </div>
-            <span className="text-blue-950 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em]">
-              GCC Certified Structural Air Systems
-            </span>
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-          </motion.div>
 
           {/* BRAND LOGO IMAGE HEADLINE SECTION */}
           <motion.div 
@@ -182,7 +161,7 @@ export default function Hero() {
             <img 
               src="/images/alugridx-logo-font.png" 
               alt="ALUGRIDX - Airflow Redefined" 
-              className="w-full max-w-[340px] sm:max-w-[480px] lg:max-w-[540px] h-auto object-contain drop-shadow-sm"
+              className="w-full max-w-[340px] sm:max-w-[480px] lg:max-w-[540px] h-auto object-contain drop-shadow-xs"
             />
           </motion.div>
 
@@ -208,7 +187,7 @@ export default function Hero() {
               return (
                 <div 
                   key={idx} 
-                  className="flex items-center gap-2 bg-white/80 border border-slate-200/80 shadow-xs px-3.5 py-2 rounded-xl text-slate-800 text-xs font-bold backdrop-blur-sm"
+                  className="flex items-center gap-2 bg-white/80 border border-slate-200/80 shadow-2xs px-3.5 py-2 rounded-xl text-slate-800 text-xs font-bold backdrop-blur-sm"
                 >
                   <Icon size={14} className="text-blue-600" />
                   <span>{item.label}</span>
@@ -239,7 +218,7 @@ export default function Hero() {
               <motion.div
                 whileHover={isMobile ? {} : { scale: 1.03, y: -2, backgroundColor: "#FFFFFF", borderColor: "#93C5FD" }}
                 whileTap={{ scale: 0.97 }}
-                className="text-slate-800 border border-slate-200/90 bg-white/90 backdrop-blur-md px-9 py-4 text-xs font-black uppercase tracking-widest transition-all rounded-full text-center cursor-pointer shadow-xs w-full"
+                className="text-slate-800 border border-slate-200/90 bg-white/90 backdrop-blur-md px-9 py-4 text-xs font-black uppercase tracking-widest transition-all rounded-full text-center cursor-pointer shadow-2xs w-full"
               >
                 Request Catalogue
               </motion.div>
@@ -266,14 +245,14 @@ export default function Hero() {
             <button 
               onClick={handlePrev}
               aria-label="Previous Product"
-              className="absolute left-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200"
+              className="absolute left-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200 cursor-pointer"
             >
               <ChevronLeft size={20} strokeWidth={2.5} />
             </button>
             <button 
               onClick={handleNext}
               aria-label="Next Product"
-              className="absolute right-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200"
+              className="absolute right-4 z-40 w-11 h-11 rounded-full bg-white text-blue-900 border border-slate-200/80 flex items-center justify-center shadow-md transition-all active:scale-90 hover:scale-105 hover:bg-blue-50 hover:border-blue-200 cursor-pointer"
             >
               <ChevronRight size={20} strokeWidth={2.5} />
             </button>
@@ -342,7 +321,7 @@ export default function Hero() {
                   setCurrentIndex(index);
                 }}
                 aria-label={`Go to slide ${index + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   index === currentIndex ? "w-10 bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.6)]" : "w-2.5 bg-slate-200 hover:bg-slate-300"
                 }`}
               />

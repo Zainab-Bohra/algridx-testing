@@ -1,45 +1,104 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
 import { ArrowLeft, Clock, Tag, User } from "lucide-react";
 
- 
- 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://algridx-testing.onrender.com";
-  export default async function BlogDetail({
+
+// 🚀 GOOGLE SERP & DYNAMIC METADATA ENGINE
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  try {
+    const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      return {
+        title: "Article Not Found | ALUGRIDX",
+        description: "The requested technical publication could not be located.",
+      };
+    }
+
+    const blog = await res.json();
+
+    const title = blog.metaTitle || `${blog.title} | ALUGRIDX`;
+    const description =
+      blog.metaDescription || blog.excerpt || blog.content?.substring(0, 160);
+    const canonical =
+      blog.canonicalUrl || `https://alugridx.com/blog/${slug}`;
+
+    return {
+      title,
+      description,
+      keywords: blog.tags?.length ? blog.tags : [blog.category, "HVAC", "ALUGRIDX"],
+      authors: [{ name: blog.author || "ALUGRIDX" }],
+      alternates: {
+        canonical: canonical,
+      },
+      openGraph: {
+        title,
+        description,
+        url: canonical,
+        siteName: "ALUGRIDX",
+        type: "article",
+        publishedTime: blog.createdAt,
+        authors: [blog.author || "ALUGRIDX"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+      },
+    };
+  } catch (error) {
+    return {
+      title: "Technical Insights | ALUGRIDX",
+      description: "Air distribution and architectural HVAC solutions from ALUGRIDX.",
+    };
+  }
+}
+
+export default async function BlogDetail({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-const { slug } = await params;
+  const { slug } = await params;
 
-let blog: any;
+  let blog: any;
 
-try {
-  console.log("Fetching:", `${API_URL}/api/blogs/${slug}`);
+  try {
+    const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
+      cache: "no-store",
+    });
 
-  const res = await fetch(`${API_URL}/api/blogs/${slug}`, {
-    cache: "no-store",
-  });
+    if (!res.ok) {
+      notFound();
+    }
 
-  console.log("Status:", res.status);
-
-  if (!res.ok) {
-    console.error(await res.text());
-    notFound();
+    blog = await res.json();
+  } catch (error) {
+    console.error("SERVER ERROR:", error);
+    throw error;
   }
 
-  blog = await res.json();
-  console.log("Blog:", blog);
-} catch (error) {
-  console.error("SERVER ERROR:", error);
-  throw error;
-}
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-40 pb-24 relative text-[#124170] font-sans overflow-hidden">
-      {/* Fine-lined corporate spatial grid layout overlay lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
+      
+      {/* 🚀 CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         

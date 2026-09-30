@@ -1,16 +1,32 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Newsreader } from "next/font/google";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import SplashLoader from "@/components/SplashLoader";
 import "./globals.css";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
-const inter = Inter({ subsets: ["latin"] });
+// Kinsen Primary Sans Font
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
+// Kinsen Editorial Accent Serif Font
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "ALUGRIDX Air Conditioning Industry LLC | Premium HVAC Solutions",
-  description: "Manufacturing high-quality grilles, diffusers, louvers, and dampers for commercial, industrial, and infrastructure projects across UAE & GCC.",
+  description:
+    "Manufacturing high-quality grilles, diffusers, louvers, and dampers for commercial, industrial, and infrastructure projects across UAE & GCC.",
   keywords: [
     "ALUGRIDX",
     "HVAC",
@@ -34,7 +50,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ALUGRIDX Air Conditioning Industry LLC | Premium HVAC Solutions",
-    description: "Manufacturing high-quality grilles, diffusers, louvers, and dampers for commercial, industrial, and infrastructure projects across UAE & GCC.",
+    description:
+      "Manufacturing high-quality grilles, diffusers, louvers, and dampers for commercial, industrial, and infrastructure projects across UAE & GCC.",
   },
   openGraph: {
     type: "website",
@@ -50,22 +67,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-<body
-  className={`${inter.className} bg-white text-slate-900 antialiased flex flex-col min-h-screen`}
->
-  <SplashLoader>
-    <Navbar />
+    <html lang="en" className={`${plusJakartaSans.variable} ${newsreader.variable}`}>
+      <body
+        className={`${plusJakartaSans.className} font-sans bg-white text-slate-900 antialiased flex flex-col min-h-screen`}
+      >
+        <SplashLoader>
+          <Navbar />
 
-    <main className="flex-grow flex flex-col">
-      {children}
-    </main>
+          <main className="flex-grow flex flex-col">{children}</main>
 
-    <Footer />
+          <Footer />
 
-    <WhatsAppButton />
-  </SplashLoader>
-</body>
+          <WhatsAppButton />
+        </SplashLoader>
+      </body>
     </html>
   );
 }

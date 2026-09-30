@@ -1,10 +1,26 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, FileText, Send, CheckCircle, Clock, Tag, Heading, Key, ArrowUpRight, Monitor, LayoutGrid, Terminal } from "lucide-react";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+import { useState } from "react";
+import { 
+  Send, 
+  CheckCircle, 
+  Clock, 
+  Tag, 
+  Heading, 
+  Key, 
+  ArrowUpRight, 
+  Monitor, 
+  Terminal, 
+  Search, 
+  Globe, 
+  AlertCircle,
+  X,
+  Link2,
+  Sliders
+} from "lucide-react";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 export default function BlogAdmin() {
   const [form, setForm] = useState({
     title: "",
@@ -13,207 +29,479 @@ export default function BlogAdmin() {
     excerpt: "",
     content: "",
     readTime: "5 min read",
+    // 🚀 ADVANCED SEO FIELDS
+    metaTitle: "",
+    metaDescription: "",
+    focusKeyword: "",
+    tags: [] as string[],
+    canonicalUrl: "",
   });
+
+  const [tagInput, setTagInput] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
+  // Auto-generate slug from title
+  const handleTitleChange = (val: string) => {
+    setForm(prev => {
+      const updated = { ...prev, title: val };
+      if (!prev.slug) {
+        updated.slug = val
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/[\s_-]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+      return updated;
+    });
+  };
+
+  // Tags Handler (Enter or comma press)
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ((e.key === "Enter" || e.key === ",") && tagInput.trim()) {
+      e.preventDefault();
+      const cleanTag = tagInput.replace(",", "").trim();
+      if (!form.tags.includes(cleanTag)) {
+        setForm(prev => ({ ...prev, tags: [...prev.tags, cleanTag] }));
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setForm(prev => ({
+      ...prev,
+      tags: prev.tags.filter(t => t !== tagToRemove)
+    }));
+  };
+
+  // Submit Handler
   const submitBlog = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+
     try {
       const res = await fetch(`${API_URL}/api/blogs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          metaTitle: form.metaTitle || `${form.title} | ALUGRIDX`,
+          metaDescription: form.metaDescription || form.excerpt,
+          canonicalUrl: form.canonicalUrl || `https://alugridx.com/blog/${form.slug}`,
+        }),
       });
 
       if (res.ok) {
         setIsSubmitted(true);
-        setForm({ title: "", slug: "", category: "", excerpt: "", content: "", readTime: "5 min read" });
+        setForm({
+          title: "",
+          slug: "",
+          category: "",
+          excerpt: "",
+          content: "",
+          readTime: "5 min read",
+          metaTitle: "",
+          metaDescription: "",
+          focusKeyword: "",
+          tags: [],
+          canonicalUrl: "",
+        });
         setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        const data = await res.json();
+        setErrorMsg(data.message || data.error || "Failed to commit document node");
       }
     } catch (err) {
       console.error("Transmission crash:", err);
+      setErrorMsg("Network transmission failure: Check API server connection");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="bg-[#DDF4E7] min-h-screen pt-36 pb-24 relative overflow-hidden text-[#124170]">
-      {/* Engineering Mesh Background Scheme */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417003_1px,transparent_1px),linear-gradient(to_bottom,#12417005_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+  // Live SEO Helpers
+  const titleLen = form.metaTitle.length || form.title.length;
+  const descLen = form.metaDescription.length || form.excerpt.length;
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
+  return (
+    <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 relative overflow-hidden text-[#124170] font-sans">
+      
+      {/* AMBIENT BACKGROUND */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-24 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[40%] -right-32 w-[600px] h-[600px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[450px] h-[450px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-10">
         
-        {/* STRUCTURAL DASHBOARD CONTROL HEAD */}
+        {/* DASHBOARD HEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#124170]/10 pb-6 gap-4">
           <div className="space-y-1">
-            <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded bg-[#124170]/5 font-mono text-[9px] font-bold uppercase tracking-widest border border-[#124170]/10">
-              <Terminal size={10} className="text-[#67C090]" />
-              Core Node Operational Panel
+            <span className="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-[#3B82F6]/10 font-mono text-[9px] font-extrabold uppercase tracking-widest text-[#3B82F6] border border-[#3B82F6]/20">
+              <Terminal size={11} />
+              Publishing & SEO Pipeline Core
             </span>
-            <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-[#124170]">
-              Publishing Matrix
+            <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#0A2540]">
+              Editorial & SEO Console
             </h1>
           </div>
-          <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider max-w-xs md:text-right leading-relaxed">
-            // Injecting architectural specifications and thermodynamics documentation.
+          <p className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider max-w-sm md:text-right leading-relaxed">
+            // Injecting architectural specifications, engineering documentation, and SERP parameters.
           </p>
         </div>
 
-        {/* HIGH-END ASYMMETRIC COMMAND CONSOLE GRIDS */}
+        {/* WORKSPACE GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT COMMAND NODE: ADVANCED BENTO CARD FORMS (Takes 7 Columns) */}
+          {/* FORM CONSOLE (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
             <form onSubmit={submitBlog} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* COMPONENT 1: MASTER TITLE CONSOLE CARD (Full Width across form) */}
-              <div className="md:col-span-2 bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-[rgba(18,65,112,0.01)_0px_10px_20px] relative transition-all duration-300 hover:border-[#67C090]/30 group">
-                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "title" ? "text-[#67C090]" : "text-slate-400"}`}>Document Header / Title Input *</label>
+              {/* 1. TITLE */}
+              <div className="md:col-span-2 bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm transition-all duration-200 hover:border-[#0A2540]">
+                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "title" ? "text-[#3B82F6]" : "text-slate-400"}`}>
+                  Document Header / Article Title *
+                </label>
                 <div className="relative mt-2">
                   <input 
-                    type="text" required value={form.title} onFocus={() => setFocusedField("title")} onBlur={() => setFocusedField(null)}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-sm font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors font-bold uppercase placeholder-slate-300" 
-                    placeholder="e.g., CONTINUOUS VELOCITY SLOTS ARRAY SPECIFICATIONS"
+                    type="text" 
+                    required 
+                    value={form.title} 
+                    onFocus={() => setFocusedField("title")} 
+                    onBlur={() => setFocusedField(null)}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-sm font-sans text-[#0A2540] focus:outline-none focus:border-[#3B82F6] transition-colors font-black uppercase placeholder-slate-300" 
+                    placeholder="e.g., Guide to Acoustic Ratings in Linear Slot Diffusers"
                   />
-                  <Heading size={13} className="absolute left-0 top-2 text-slate-400" />
+                  <Heading size={14} className="absolute left-0 top-2.5 text-slate-400" />
                 </div>
-                {focusedField === "title" && <motion.div layoutId="formGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_10px_#67C090]" />}
               </div>
 
-              {/* COMPONENT 2: ROUTER HASH HATCH CARD */}
-              <div className="bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-sm relative transition-all duration-300 hover:border-[#67C090]/30">
-                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "slug" ? "text-[#67C090]" : "text-slate-400"}`}>URL Slug Reference Hash *</label>
+              {/* 2. SLUG */}
+              <div className="bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm transition-all duration-200 hover:border-[#0A2540]">
+                <div className="flex justify-between items-center">
+                  <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "slug" ? "text-[#3B82F6]" : "text-slate-400"}`}>
+                    URL Slug Reference *
+                  </label>
+                  <span className="text-[9px] font-mono text-emerald-600 font-bold uppercase">SEO Critical</span>
+                </div>
                 <div className="relative mt-2">
                   <input 
-                    type="text" required value={form.slug} onFocus={() => setFocusedField("slug")} onBlur={() => setFocusedField(null)}
+                    type="text" 
+                    required 
+                    value={form.slug} 
+                    onFocus={() => setFocusedField("slug")} 
+                    onBlur={() => setFocusedField(null)}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors placeholder-slate-300" 
-                    placeholder="slot-diffuser-velocity-matrix"
+                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#0A2540] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
+                    placeholder="linear-slot-diffusers-acoustic-ratings"
                   />
                   <Key size={13} className="absolute left-0 top-2.5 text-slate-400" />
                 </div>
-                {focusedField === "slug" && <motion.div layoutId="formGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_10px_#67C090]" />}
               </div>
 
-              {/* COMPONENT 3: ARCHITECTURAL CATEGORY GROUP CARD */}
-              <div className="bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-sm relative transition-all duration-300 hover:border-[#67C090]/30">
-                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "category" ? "text-[#67C090]" : "text-slate-400"}`}>Classification Core Group *</label>
+              {/* 3. CATEGORY */}
+              <div className="bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm transition-all duration-200 hover:border-[#0A2540]">
+                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "category" ? "text-[#3B82F6]" : "text-slate-400"}`}>
+                  Category / Classification *
+                </label>
                 <div className="relative mt-2">
                   <input 
-                    type="text" required value={form.category} onFocus={() => setFocusedField("category")} onBlur={() => setFocusedField(null)}
+                    type="text" 
+                    required 
+                    value={form.category} 
+                    onFocus={() => setFocusedField("category")} 
+                    onBlur={() => setFocusedField(null)}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors placeholder-slate-300" 
-                    placeholder="HVAC Manufacturing"
+                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-sans font-bold text-[#0A2540] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300 uppercase" 
+                    placeholder="HVAC Engineering / Diffusers"
                   />
                   <Tag size={13} className="absolute left-0 top-2.5 text-slate-400" />
                 </div>
-                {focusedField === "category" && <motion.div layoutId="formGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_10px_#67C090]" />}
               </div>
 
-              {/* COMPONENT 4: READ TIMING CARD (Full Width across form) */}
-              <div className="md:col-span-2 bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-sm relative transition-all duration-300 hover:border-[#67C090]/30">
-                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "readTime" ? "text-[#67C090]" : "text-slate-400"}`}>Calculated Reading Matrix Time</label>
+              {/* 4. READ TIME */}
+              <div className="md:col-span-2 bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm transition-all duration-200 hover:border-[#0A2540]">
+                <label className={`text-[9px] font-mono font-bold uppercase tracking-wider block transition-colors ${focusedField === "readTime" ? "text-[#3B82F6]" : "text-slate-400"}`}>
+                  Estimated Read Time
+                </label>
                 <div className="relative mt-2">
                   <input 
-                    type="text" value={form.readTime} onFocus={() => setFocusedField("readTime")} onBlur={() => setFocusedField(null)}
+                    type="text" 
+                    value={form.readTime} 
+                    onFocus={() => setFocusedField("readTime")} 
+                    onBlur={() => setFocusedField(null)}
                     onChange={(e) => setForm({ ...form, readTime: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#124170] focus:outline-none focus:border-[#124170] transition-colors" 
-                    placeholder="5 min read"
+                    className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2 text-xs font-mono text-[#0A2540] focus:outline-none focus:border-[#3B82F6] transition-colors" 
+                    placeholder="4 min read"
                   />
                   <Clock size={13} className="absolute left-0 top-2.5 text-slate-400" />
                 </div>
-                {focusedField === "readTime" && <motion.div layoutId="formGlow" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#67C090] shadow-[0_2px_10px_#67C090]" />}
               </div>
 
-              {/* COMPONENT 5: ABSTRACT ABSTRACT CONSOLE PANEL */}
-              <div className="md:col-span-2 bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-sm space-y-2">
-                <label className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Abstract Summary Excerpt Node *</label>
+              {/* 5. EXCERPT */}
+              <div className="md:col-span-2 bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm space-y-2">
+                <label className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                  Abstract Summary Excerpt *
+                </label>
                 <textarea 
-                  rows={2} required value={form.excerpt}
+                  rows={2} 
+                  required 
+                  value={form.excerpt}
                   onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                  className="w-full bg-[#DDF4E7]/20 border border-[#124170]/10 rounded-2xl p-3 text-xs text-slate-600 focus:outline-none focus:border-[#124170] resize-none leading-relaxed" 
-                  placeholder="Provide a condensed conceptual node breakdown for search arrays..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-700 focus:outline-none focus:border-[#3B82F6] resize-none leading-relaxed" 
+                  placeholder="Provide a condensed 2-sentence summary for post cards and schema markup..."
                 />
               </div>
 
-              {/* COMPONENT 6: COMPREHENSIVE TEXT ENGINE PANEL */}
-              <div className="md:col-span-2 bg-white border-2 border-[#124170]/10 p-6 rounded-[2rem] shadow-sm space-y-2">
-                <label className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Core Body Specifications Data Block *</label>
+              {/* 6. GOOGLE SEO & METADATA CONFIGURATION ENGINE */}
+              <div className="md:col-span-2 bg-white border-2 border-[#3B82F6]/30 p-7 rounded-[2.2rem] shadow-sm space-y-5">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-extrabold uppercase tracking-wider text-[#3B82F6]">
+                    <Search size={13} />
+                    Google Search Metadata Engine (Yoast Equivalent)
+                  </span>
+                  <span className="text-[9px] font-mono text-slate-400 font-bold">ALUGRIDX SEO SUITE</span>
+                </div>
+
+                {/* Focus Keyword */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-mono uppercase text-slate-500 font-bold block">
+                    Target Focus Keyword
+                  </label>
+                  <input
+                    type="text"
+                    value={form.focusKeyword}
+                    onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })}
+                    placeholder="e.g., linear slot diffusers, HVAC louvers UAE"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-[#0A2540] focus:outline-none focus:border-[#3B82F6]"
+                  />
+                </div>
+
+                {/* SEO Meta Title */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[9px] font-mono uppercase text-slate-500 font-bold block">
+                      Google SERP Meta Title
+                    </label>
+                    <span className={`text-[9px] font-mono font-bold ${titleLen >= 50 && titleLen <= 60 ? "text-emerald-600" : "text-amber-500"}`}>
+                      {titleLen}/60 chars (Recommended: 50-60)
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={form.metaTitle}
+                    onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
+                    placeholder={form.title ? `${form.title} | ALUGRIDX` : "e.g., Precision Linear Slot Diffusers Dubai | ALUGRIDX"}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-sans font-semibold text-[#0A2540] focus:outline-none focus:border-[#3B82F6]"
+                  />
+                </div>
+
+                {/* SEO Meta Description */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[9px] font-mono uppercase text-slate-500 font-bold block">
+                      Google SERP Meta Description
+                    </label>
+                    <span className={`text-[9px] font-mono font-bold ${descLen >= 140 && descLen <= 160 ? "text-emerald-600" : "text-amber-500"}`}>
+                      {descLen}/160 chars (Recommended: 140-160)
+                    </span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    value={form.metaDescription}
+                    onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
+                    placeholder={form.excerpt || "High-precision architectural air terminals manufactured in UAE. Learn acoustic specifications..."}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-700 focus:outline-none focus:border-[#3B82F6] leading-relaxed"
+                  />
+                </div>
+
+                {/* SEO TAGS PILLS GENERATOR */}
+                <div className="space-y-2">
+                  <label className="text-[9px] font-mono uppercase text-slate-500 font-bold block">
+                    Article Tags (Press Enter or Comma to add)
+                  </label>
+                  <div className="flex flex-wrap gap-2 items-center min-h-[42px] p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    {form.tags.map((tag, i) => (
+                      <span key={i} className="bg-white border border-slate-200 text-[#0A2540] text-[11px] font-mono font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow-2xs">
+                        <span>{tag}</span>
+                        <button type="button" onClick={() => removeTag(tag)} className="text-slate-400 hover:text-red-500">
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))}
+                    <input
+                      type="text"
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={handleAddTag}
+                      placeholder={form.tags.length === 0 ? "Type tag & press enter (e.g. diffusers, acoustic)..." : ""}
+                      className="bg-transparent text-xs font-mono outline-none flex-1 min-w-[120px] px-1 text-[#0A2540]"
+                    />
+                  </div>
+                </div>
+
+                {/* CANONICAL URL */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[9px] font-mono uppercase text-slate-500 font-bold flex items-center gap-1">
+                      <Link2 size={11} /> Canonical URL (Avoid duplicate content penalty)
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    value={form.canonicalUrl}
+                    onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })}
+                    placeholder={`https://alugridx.com/blog/${form.slug || "your-slug"}`}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-[#0A2540] focus:outline-none focus:border-[#3B82F6]"
+                  />
+                </div>
+
+              </div>
+
+              {/* 7. CORE CONTENT */}
+              <div className="md:col-span-2 bg-white border-2 border-slate-200 p-6 rounded-[2rem] shadow-sm space-y-2">
+                <label className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                  Core Article Content (Markdown or Text) *
+                </label>
                 <textarea 
-                  rows={12} required value={form.content}
+                  rows={12} 
+                  required 
+                  value={form.content}
                   onChange={(e) => setForm({ ...form, content: e.target.value })}
-                  className="w-full bg-[#DDF4E7]/20 border border-[#124170]/10 rounded-2xl p-4 text-xs font-mono text-slate-700 focus:outline-none focus:border-[#124170] resize-none leading-relaxed" 
-                  placeholder="Paste comprehensive engineering documentation blocks and specifications matrices here..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs font-mono text-slate-700 focus:outline-none focus:border-[#3B82F6] resize-none leading-relaxed" 
+                  placeholder="Paste article body here..."
                 />
               </div>
 
-              {/* FORM SYSTEM EMISSION SWITCHES */}
-              <div className="md:col-span-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-slate-200/60 mt-2">
-                <p className="text-[10px] text-slate-400 font-light max-w-xs leading-normal">Deploying parameters will instantly synchronize this log across global cdn distribution nodes.</p>
-                <button 
-                  type="submit"
-                  className="group bg-[#124170] hover:bg-[#67C090] text-white px-8 py-4 rounded-full text-xs font-mono font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-2 shadow-md w-full sm:w-auto justify-center"
-                >
-                  <span>Deploy Data Node</span>
-                  <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </button>
-              </div>
-
-              {isSubmitted && (
-                <div className="md:col-span-2 bg-white border-2 border-[#67C090] rounded-2xl p-4 flex items-center gap-3 text-[#124170] text-xs font-mono font-bold uppercase tracking-wider shadow-sm">
-                  <CheckCircle size={15} className="text-[#67C090] shrink-0" />
-                  <span>[ Operational Secure Alert: Document Injected Safely into Main Grid Pipeline ]</span>
+              {/* ALERTS */}
+              {errorMsg && (
+                <div className="md:col-span-2 bg-red-50 border-2 border-red-200 rounded-2xl p-4 flex items-center gap-3 text-red-600 text-xs font-mono font-bold uppercase">
+                  <AlertCircle size={16} className="shrink-0" />
+                  <span>{errorMsg}</span>
                 </div>
               )}
+
+              {isSubmitted && (
+                <div className="md:col-span-2 bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 flex items-center gap-3 text-emerald-800 text-xs font-mono font-bold uppercase shadow-sm">
+                  <CheckCircle size={16} className="text-emerald-600 shrink-0" />
+                  <span>[ Secure Status: Article & Full SEO Suite Saved Successfully ]</span>
+                </div>
+              )}
+
+              {/* SUBMISSION BUTTON */}
+              <div className="md:col-span-2 pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-slate-200 mt-2">
+                <p className="text-[10px] text-slate-400 font-mono font-medium max-w-xs leading-normal">
+                  All SEO metadata and structured tags will be automatically synchronized with Google Search Console index.
+                </p>
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="group bg-[#0A2540] hover:bg-[#2563EB] text-white px-8 py-4 rounded-full text-xs font-mono font-bold uppercase tracking-widest transition-all duration-200 flex items-center gap-2 shadow-md w-full sm:w-auto justify-center cursor-pointer active:scale-95 disabled:opacity-50"
+                >
+                  <span>{loading ? "Transmitting..." : "Deploy Publication Node"}</span>
+                  <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </button>
+              </div>
 
             </form>
           </div>
 
-          {/* RIGHT COMMAND NODE: STICKY ASYMMETRIC LIVE ARTWORK LAYOUT (Takes 5 Columns) */}
-          <div className="lg:col-span-5 sticky top-32 space-y-4">
-            <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-[#26667F] uppercase tracking-widest px-1">
-              <Monitor size={14} className="text-[#67C090]" />
-              <span>Real-Time Production Output</span>
-            </div>
+          {/* STICKY LIVE SIMULATION (5 Cols) */}
+          <div className="lg:col-span-5 sticky top-32 space-y-6">
+            
+            {/* GOOGLE SERP PREVIEW BOX */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest px-1">
+                <Globe size={13} className="text-[#3B82F6]" />
+                <span>Google Search (SERP) Live Snippet</span>
+              </div>
 
-            {/* Simulated Live Architectural Premium Blog Card Component */}
-            <div className="bg-white border-2 border-[#124170]/10 rounded-[2rem] rounded-tr-[4.5rem] p-7 flex flex-col justify-between h-[380px] relative overflow-hidden shadow-[rgba(18,65,112,0.02)_0px_25px_50px_-12px]">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-[radial-gradient(#12417008_1px,transparent_1px)] bg-[size:10px_10px] rounded-tr-[4.5rem] pointer-events-none" />
-              
-              <div className="space-y-5">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-mono font-bold bg-[#DDF4E7] text-[#26667F] uppercase tracking-wider border border-[#67C090]/10">
-                    <Tag size={10} className="text-[#67C090]" />
-                    {form.category || "Classification Category"}
-                  </span>
-                  <div className="flex items-center gap-1 text-slate-400 font-mono text-[10px] font-bold uppercase">
-                    <Clock size={11} className="text-[#67C090]" />
-                    <span>{form.readTime || "5 Min"}</span>
+              <div className="bg-white border-2 border-slate-200 rounded-[2rem] p-6 shadow-sm space-y-2 font-sans">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-[#0A2540]">
+                    A
+                  </div>
+                  <div className="text-[11px] leading-tight text-slate-500">
+                    <span className="block font-semibold text-slate-700">alugridx.com</span>
+                    <span className="text-[10px] truncate max-w-[280px] block">
+                      https://alugridx.com/blog/{form.slug || "url-slug"}
+                    </span>
                   </div>
                 </div>
 
-                <div className="space-y-2.5">
-                  <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest font-bold block">
-                    {new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-                  </span>
-                  <h2 className="text-xl font-black text-[#124170] uppercase tracking-tight leading-[1.2] line-clamp-2">
-                    {form.title || "AWAITING CORE ENTRY PARAMETERS..."}
-                  </h2>
-                  <p className="text-slate-500 font-light text-xs leading-relaxed line-clamp-3 pt-1">
-                    {form.excerpt || "The abstract structural documentation markdown excerpt node will instantly mount inside this visual workspace layout as data fields are altered..."}
-                  </p>
-                </div>
-              </div>
+                <h3 className="text-base font-semibold text-[#1a0dab] hover:underline cursor-pointer leading-snug line-clamp-2">
+                  {form.metaTitle || (form.title ? `${form.title} | ALUGRIDX` : "Enter Document Header to Preview Search Title")}
+                </h3>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono uppercase tracking-wider font-bold text-slate-400">
-                <span>Node: AX-DESK</span>
-                <span className="text-[#124170] flex items-center gap-1">
-                  <span>Examine</span>
-                  <ArrowUpRight size={12} />
-                </span>
+                <p className="text-xs text-[#4d5156] leading-relaxed line-clamp-2">
+                  <span className="text-slate-400 font-mono text-[10px] mr-1">
+                    {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} —
+                  </span>
+                  {form.metaDescription || form.excerpt || "Enter meta description to preview how this appears on Google SERP..."}
+                </p>
+
+                {form.tags.length > 0 && (
+                  <div className="pt-2 flex flex-wrap gap-1 border-t border-slate-100 mt-2">
+                    {form.tags.map((t, idx) => (
+                      <span key={idx} className="text-[9px] font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded">
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* EDITORIAL CARD PREVIEW */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest px-1">
+                <Monitor size={14} className="text-[#3B82F6]" />
+                <span>Website Editorial Card Preview</span>
+              </div>
+
+              <div className="bg-white border-2 border-slate-200 rounded-[2rem] p-7 flex flex-col justify-between h-[370px] relative overflow-hidden shadow-sm">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[9px] font-mono font-bold bg-slate-100 text-[#0A2540] uppercase tracking-wider border border-slate-200">
+                      <Tag size={10} className="text-[#3B82F6]" />
+                      {form.category || "CLASSIFICATION"}
+                    </span>
+                    <div className="flex items-center gap-1 text-slate-400 font-mono text-[10px] font-bold uppercase">
+                      <Clock size={11} className="text-[#3B82F6]" />
+                      <span>{form.readTime || "5 min read"}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest font-bold block">
+                      {new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                    </span>
+                    <h2 className="text-lg font-black text-[#0A2540] uppercase tracking-tight leading-snug line-clamp-2">
+                      {form.title || "AWAITING EDITORIAL TITLE..."}
+                    </h2>
+                    <p className="text-slate-500 font-normal text-xs leading-relaxed line-clamp-3">
+                      {form.excerpt || "The abstract structural documentation excerpt node will automatically render here as you type..."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono uppercase tracking-wider font-bold text-slate-400">
+                  <span>Author: ALUGRIDX</span>
+                  <span className="text-[#3B82F6] flex items-center gap-1">
+                    <span>Read Article</span>
+                    <ArrowUpRight size={12} />
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>

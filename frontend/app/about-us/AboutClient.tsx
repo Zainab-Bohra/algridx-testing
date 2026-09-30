@@ -48,8 +48,12 @@ export default function AboutClient() {
   return (
     <div className="bg-[#F8FAFC] min-h-screen text-[#124170] selection:bg-[#124170] selection:text-white overflow-hidden relative font-sans">
       
-      {/* Structural blueprint layout grid lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
+      {/* 🚀 CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
       {/* 1. DYNAMIC BRAND HERO HEADER SECTION */}
       <section className="pt-48 pb-20 px-6 max-w-7xl mx-auto relative z-10 border-b border-slate-100">
@@ -74,7 +78,7 @@ export default function AboutClient() {
               <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider">
                 <span className="font-black text-[#124170] tracking-widest">ALUGRIDX</span>
                 <span className="text-slate-300">|</span>
-                <span className="text-slate-400">Evolving Air Systems Since 1986</span>
+                <span className="text-slate-400">Evolving Air Systems</span>
               </div>
             </motion.div>
 
@@ -147,7 +151,7 @@ export default function AboutClient() {
             </p>
           </motion.div>
 
-          {/* Right Area Workspace Side: FULL BRAND LOGO CARD WITH WHITE BACKGROUND & BLUE BORDER */}
+          {/* Right Area Workspace Side: FULL BRAND LOGO CARD */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end [perspective:1500px]" ref={cardRef}>
             <motion.div 
               onMouseMove={handleMouseMove}
@@ -156,7 +160,6 @@ export default function AboutClient() {
               whileHover={{ scale: 1.02 }}
               className="relative w-full max-w-md h-[440px] bg-white border-2 border-[#3B82F6] rounded-[3rem] p-4 shadow-[0_15px_40px_rgba(59,130,246,0.15)] hover:shadow-[0_25px_60px_rgba(59,130,246,0.3)] transition-all duration-200 cursor-pointer"
             >
-              {/* Pure White Image Frame with Solid White Background & Blue Accent Inner Border */}
               <div className="w-full h-full rounded-[2.5rem] bg-white border border-[#3B82F6]/30 p-8 flex items-center justify-center relative [transform:translate3d(0,0,20px)] shadow-sm">
                 <img 
                   src="/images/alugridx-logo.png" 
@@ -165,7 +168,6 @@ export default function AboutClient() {
                 />
               </div>
 
-              {/* Minimal floating trust parameters capsule label */}
               <div className="absolute -bottom-5 right-8 bg-[#0A2540] text-white border border-[#3B82F6]/50 px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2 [transform:translate3d(0,0,45px)]">
                 <Award size={14} className="text-[#3B82F6]" />
                 <span className="text-xs font-black uppercase tracking-wider">40 Yrs Trust Registry</span>
@@ -215,7 +217,7 @@ export default function AboutClient() {
       <section className="py-28 max-w-7xl mx-auto px-6 relative z-10">
         <div className="border-b border-slate-100 pb-6 mb-16 text-center md:text-left">
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">
-            The Sovereignty Pillars
+            Foundational Values
           </h2>
         </div>
 
@@ -253,13 +255,11 @@ export default function AboutClient() {
           initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white rounded-[3rem] p-8 md:p-16 border border-white/5 shadow-[0_20px_50px_rgba(10,37,64,0.15)] relative overflow-hidden text-center"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:12px_12px] pointer-events-none" />
-
           <h3 className="text-2xl md:text-5xl font-black uppercase tracking-tight leading-tight max-w-3xl mx-auto relative z-10">
-            Deploy High-Fidelity Grids For Your Project Framework
+            Precision Engineering Built For Lasting Performance
           </h3>
           <p className="text-slate-300 max-w-xl mx-auto mt-4 text-xs md:text-sm font-normal relative z-10 leading-relaxed">
-            Connect directly with our engineering department in Ajman for instant dimensional parameters, AutoCAD submittal sheets, and rapid manufacturing schedules.
+            Manufactured at our dedicated facility in Ajman, AlugridX delivers architectural-grade air distribution systems backed by verified engineering data and dependable GCC delivery timelines.
           </p>
           
           <div className="mt-10 flex flex-wrap justify-center gap-5 relative z-10">

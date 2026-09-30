@@ -1,13 +1,16 @@
 "use client";
 import Link from "next/link";
-import { Mail, MapPin, ShieldCheck, ArrowRight, Award } from "lucide-react";
+import { Mail, MapPin, ArrowRight, Award } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0A2540] text-white py-12 relative z-20 border-t border-[#3B82F6]/20 font-sans">
+    <footer className="bg-[#0A2540] text-white py-12 relative z-20 border-t border-[#3B82F6]/20 font-sans overflow-hidden">
       
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.015] to-transparent pointer-events-none z-0" />
+      {/* 🚀 CLEAN DARK AMBIENT GLOW (NO CHECKS / NO BOXES) */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-24 left-1/4 w-[450px] h-[450px] bg-gradient-to-br from-[#3B82F6]/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-tl from-[#1D4ED8]/10 to-transparent rounded-full blur-3xl" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 pb-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
         
@@ -29,10 +32,6 @@ export default function Footer() {
             <p className="text-sm font-normal text-slate-300 tracking-tight leading-relaxed max-w-sm">
               Engineering the future of micro-climates with <span className="text-[#60A5FA] font-semibold">absolute localized</span> manufacturing supremacy across the Middle Eastern infrastructures.
             </p>
-            <div className="inline-flex items-center gap-2.5 bg-[#3B82F6]/5 border border-[#3B82F6]/20 px-4 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider text-[#60A5FA] shadow-sm">
-              <ShieldCheck size={12} className="text-[#3B82F6]" />
-              <span>ASHRAE Certified Calibration</span>
-            </div>
           </div>
 
         </div>
@@ -96,7 +95,6 @@ export default function Footer() {
           <span className="text-[#3B82F6] font-black inline-flex items-center gap-1.5 bg-[#3B82F6]/5 px-3 py-1 rounded-lg border border-[#3B82F6]/10">
             <Award size={12} /> Industrial Stream
           </span>
-          <span className="text-slate-500 font-medium">Fulfillment across GCC</span>
         </div>
       </div>
     </footer>

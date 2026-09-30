@@ -39,13 +39,61 @@ function Counter({ value }: { value: number }) {
   );
 }
 
-// Product Card Component with Fixed Grid Alignment & Reversed Borders
+// Function to resolve exact route matching your new individual pages
+function getProductDetailRoute(slug: string): string {
+  const rawSlug = (slug || "").toLowerCase().trim();
+  const cleanSlug = rawSlug.replace(/\s+/g, "-");
+
+  if (cleanSlug.includes("egg") || cleanSlug.includes("eg-crate")) {
+    return "/egg-crate-grilles-registers-diffusers/";
+  } else if (cleanSlug === "ceiling-diffusers") {
+    return "/ceiling-diffusers/";
+  } else if (
+    cleanSlug === "supply-return-air-registers-grilles" ||
+    cleanSlug === "supply-return-air-registers-grilles-and-fresh-air-grilles"
+  ) {
+    return "/supply-return-air-registers-grilles-and-fresh-air-grilles/";
+  } else if (cleanSlug.includes("linear-bar")) {
+    return "/linear-bar-grilles/";
+  } else if (cleanSlug.includes("linear-slot")) {
+    return "/linear-slot-diffusers/";
+  } else if (cleanSlug.includes("flowbar")) {
+    return "/flowbar-slot-diffusers/";
+  } else if (cleanSlug.includes("round-ceiling")) {
+    return "/round-ceiling-diffusers/";
+  } else if (cleanSlug.includes("sand-trap")) {
+    return "/sand-trap-louvers/";
+  } else if (cleanSlug.includes("volume-control")) {
+    return "/volume-control-dampers/";
+  } else if (
+    cleanSlug.includes("non-return") ||
+    cleanSlug.includes("gravity") ||
+    cleanSlug.includes("backdraft")
+  ) {
+    return "/non-return-dampers/";
+  } else if (cleanSlug.includes("disc-valve")) {
+    return "/disc-valves/";
+  } else if (cleanSlug.includes("jet-diffuser")) {
+    return "/jet-diffusers/";
+  } else if (cleanSlug.includes("door-transfer")) {
+    return "/door-transfer-grilles/";
+  } else if (
+    cleanSlug.includes("external-louver") ||
+    cleanSlug.includes("external-weather-louver")
+  ) {
+    return "/external-louvers/";
+  } else {
+    return `/${cleanSlug}/`;
+  }
+}
+
+// Product Card Component with Exact Target URL Routing
 function ProductCard({ cat }: { cat: any }) {
   const [isLiked, setIsLiked] = useState(false);
   const linkedProduct = staticProductsList.find((p) => p.slug === cat.slug);
   const finalImageSrc = linkedProduct ? linkedProduct.image : `/images/products/${cat.slug}.png`;
-
   const badgeText = cat.badge || "NEW";
+  const targetUrl = getProductDetailRoute(cat.slug);
 
   return (
     <motion.div
@@ -63,8 +111,13 @@ function ProductCard({ cat }: { cat: any }) {
             {badgeText}
           </span>
           <button
-            onClick={() => setIsLiked(!isLiked)}
-            className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0A2540] hover:text-red-500 transition-colors shadow-sm z-20"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsLiked(!isLiked);
+            }}
+            className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0A2540] hover:text-red-500 transition-colors shadow-sm z-20 cursor-pointer"
           >
             <Heart
               size={15}
@@ -73,43 +126,43 @@ function ProductCard({ cat }: { cat: any }) {
           </button>
         </div>
 
-        {/* Product Image Stage */}
-        <div className="w-full h-48 bg-gradient-to-b from-slate-100/80 via-slate-50 to-white group-hover:from-blue-50/60 group-hover:to-slate-50/60 rounded-[1.6rem] flex items-center justify-center p-4 my-2 border border-slate-200 group-hover:border-[#3B82F6]/40 transition-colors duration-150 relative overflow-hidden">
-          <img
-            src={finalImageSrc}
-            alt={cat.name}
-            className="max-h-full max-w-full object-contain drop-shadow-md mix-blend-multiply group-hover:scale-110 transition-transform duration-200 relative z-10"
-          />
-          <span className="absolute bottom-2.5 right-2.5 text-[9px] font-mono tracking-wider text-[#0A2540] bg-white/90 backdrop-blur-md border border-slate-200 px-2 py-0.5 rounded-md font-bold uppercase shadow-sm z-10">
-            {cat.code}
-          </span>
-        </div>
+        {/* Clickable Card Stage pointing to the new page */}
+        <Link href={targetUrl} className="block cursor-pointer">
+          {/* Product Image Stage */}
+          <div className="w-full h-48 bg-gradient-to-b from-slate-100/80 via-slate-50 to-white group-hover:from-blue-50/60 group-hover:to-slate-50/60 rounded-[1.6rem] flex items-center justify-center p-4 my-2 border border-slate-200 group-hover:border-[#3B82F6]/40 transition-colors duration-150 relative overflow-hidden">
+            <img
+              src={finalImageSrc}
+              alt={cat.name}
+              className="max-h-full max-w-full object-contain drop-shadow-md mix-blend-multiply group-hover:scale-110 transition-transform duration-200 relative z-10"
+            />
+            <span className="absolute bottom-2.5 right-2.5 text-[9px] font-mono tracking-wider text-[#0A2540] bg-white/90 backdrop-blur-md border border-slate-200 px-2 py-0.5 rounded-md font-bold uppercase shadow-sm z-10">
+              {cat.code}
+            </span>
+          </div>
 
-        {/* Carousel Indicators */}
-        <div className="flex justify-center items-center gap-1.5 my-3">
-          <span className="w-2 h-2 rounded-full bg-slate-300 group-hover:bg-[#3B82F6] transition-colors duration-150" />
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-        </div>
+          {/* Carousel Indicators */}
+          <div className="flex justify-center items-center gap-1.5 my-3">
+            <span className="w-2 h-2 rounded-full bg-slate-300 group-hover:bg-[#3B82F6] transition-colors duration-150" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+          </div>
 
-        {/* Product Details */}
-        <div className="space-y-1.5 text-left">
-          <h3 className="text-[#0A2540] font-black text-lg md:text-xl uppercase tracking-tight group-hover:text-[#2563EB] transition-colors duration-150 leading-snug line-clamp-1">
-            {cat.name}
-          </h3>
-          <p className="text-slate-600 text-xs leading-relaxed font-medium line-clamp-2">
-            {cat.desc}
-          </p>
-        </div>
+          {/* Product Details */}
+          <div className="space-y-1.5 text-left">
+            <h3 className="text-[#0A2540] font-black text-lg md:text-xl uppercase tracking-tight group-hover:text-[#2563EB] transition-colors duration-150 leading-snug line-clamp-1">
+              {cat.name}
+            </h3>
+            <p className="text-slate-600 text-xs leading-relaxed font-medium line-clamp-2">
+              {cat.desc}
+            </p>
+          </div>
+        </Link>
       </div>
 
       {/* Action CTA Button */}
       <div className="pt-4 mt-5 border-t border-slate-200 group-hover:border-[#0A2540]/20 transition-colors">
-        <Link
-          href={linkedProduct ? `/products/${linkedProduct.slug}` : `/products`}
-          className="w-full block"
-        >
-          <button className="w-full bg-[#0A2540] hover:bg-[#2563EB] text-white font-black text-xs uppercase tracking-wider py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 shadow-sm active:scale-95">
+        <Link href={targetUrl} className="w-full block">
+          <button className="w-full bg-[#0A2540] hover:bg-[#2563EB] text-white font-black text-xs uppercase tracking-wider py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 shadow-sm active:scale-95 cursor-pointer">
             <span>View Specs</span>
             <ArrowUpRight size={15} />
           </button>
@@ -123,7 +176,7 @@ const categories = [
   { slug: "ceiling-diffusers", name: "Ceiling Diffusers", code: "SAD / RAD", desc: "Engineered for optimal omnidirectional air distribution with whisper-quiet acoustics.", badge: "NEW" },
   { slug: "linear-slot-diffusers", name: "Linear Slot Diffusers", code: "LSD-Series", desc: "Architectural linear profiles delivering high-capacity fluid airflow design.", badge: "TRENDING" },
   { slug: "linear-bar-grilles", name: "Linear Bar Grilles", code: "LBG-Series", desc: "Heavy-duty extruded aluminum profiles ideal for premium floor and sidewall integrations.", badge: "BEST SELLER" },
-  { slug: "gravity-louvers", name: "Gravity Louvers", code: "GL-Series", desc: "Pressure-operated exhaust louvers engineered for automatic air release loops.", badge: "POPULAR" },
+  { slug: "jet-diffusers", name: "Jet Diffusers", code: "JD-Series", desc: "Long-throw adjustable nozzle diffusers engineered for high-ceiling commercial and airport spaces.", badge: "POPULAR" },
   { slug: "volume-control-dampers", name: "Volume Control Dampers", code: "VCD-Series", desc: "Aerofoil opposing blades crafted for microscopic air volume and pressure balance.", badge: "NEW" },
   { slug: "non-return-dampers", name: "Non-Return Dampers", code: "NRD-Series", desc: "Velocity actuated backdraft dampers designed for automatic airflow isolation.", badge: "POPULAR" },
   { slug: "sand-trap-louvers", name: "Sand Trap Louvers", code: "STL-Series", desc: "High-capacity heavy architectural sand trap louvers engineered to separate desert sand.", badge: "HEAVY DUTY" },
@@ -142,225 +195,233 @@ const applications = [
   { title: "Residential Towers", scope: "High-Rise Enclaves & Luxury Spatial Living" },
   { title: "Hospitality Frameworks", scope: "Resorts & Premium Grade Entertainment Hubs" },
   { title: "Sterile Clinical Fields", scope: "Air Filtration Systems for Clean Medical Zones" },
-  { title: "Industrial Complexes", scope: "Manufacturing Plants & Precision Infrastructure" },
+  { title: "Industrial Complexes", scope: "Manufacturing Plant & Precision Infrastructure" },
   { title: "Infrastructure Hubs", scope: "Aviation Terminals & High-Traffic Rail Logistics" },
 ];
 
 export default function Home() {
   return (
     <div className="bg-[#F8FAFC] min-h-screen text-[#124170] selection:bg-[#124170] selection:text-white overflow-hidden relative font-sans">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none z-0" />
+      
+      {/* CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
-      <Hero />
+      <div className="relative z-10">
+        <Hero />
 
-      {/* --- SECTION 2: OUR PRODUCTS / FEATURED COLLECTION --- */}
-      <section className="py-20 md:py-32 px-6 max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={sectionReveal}
-          className="text-center max-w-2xl mx-auto mb-12 md:mb-16"
-        >
-          <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] block mb-2">
-            ARCHITECTURAL AIR TERMINALS
-          </span>
-          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#0A2540]">
-            Featured Products
-          </h2>
-          <p className="text-slate-600 text-xs md:text-sm mt-3 font-medium">
-            Explore our most popular air terminal models built for precision architectural environments.
-          </p>
-        </motion.div>
+        {/* --- SECTION 2: OUR PRODUCTS / FEATURED COLLECTION --- */}
+        <section className="py-20 md:py-32 px-6 max-w-7xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={sectionReveal}
+            className="text-center max-w-2xl mx-auto mb-12 md:mb-16"
+          >
+            <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] block mb-2">
+              ARCHITECTURAL AIR TERMINALS
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#0A2540]">
+              Featured Products
+            </h2>
+            <p className="text-slate-600 text-xs md:text-sm mt-3 font-medium">
+              Explore our most popular air terminal models built for precision architectural environments.
+            </p>
+          </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
-          {categories.map((cat, i) => (
-            <ProductCard key={i} cat={cat} />
-          ))}
-        </div>
-      </section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+            {categories.map((cat, i) => (
+              <ProductCard key={i} cat={cat} />
+            ))}
+          </div>
+        </section>
 
-      {/* --- SECTION 3: SYSTEM RIGIDITY & ACCURACY --- */}
-      <section className="py-24 md:py-36 bg-[#F8FAFC] text-[#0A2540] relative z-10 border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 md:mb-24">
-            <div className="lg:col-span-8">
-              <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] block mb-2">Performance Standards</span>
-              <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tight leading-none text-[#0A2540]">
-                Rigidity & Accuracy
-              </h2>
+        {/* --- SECTION 3: SYSTEM RIGIDITY & ACCURACY --- */}
+        <section className="py-24 md:py-36 bg-white/80 backdrop-blur-sm text-[#0A2540] border-t border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 md:mb-24">
+              <div className="lg:col-span-8">
+                <span className="text-[10px] uppercase font-black tracking-widest text-[#3B82F6] block mb-2">Performance Standards</span>
+                <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tight leading-none text-[#0A2540]">
+                  Rigidity & Accuracy
+                </h2>
+              </div>
+              <div className="lg:col-span-4 lg:border-l border-slate-300 lg:pl-6">
+                <p className="text-sm text-slate-600 font-normal leading-relaxed">
+                  Every AlugridX matrix layout profile undergoes calibrated high-pressure load checking to guarantee absolute zero acoustic deflection across multi-tier regional developments.
+                </p>
+              </div>
             </div>
-            <div className="lg:col-span-4 lg:border-l border-slate-300 lg:pl-6">
-              <p className="text-sm text-slate-600 font-normal leading-relaxed">
-                Every AlugridX matrix layout profile undergoes calibrated high-pressure load checking to guarantee absolute zero acoustic deflection across multi-tier regional developments.
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {features.map((feat, i) => {
+                const Icon = feat.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -6 }}
+                    whileTap={{ scale: 0.98 }}
+                    viewport={{ once: true }}
+                    transition={{ type: "tween", duration: 0.15 }}
+                    className="bg-white border-2 border-slate-200 hover:border-[#0A2540] p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] flex items-start gap-5 shadow-sm hover:shadow-xl transition-all duration-200"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-[#3B82F6] text-white flex items-center justify-center shrink-0 shadow-md">
+                      <Icon size={22} />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-[#0A2540] font-black text-lg uppercase tracking-tight">
+                        {feat.title}
+                      </h3>
+                      <p className="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                        {feat.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="mt-20 md:mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-12 md:pt-16 border-t border-slate-200">
+              {[
+                { value: <><Counter value={44} />+</>, label: "System Profiles" },
+                { value: <><Counter value={40} />+</>, label: "Years Operations Network" },
+                { value: "UAE", label: "Production Plant" },
+                { value: "GCC", label: "Enterprise Dispatch Hubs" },
+              ].map((stat, idx) => (
+                <div key={idx}>
+                  <p className="text-3xl md:text-5xl font-black text-[#0A2540]">{stat.value}</p>
+                  <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[#3B82F6] mt-2 font-extrabold">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --- SECTION 4: HISTORICAL TIMELINE --- */}
+        <section className="py-24 md:py-36 max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+            <div className="lg:col-span-4">
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Corporate Roots</h2>
+              <p className="text-xs text-slate-500 font-normal mt-4 leading-relaxed max-w-sm hidden lg:block">
+                Tracing the technological execution lineage of AlugridX architectural frameworks across global delivery grids.
               </p>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {features.map((feat, i) => {
-              const Icon = feat.icon;
-              return (
+            <div className="lg:col-span-8 flex flex-col gap-6">
+              {[
+                { year: "1986", title: "Strategic Foundation & GCC Network Setup", desc: "Inaugurated structural-scale architectural products supply loops across key GCC commercial zones, establishing an unshakeable ecosystem of trust and supply precision." },
+                { year: "2025", title: "Technological Evolution & Automation Launch", desc: "Transitioned workflow execution into automated precision machinery lines, establishing tight thermodynamic parameters and zero-vibration air terminal setups." }
+              ].map((item, idx) => (
                 <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 15 }}
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -6 }}
-                  whileTap={{ scale: 0.98 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "tween", duration: 0.15 }}
-                  className="bg-white border-2 border-slate-200 hover:border-[#0A2540] p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] flex items-start gap-5 shadow-sm hover:shadow-xl transition-all duration-200"
+                  viewport={{ once: true, margin: "-40px" }}
+                  whileTap={{ scale: 0.99 }}
+                  className="group relative bg-white border-2 border-slate-200 hover:border-[#0A2540] p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-200"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#3B82F6] text-white flex items-center justify-center shrink-0 shadow-md">
-                    <Icon size={22} />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-[#0A2540] font-black text-lg uppercase tracking-tight">
-                      {feat.title}
-                    </h3>
-                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
-                      {feat.desc}
-                    </p>
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-start">
+                    <span className="text-4xl md:text-5xl font-black text-[#124170]/20 group-hover:text-[#3B82F6] transition-colors duration-300 select-none">
+                      {item.year}
+                    </span>
+                    <div className="space-y-1.5">
+                      <h4 className="text-base md:text-xl font-extrabold text-[#124170] group-hover:text-[#2563EB] transition-colors leading-tight">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
-              );
-            })}
-          </div>
-
-          <div className="mt-20 md:mt-28 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-12 md:pt-16 border-t border-slate-200">
-            {[
-              { value: <><Counter value={44} />+</>, label: "System Profiles" },
-              { value: <><Counter value={40} />+</>, label: "Years Operations Network" },
-              { value: "UAE", label: "Production Plants" },
-              { value: "GCC", label: "Enterprise Dispatch Hubs" },
-            ].map((stat, idx) => (
-              <div key={idx}>
-                <p className="text-3xl md:text-5xl font-black text-[#0A2540]">{stat.value}</p>
-                <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[#3B82F6] mt-2 font-extrabold">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- SECTION 4: HISTORICAL TIMELINE --- */}
-      <section className="py-24 md:py-36 max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170]">Corporate Roots</h2>
-            <p className="text-xs text-slate-500 font-normal mt-4 leading-relaxed max-w-sm hidden lg:block">
-              Tracing the technological execution lineage of AlugridX architectural frameworks across global delivery grids.
-            </p>
-          </div>
-
-          <div className="lg:col-span-8 flex flex-col gap-6">
-            {[
-              { year: "1986", title: "Strategic Foundation & GCC Network Setup", desc: "Inaugurated structural-scale architectural products supply loops across key GCC commercial zones, establishing an unshakeable ecosystem of trust and supply precision." },
-              { year: "2025", title: "Technological Evolution & Automation Launch", desc: "Transitioned workflow execution into automated precision machinery lines, establishing tight thermodynamic parameters and zero-vibration air terminal setups." }
-            ].map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                whileTap={{ scale: 0.99 }}
-                className="group relative bg-white border-2 border-slate-200 hover:border-[#0A2540] p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-200"
-              >
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-start">
-                  <span className="text-4xl md:text-5xl font-black text-[#124170]/20 group-hover:text-[#3B82F6] transition-colors duration-300 select-none">
-                    {item.year}
-                  </span>
-                  <div className="space-y-1.5">
-                    <h4 className="text-base md:text-xl font-extrabold text-[#124170] group-hover:text-[#2563EB] transition-colors leading-tight">
-                      {item.title}
-                    </h4>
-                    <p className="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- SECTION 5: PREMIUM INTEGRATION NODES --- */}
-      <section className="py-24 md:py-36 bg-white relative z-10 border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-slate-200 pb-8 mb-12 md:mb-16 gap-4">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] mt-3">
-                Integration Nodes
-              </h2>
+              ))}
             </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {applications.map((app, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                whileHover={{ y: -6 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "tween", duration: 0.15 }}
-                className="group bg-white border-2 border-slate-200 hover:border-[#0A2540] rounded-[2rem] p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-200 relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <span className="w-9 h-9 rounded-full bg-[#0A2540] text-white font-bold text-xs flex items-center justify-center font-mono">
-                    0{i + 1}
-                  </span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
-                </div>
+        {/* --- SECTION 5: PREMIUM INTEGRATION NODES --- */}
+        <section className="py-24 md:py-36 bg-white relative border-t border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-slate-200 pb-8 mb-12 md:mb-16 gap-4">
+              <div>
+                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#124170] mt-3">
+                  Integration Nodes
+                </h2>
+              </div>
+            </div>
 
-                <div className="mb-8">
-                  <h3 className="text-[#0A2540] text-xl font-black uppercase tracking-tight mb-2">
-                    {app.title}
-                  </h3>
-                  <p className="text-slate-600 text-xs font-medium leading-relaxed">
-                    {app.scope}
-                  </p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {applications.map((app, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  whileHover={{ y: -6 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "tween", duration: 0.15 }}
+                  className="group bg-white border-2 border-slate-200 hover:border-[#0A2540] rounded-[2rem] p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-200 relative overflow-hidden"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="w-9 h-9 rounded-full bg-[#0A2540] text-white font-bold text-xs flex items-center justify-center font-mono">
+                      0{i + 1}
+                    </span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
+                  </div>
 
-                <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
-                  <span className="text-[#3B82F6] font-mono text-[10px] font-bold uppercase tracking-wider">
-                    ACTIVE DATA MATRIX
-                  </span>
-                  <button className="flex items-center gap-1 text-[#0A2540] group-hover:text-[#3B82F6] font-mono text-[11px] font-bold uppercase transition-colors">
-                    MATRIX SPEC <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="mb-8">
+                    <h3 className="text-[#0A2540] text-xl font-black uppercase tracking-tight mb-2">
+                      {app.title}
+                    </h3>
+                    <p className="text-slate-600 text-xs font-medium leading-relaxed">
+                      {app.scope}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                    <span className="text-[#3B82F6] font-mono text-[10px] font-bold uppercase tracking-wider">
+                      ACTIVE DATA MATRIX
+                    </span>
+                    <button className="flex items-center gap-1 text-[#0A2540] group-hover:text-[#3B82F6] font-mono text-[11px] font-bold uppercase transition-colors">
+                      MATRIX SPEC <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* --- SECTION 6: BRANDED CTA BANNER --- */}
-      <section className="py-24 md:py-32 px-6 relative z-10 bg-[#F8FAFC]">
-        <div className="max-w-5xl mx-auto bg-white border-2 border-slate-200 hover:border-[#0A2540] rounded-[2.5rem] p-10 sm:p-16 text-center shadow-lg hover:shadow-xl transition-all duration-200 space-y-8">
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-[#0A2540] max-w-3xl mx-auto leading-tight">
-            REQUEST ALUGRIDX TECHNICAL BLUEPRINT DATA
-          </h2>
+        {/* --- SECTION 6: BRANDED CTA BANNER --- */}
+        <section className="py-24 md:py-32 px-6">
+          <div className="max-w-5xl mx-auto bg-white border-2 border-slate-200 hover:border-[#0A2540] rounded-[2.5rem] p-10 sm:p-16 text-center shadow-lg hover:shadow-xl transition-all duration-200 space-y-8">
+            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-[#0A2540] max-w-3xl mx-auto leading-tight">
+              REQUEST ALUGRIDX CATALOGUE
+            </h2>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <Link href="/request-catalogue" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto bg-[#3B82F6] hover:bg-[#2563EB] text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-md active:scale-95">
-                EXTRACT CORE CATALOGUE
-              </button>
-            </Link>
-            <Link href="/contact-us" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto bg-white hover:bg-slate-50 text-[#0A2540] border-2 border-[#0A2540] font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-sm active:scale-95">
-                CONNECT WITH DESK
-              </button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <Link href="/request-catalogue" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto bg-[#3B82F6] hover:bg-[#2563EB] text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-md active:scale-95 cursor-pointer">
+                  EXTRACT CORE CATALOGUE
+                </button>
+              </Link>
+              <Link href="/contact-us" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto bg-white hover:bg-slate-50 text-[#0A2540] border-2 border-[#0A2540] font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-sm active:scale-95 cursor-pointer">
+                  CONNECT WITH DESK
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <SlidingMarquee />
+        <SlidingMarquee />
+      </div>
     </div>
   );
 }

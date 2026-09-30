@@ -1,173 +1,215 @@
 "use client";
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, ShieldCheck } from "lucide-react";
-import { staticProductsList } from "@/app/products/productsData";
+import { 
+  Search, 
+  ArrowUpRight, 
+  Layers, 
+  ShieldCheck,
+  ArrowRight,
+  Wind
+} from "lucide-react";
+import { staticProductsList, StaticProduct } from "@/app/products/productsData";
 
-export default function ProductDetailClient() {
-  const params = useParams();
-  const slug = typeof params?.slug === "string" ? params.slug : "";
-  const [activeTab, setActiveTab] = useState("specs");
+const categoryFilters = [
+  { label: "All Products", value: "all" },
+  { label: "Grilles & Diffusers", value: "grilles-registers" },
+  { label: "Architectural Louvers", value: "louvers" },
+  { label: "Duct Dampers", value: "dampers" }
+];
 
-  const product = staticProductsList.find((p) => p.slug === slug);
+export default function ProductsClient() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center text-[#124170] font-sans gap-4">
-        <div className="text-xs font-bold uppercase tracking-[0.2em]">Component Model Grid Not Found</div>
-        <Link href="/products" className="text-xs text-[#3B82F6] underline uppercase font-bold tracking-wider">
-          Return to Catalog
-        </Link>
-      </div>
-    );
-  }
+  const filteredProducts = useMemo(() => {
+    return staticProductsList.filter((product: StaticProduct) => {
+      const matchesCategory =
+        selectedCategory === "all" || product.category === selectedCategory;
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchQuery, selectedCategory]);
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 relative text-[#124170] font-sans overflow-hidden">
-      {/* Fine-lined corporate spatial architecture overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#12417002_1px,transparent_1px),linear-gradient(to_bottom,#12417002_1px,transparent_1px)] bg-[size:5rem_5rem] pointer-events-none" />
+    <div className="bg-[#F8FAFC] min-h-screen pt-36 pb-24 overflow-hidden relative text-[#124170] font-sans">
+      
+      {/* 🚀 CLEAN AMBIENT LIGHTING BACKGROUND (NO CHECKS / NO BOXES) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#3B82F6]/10 via-[#124170]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-[45%] -right-40 w-[700px] h-[700px] bg-gradient-to-tl from-[#3B82F6]/8 via-slate-200/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-10 w-[550px] h-[550px] bg-gradient-to-tr from-[#0A2540]/5 via-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
         
-        {/* Crisp clean Back to Catalog Trigger */}
-        <Link href="/products" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#3B82F6] mb-10 group transition-colors">
-          <ArrowLeft size={13} className="transform group-hover:-translate-x-1 transition-transform" />
-          <span>Return to Catalog</span>
-        </Link>
-
-        {/* Core Product Grid Canvas */}
-        <div className="bg-white rounded-[3rem] p-8 lg:p-14 border-2 border-[#0A2540] shadow-[0_30px_70px_rgba(10,37,64,0.08)]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            
-            {/* LEFT SIDE: DYNAMIC HIGH-DEPTH IMAGE DISPLAY */}
-            <div className="lg:col-span-5 space-y-6">
-              <motion.div 
-                whileHover={{ 
-                  scale: 1.02,
-                  y: -5,
-                  boxShadow: "0px 30px 60px rgba(10, 37, 64, 0.15)"
-                }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className="w-full h-[420px] bg-slate-50 border-2 border-[#0A2540]/20 rounded-[2.5rem] flex items-center justify-center p-6 relative overflow-hidden shadow-sm cursor-pointer"
-              >
-                <img 
-                  src={product.image}
-                  alt={product.name}
-                  className="max-w-full max-h-[360px] object-contain mix-blend-multiply transition-transform duration-500 hover:scale-105"
-                  onError={(e) => {
-                    e.currentTarget.src = `https://placehold.co/500x400/ffffff/124170?text=${product.name.replace(/\s+/g, '+')}`;
-                  }}
-                />
-              </motion.div>
-
-              {/* Verified Badge Row */}
-              <div className="bg-slate-50 border-2 border-[#0A2540]/20 p-5 rounded-2xl flex gap-3.5 items-center">
-                <ShieldCheck className="text-[#3B82F6] shrink-0" size={20} />
-                <p className="text-xs font-semibold text-slate-600 leading-relaxed uppercase tracking-wide">Factory approved material compliance matrix for GCC ministries.</p>
-              </div>
+        {/* 1. ARCHITECTURAL HEADER SECTION */}
+        <div className="border-b border-[#124170]/10 pb-8 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3B82F6]/10 text-[#3B82F6] text-[10px] font-extrabold uppercase tracking-wider mb-3">
+              <Layers size={13} />
+              <span>Engineered Air Distribution Portfolio</span>
             </div>
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-[#124170]">
+              Product <span className="font-light italic font-serif text-[#3B82F6] tracking-normal lowercase">Catalog</span>
+            </h1>
+            <p className="text-slate-500 text-xs md:text-sm font-normal mt-2 max-w-xl leading-relaxed">
+              Precision-extruded aluminum 6063-T6 air terminals, architectural louvers, and certified airflow control dampers fabricated in Ajman, UAE.
+            </p>
+          </div>
 
-            {/* RIGHT SIDE: PREMIUM ARCHITECTURAL SPECS CONSOLE */}
-            <div className="lg:col-span-7 space-y-8">
-              <div className="space-y-3">
-                <span className="text-[10px] font-extrabold text-[#3B82F6] bg-[#3B82F6]/10 border-2 border-[#3B82F6]/30 px-3 py-1 rounded-lg uppercase tracking-wider">
-                  {product.category} Specification
-                </span>
-                <h1 className="text-3xl md:text-5xl font-black uppercase text-[#124170] tracking-tight leading-tight">
-                  {product.name}
-                </h1>
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  {product.code} Framework Model
-                </p>
-                
-                <p className="text-slate-600 text-base font-normal leading-relaxed pt-3">
-                  {product.desc}
-                </p>
-              </div>
+          <div className="flex items-center justify-center md:justify-end gap-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+            <span className="w-2 h-2 rounded-full bg-[#3B82F6] animate-pulse" />
+            <span>{filteredProducts.length} Profiles Available</span>
+          </div>
+        </div>
 
-              {/* ROUNDED CORPORATE TAB NAVIGATION */}
-              <div className="flex gap-4 border-b-2 border-[#0A2540]/15 pt-2">
-                <button 
+        {/* 2. SEARCH & CATEGORY FILTER CONTROL BAR */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          
+          {/* Category Tabs */}
+          <div className="flex flex-wrap gap-2 bg-white p-1.5 rounded-2xl border border-slate-200/70 shadow-xs w-full md:w-auto">
+            {categoryFilters.map((tab) => {
+              const isActive = selectedCategory === tab.value;
+              return (
+                <button
+                  key={tab.value}
                   type="button"
-                  onClick={() => setActiveTab("specs")}
-                  className={`pb-3 px-2 text-xs font-extrabold uppercase tracking-wider transition-all border-b-4 cursor-pointer -mb-[2px] ${
-                    activeTab === "specs" 
-                      ? "border-[#124170] text-[#124170]" 
-                      : "border-transparent text-slate-400 hover:text-slate-600"
+                  onClick={() => setSelectedCategory(tab.value)}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-sans font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap cursor-pointer flex-1 sm:flex-initial text-center ${
+                    isActive
+                      ? "bg-[#124170] text-white shadow-sm"
+                      : "text-slate-500 hover:bg-slate-50 hover:text-[#124170]"
                   }`}
                 >
-                  Structural Features
+                  {tab.label}
                 </button>
-                <button 
-                  type="button"
-                  onClick={() => setActiveTab("dims")}
-                  className={`pb-3 px-2 text-xs font-extrabold uppercase tracking-wider transition-all border-b-4 cursor-pointer -mb-[2px] ${
-                    activeTab === "dims" 
-                      ? "border-[#124170] text-[#124170]" 
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
+              );
+            })}
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search model, code..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200/70 rounded-2xl text-xs font-medium text-[#124170] placeholder-slate-400 focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/10 transition-all shadow-xs"
+            />
+          </div>
+
+        </div>
+
+        {/* 3. PRODUCT CATALOG GRID */}
+        {filteredProducts.length === 0 ? (
+          <div className="bg-white border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 text-center space-y-3">
+            <Wind size={32} className="mx-auto text-slate-300" />
+            <h3 className="text-base font-black uppercase text-[#124170]">No Matching Air Terminals</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              We could not find any model matching your search. Please adjust your keywords or reset filters.
+            </p>
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(""); setSelectedCategory("all"); }}
+              className="text-xs font-bold uppercase text-[#3B82F6] underline tracking-wider pt-2 cursor-pointer"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-7 items-stretch">
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((cat: StaticProduct) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  key={cat.slug}
+                  className="group bg-white border-2 border-slate-200 hover:border-[#0A2540] rounded-[2.2rem] p-5 md:p-6 flex flex-col justify-between shadow-xs hover:shadow-xl relative overflow-hidden transition-all duration-200"
                 >
-                  Dimension Mappings
-                </button>
-              </div>
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-[#3B82F6]/15 via-transparent to-transparent rounded-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
 
-              {/* DATA WORKSPACE LAYOUT PANELS */}
-              <div className="min-h-[160px]">
-                {activeTab === "specs" && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 gap-3">
-                    {product.features.map((feat: string, i: number) => (
-                      <div key={i} className="flex gap-3 items-center text-xs font-semibold text-slate-700 bg-slate-50 border-2 border-[#0A2540]/15 p-3 rounded-xl shadow-sm">
-                        <CheckCircle2 size={15} className="text-[#3B82F6] shrink-0" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </motion.div>
-                )}
-
-                {activeTab === "dims" && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {product.dimensions.map((d: string, i: number) => (
-                        <div key={i} className="bg-slate-50 border-2 border-[#0A2540]/15 p-3.5 rounded-xl text-left text-xs font-bold text-[#124170] shadow-sm flex flex-col justify-center">
-                          <span className="block text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Sizing Framework</span>
-                          <span className="text-sm font-extrabold">{d}</span>
-                        </div>
-                      ))}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="bg-slate-100 text-[#0A2540] group-hover:bg-[#3B82F6] group-hover:text-white transition-colors text-[9px] font-black tracking-widest px-2.5 py-1 rounded-md uppercase">
+                        {cat.badge || "FEATURED"}
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-slate-400">
+                        {cat.code}
+                      </span>
                     </div>
-                    <div className="p-4 rounded-xl bg-[#3B82F6]/10 border-2 border-[#3B82F6]/30 text-xs font-bold uppercase text-[#124170] tracking-wide">
-                      Performance Metrics / Pressure Balance: <span className="text-[#3B82F6] font-extrabold">{product.kFactors}</span>
+
+                    <div className="w-full h-48 bg-gradient-to-b from-slate-100/70 via-slate-50 to-white rounded-[1.6rem] flex items-center justify-center p-4 my-2 border border-slate-200/80 group-hover:border-[#3B82F6]/30 transition-colors relative overflow-hidden">
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-108 transition-transform duration-300"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://placehold.co/400x300/ffffff/124170?text=${cat.name.replace(/\s+/g, '+')}`;
+                        }}
+                      />
                     </div>
-                  </motion.div>
-                )}
-              </div>
 
-              {/* HIGH-END 3D CTA SUBMITTAL BANNER CONSOLE */}
-              <div className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white p-6 md:p-8 rounded-[2.5rem] shadow-[0_15px_30px_rgba(10,37,64,0.15)] relative overflow-hidden border-2 border-[#0A2540]">
-                <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:12px_12px] pointer-events-none" />
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
-                  <div className="space-y-1">
-                    <h4 className="text-lg font-black uppercase tracking-tight">Request Blueprint Data Package</h4>
-                    <p className="text-slate-300 text-xs font-normal max-w-sm leading-relaxed">Get rapid pricing estimations and factory AutoCAD submittals directly into your mailbox.</p>
+                    <div className="space-y-1.5 mt-4 text-left">
+                      <h3 className="text-[#0A2540] font-black text-base md:text-lg uppercase tracking-tight group-hover:text-[#2563EB] transition-colors leading-snug line-clamp-1">
+                        {cat.name}
+                      </h3>
+                      <p className="text-slate-500 text-xs leading-relaxed font-normal line-clamp-2">
+                        {cat.desc}
+                      </p>
+                    </div>
                   </div>
-                  
-                  <Link href={`/contact-us?product=${slug}`} className="w-full sm:w-auto">
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -2, boxShadow: "0px 10px 25px rgba(59, 130, 246, 0.4)" }}
-                      whileTap={{ scale: 0.98 }}
-                      className="bg-[#3B82F6] hover:bg-[#2563EB] text-white text-center text-xs font-extrabold uppercase tracking-widest px-7 py-4 rounded-full transition-colors whitespace-nowrap cursor-pointer border-2 border-transparent"
-                    >
-                      Request Submittal
-                    </motion.div>
-                  </Link>
-                </div>
-              </div>
 
-            </div>
+                  <div className="pt-4 mt-5 border-t border-slate-100 group-hover:border-slate-200 transition-colors">
+                    <Link href={`/products/${cat.slug}`} className="w-full block">
+                      <button 
+                        type="button"
+                        className="w-full bg-[#0A2540] group-hover:bg-[#2563EB] text-white font-extrabold text-xs uppercase tracking-wider py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-200 cursor-pointer shadow-xs active:scale-98"
+                      >
+                        <span>View Specifications</span>
+                        <ArrowUpRight size={14} />
+                      </button>
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
 
+        {/* 4. DIRECT ESTIMATION & FACTORY SUBMITTAL BANNER */}
+        <div className="bg-gradient-to-br from-[#124170] to-[#0A2540] text-white p-8 md:p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 border border-white/5">
+          <div className="text-center lg:text-left space-y-2 max-w-xl relative z-10">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-extrabold tracking-widest text-[#3B82F6] uppercase">
+              <ShieldCheck size={13} />
+              Direct Factory Support • Ajman
+            </span>
+            <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight">
+              Require Custom Profile Dimensions?
+            </h3>
+            <p className="text-slate-300 text-xs md:text-sm font-normal leading-relaxed">
+              Send your project BOQ or architectural duct schedules for quick estimation, custom RAL color powder coating, and AutoCAD submittals.
+            </p>
+          </div>
+          
+          <div className="shrink-0 w-full lg:w-auto relative z-10">
+            <Link 
+              href="/contact-us" 
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#3B82F6] hover:bg-white text-white hover:text-[#124170] font-sans text-xs font-extrabold uppercase tracking-widest px-8 py-4 rounded-full transition-all text-center cursor-pointer shadow-lg hover:shadow-xl"
+            >
+              <span>Submit Project Inquiry</span>
+              <ArrowRight size={13} />
+            </Link>
           </div>
         </div>
 
