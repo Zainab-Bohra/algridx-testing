@@ -134,7 +134,7 @@ export default function CatalogueClient() {
                           onBlur={() => setFocusedField(null)}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
                           className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2.5 text-xs font-semibold text-[#124170] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
-                          placeholder="e.g. John Doe" 
+                          placeholder="Enter your  name" 
                         />
                         <User size={13} className="absolute left-0 top-3 text-slate-400" />
                       </div>
@@ -155,7 +155,7 @@ export default function CatalogueClient() {
                           onBlur={() => setFocusedField(null)}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })} 
                           className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2.5 text-xs font-semibold text-[#124170] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
-                          placeholder="e.g. Al-Futtaim Engineering" 
+                          placeholder="Enter company name" 
                         />
                         <Building2 size={13} className="absolute left-0 top-3 text-slate-400" />
                       </div>
@@ -176,7 +176,7 @@ export default function CatalogueClient() {
                           onBlur={() => setFocusedField(null)}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
                           className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2.5 text-xs font-semibold text-[#124170] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
-                          placeholder="name@company.com" 
+                          placeholder="Enter Corporate Email" 
                         />
                         <Mail size={13} className="absolute left-0 top-3 text-slate-400" />
                       </div>
@@ -197,7 +197,7 @@ export default function CatalogueClient() {
                           onBlur={() => setFocusedField(null)}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
                           className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2.5 text-xs font-semibold text-[#124170] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
-                          placeholder="+971 4 000 0000" 
+                          placeholder="Enter Phone Number" 
                         />
                         <Phone size={13} className="absolute left-0 top-3 text-slate-400" />
                       </div>
@@ -218,7 +218,7 @@ export default function CatalogueClient() {
                           onBlur={() => setFocusedField(null)}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })} 
                           className="w-full bg-transparent border-b-2 border-slate-100 pl-8 py-2.5 text-xs font-semibold text-[#124170] focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-slate-300" 
-                          placeholder="+971 50 000 0000" 
+                          placeholder="Enter Whatsapp Number" 
                         />
                         <MessageSquare size={13} className="absolute left-0 top-3 text-slate-400" />
                       </div>

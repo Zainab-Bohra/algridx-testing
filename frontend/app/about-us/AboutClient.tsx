@@ -269,7 +269,7 @@ export default function AboutClient() {
                 whileTap={{ scale: 0.98 }}
                 className="bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-extrabold uppercase tracking-widest px-8 py-4 rounded-full shadow-md cursor-pointer"
               >
-                Explore Core Components
+                Explore Products
               </motion.div>
             </Link>
             <Link href="/contact-us">
@@ -278,7 +278,7 @@ export default function AboutClient() {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-2 border border-white/30 bg-transparent text-white text-xs font-extrabold uppercase tracking-widest px-8 py-4 rounded-full transition-all cursor-pointer"
               >
-                <span>Request Factory Submittal</span> <ArrowRight size={12} />
+                <span>Contact US</span> <ArrowRight size={12} />
               </motion.div>
             </Link>
           </div>

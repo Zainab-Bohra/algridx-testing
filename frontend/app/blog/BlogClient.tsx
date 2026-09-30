@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // 🚀 Router navigation import kiya
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Search, Tag, Clock, Newspaper, Layers, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -29,6 +30,7 @@ function GeometricLoader() {
 }
 
 export default function BlogClient() {
+  const router = useRouter(); // 🚀 Navigation ke liye router initialize kiya
   const [blogs, setBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
@@ -161,6 +163,7 @@ export default function BlogClient() {
                     }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    onClick={() => router.push(`/blog/${blog.slug || blog._id}`)} // 🚀 Card par click karne par redirect hoga
                     className="group bg-white border border-slate-100 rounded-[2.5rem] rounded-tr-[4.5rem] p-8 flex flex-col justify-between h-[390px] cursor-pointer relative overflow-hidden z-10 transition-colors duration-300 hover:bg-[#0A2540]"
                   >
                     <div className="absolute top-0 right-0 w-24 h-24 bg-[radial-gradient(rgba(18,65,112,0.03)_1px,transparent_1px)] group-hover:bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:10px_10px] rounded-tr-[4.5rem] pointer-events-none transition-colors" />
@@ -202,10 +205,10 @@ export default function BlogClient() {
                         <Layers size={11} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
                         <span className="text-slate-400 group-hover:text-slate-400/60 text-[10px] font-semibold transition-colors">Desk: {blog.author || "AX-DESK"}</span>
                       </div>
-                      <Link href={`/blog/${blog.slug || blog._id}`} className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors relative block">
+                      <div className="text-[#124170] group-hover:text-[#60A5FA] flex items-center gap-1 transition-colors relative">
                         <span className="text-[11px] tracking-tight">Read more</span>
                         <ArrowRight size={13} className="transform transition-transform duration-300 group-hover:translate-x-0.5" />
-                      </Link>
+                      </div>
                     </div>
                   </motion.article>
                 ))}

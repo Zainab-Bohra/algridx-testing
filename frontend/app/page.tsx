@@ -408,7 +408,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <Link href="/request-catalogue" className="w-full sm:w-auto">
                 <button className="w-full sm:w-auto bg-[#3B82F6] hover:bg-[#2563EB] text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-md active:scale-95 cursor-pointer">
-                  EXTRACT CORE CATALOGUE
+                  Request CATALOGUE
                 </button>
               </Link>
               <Link href="/contact-us" className="w-full sm:w-auto">

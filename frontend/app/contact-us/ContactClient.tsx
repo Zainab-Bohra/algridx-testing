@@ -190,7 +190,7 @@ export default function ContactClient() {
           >
             <div className="mb-6 sm:mb-8 space-y-1">
               <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-[#124170]">Request a Quote &amp; Technical Submittals</h3>
-              <p className="text-slate-400 text-xs font-normal">Please fill out the form below. Our estimation team will respond within 2 hours.</p>
+              <p className="text-slate-400 text-xs font-normal">Please fill out the form below.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
